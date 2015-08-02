@@ -1,0 +1,1374 @@
+#!/usr/bin/perl
+
+ use Tk;
+ use Tk::BrowseEntry; 
+ use Tk::DialogBox;
+ use Tk::Dialog ;
+ use Tk::Button ;
+ use Tk::Frame;
+ use Tk::TextUndo;
+ use Tk::Text;
+ use Tk::Scrollbar;
+ use Tk::Menu;
+ use Tk::Menubutton;
+ use Tk::Listbox;
+ use Tk::Font;
+ use File::Basename;
+ use Win32;
+ use Tk::Balloon;
+ use Win32::OLE;
+ 
+ use Spreadsheet::WriteExcel;
+ 
+ 
+
+ my $mw = MainWindow->new(); 
+
+  # Create balloon widget
+ my $b = $mw->Balloon();
+ $mw->configure(-background=>'Cyan',-foreground=>'white'); 
+ $mw->title("Get Custom Properties of SolidWorks files"); 
+  
+ $mw->geometry('+300+10'); 
+ 
+  my $menu_bar = $mw->Frame(-relief=>'groove',-borderwidth => 3, -background => 'cyan',)->pack(-side =>'top', -fill=>'x');
+
+  $b->attach($menu_bar, -msg => "Designed by Bhaskar Reddy");
+  
+  my $About_menu = $menu_bar->Menubutton(-text=>'About',-underline => 0,
+      -background=>'purple',
+      -activebackground=>'cyan',
+      -foreground=>'white',
+      -tearoff => 0)->pack(-side =>'left');
+
+  my $help = $menu_bar->Menubutton(-text=>'Help',-underline => 0,
+      -background=>'purple',
+      -activebackground=>'cyan',
+      -foreground=>'white',
+      -tearoff => 0)->pack(-side =>'left');
+ 
+   $About_menu->command(-label => "About Author",-background=>'lightblue', -underline => 0, -command => \&aboutDialog);
+   $help->command(-label => "Help",-background=>'lightblue', -underline => 0, -command => \&help);
+
+
+
+my $path1;
+my $path2;
+my $entry1;
+my $entry2 = "X:\\Files";
+my $entry3;
+my $entry4;
+	
+   $mw->minsize(qw(670 670)); 
+ 
+      
+ my $family = 'Trebuchet MS';
+
+
+my $sample = $mw->Entry(-textvariable => \$entry1,-width =>70)->place(-x => 90, -y => 48);
+$sample->configure(-font => [-family => $family,-size => 8, -weight => "normal",]);
+$b->attach($sample, -msg => "Select the file/files location, which you want to get the Custom Properties");
+
+$sample->focus;
+$sample->icursor(0);
+#$sample->delete('0.0', 'end');
+#$sample->selectionClear( );
+
+$sample1 = $mw->Entry(-textvariable => \$entry2,-width =>30)->place(-x => 300, -y => 90);
+$sample1->configure(-font => [-family => $family,-size => 8, -weight => "normal",]);
+$b->attach($sample1, -msg => "Enter the file path which you need to display in Control File, leave it blank if you dont require control file");
+
+
+
+   
+$sample2 = $mw->Label(-text => "SLD file\nlocation",-foreground=>'blue',-background=>'Cyan',-font => [-family => 'Calibri (Body)',-size => 7, -weight => 'bold',])->place(-x => 30, -y => 40);
+
+$sample3 = $mw->Label(-text => "Control File\nEntry",-foreground=>'blue',-background=>'Cyan',-font => [-family => 'Calibri (Body)',
+-size => 7, -weight => 'bold',])->place(-x => 230, -y => 90);
+
+my $control1 = 1;
+my $control11 = $mw -> Checkbutton(-text=>"Control File",-activebackground=>'cyan',-background=>'Cyan',-variable=> \$control1,-command => \&control)->place(-x => 130, -y => 90);
+
+
+sub control
+{
+if ($control1 == 0)
+    {
+	 $sample1->configure(-state=>'disabled');
+	}else
+	{
+	$sample1->configure(-state=>'normal');
+	}
+}
+ 
+my $lab = $mw->Label(-text => "Designed by Bhaskar Reddy 11-Nov-2011",-background=>'Cyan',-foreground=>'blue',-font => [-family => 'Trebuchet MS',
+-size => 7, -weight => 'bold',])->place(-x => 250, -y => 647);
+
+  $b->attach($lab, -msg => "Designed by Bhaskar Reddy");
+
+  my $output_frame = $mw->Frame()->place(-x => 30, -y => 190);
+
+  my $output_scroll = $output_frame->Scrollbar();
+  
+  my $output_text = $output_frame->Text(-font => [-family => 'Trebuchet MS',
+-size => 8, -weight => 'normal',],-yscrollcommand => ['set', $output_scroll],-height => '25',-width => '80');
+  
+  $output_scroll->configure(-command => ['yview', $output_text]);
+  
+  $output_scroll->pack(-side => "right", -expand => "Yes", -fill => "y");
+  
+  $output_text->pack();
+
+
+ tie *STDOUT, ref $output_text, $output_text;
+
+ $b->attach($output_text, -msg => "Displays all custom properties of each file");
+
+my $source = $mw->Button(-text => "...",-background=>'lightblue',-state => "normal",-font => [-family => 'Calibri (Body)', -size => 10, -weight => 'bold',],-height => '1',-width => '3', -command => \&browse1)->place(-x => 520, -y => 43);
+
+$b->attach($source, -msg => "Select the file/files location, which you want to get the Custom Properties");
+
+my $run = $mw->Button(-text => "Get\nCustom\nProperties",-background=>'lightblue',-state => "normal",-font => [-family => 'Calibri (Body)', -size => 7, -weight => 'bold',],-height => '4',-width => '13', -command => \&custom)->place(-x => 550, -y => 390);
+
+$b->attach($run, -msg => "Click On this button to get Custom Properties");
+
+my $pause = $mw->Button(-text => "Pause",-background=>'lightblue',-state => "normal",-font => [-family => 'Calibri (Body)', -size => 7, -weight => 'bold',],-height => '4',-width => '13', -command => \&Pause)->place(-x => 550, -y => 500);
+
+$pause->configure(-state=>'disabled');
+
+$b->attach($pause, -msg => "Click On this button to pause the scipt");
+
+
+my $dropdown_value;
+$mw->Label(-text => "Select file Extn",-foreground=>'blue',-background=>'Cyan',-font => [-family => 'Calibri (Body)',
+-size => 7, -weight => 'bold',])->place(-x => 30, -y => 140);
+my $dropdown = $mw->BrowseEntry(-variable => \$dropdown_value,-background=>'white')->place(-x => 130, -y => 140);
+
+$b->attach($dropdown, -msg => "Select the file extension, which you like to get properties, otherwise select None");
+
+
+$mw->Label(-text => "OR",-foreground=>'blue',-background=>'Cyan',-font => [-family => 'Calibri (Body)',
+-size => 7, -weight => 'bold',])->place(-x => 300, -y => 140);
+
+#my $entry5 = "XYZ";
+my $sample5 = $mw->Entry(-textvariable => \$entry5,-width =>10)->place(-x => 350, -y => 140);  
+
+$b->attach($sample5, -msg => "Enter the file extension, which you like to get properties, No need to enter . (Ex: pdf, doc)");
+
+
+my $descript1 = 1;
+my $descript = $mw -> Checkbutton(-text=>"Description",-activebackground=>'cyan',-background=>'Cyan',-variable=>\$descript1)->place(-x => 550, -y => 120);
+#$descript -> select();
+
+my $revision1 = 1;
+my $revision = $mw -> Checkbutton(-text=>"Revision",-activebackground=>'cyan',-background=>'Cyan',-variable=>\$revision1)->place(-x => 550, -y => 140);
+#$revision -> select();
+
+my $CTS111 = 0;
+my $CTS11 = $mw -> Checkbutton(-text=>"CTS",-activebackground=>'cyan',-background=>'Cyan',-variable=>\$CTS111)->place(-x => 550, -y => 160);
+#$CTS11 -> select();
+
+my $Part_No111 = 0;
+my $Part_No11 = $mw -> Checkbutton(-text=>"Part_No",-activebackground=>'cyan',-background=>'Cyan',-variable=>\$Part_No111)->place(-x => 550, -y => 180);
+#$Part_No11 -> select();
+
+my $Number111 = 0;
+my $Number11 = $mw -> Checkbutton(-text=>"Number",-activebackground=>'cyan',-background=>'Cyan',-variable=>\$Number111)->place(-x => 550, -y => 200);
+#$Number11 -> select();
+
+my $Project111 = 1;
+my $Project11 = $mw -> Checkbutton(-text=>"Project",-activebackground=>'cyan',-background=>'Cyan',-variable=>\$Project111)->place(-x => 550, -y => 220);
+#$Project11 -> select();
+
+my $Status111 = 1;
+my $Status11 = $mw -> Checkbutton(-text=>"Status",-activebackground=>'cyan',-background=>'Cyan',-variable=>\$Status111)->place(-x => 550, -y => 240);
+#$Status11 -> select();
+
+my $entry6;
+my $sample6 = $mw->Entry(-textvariable => \$entry6,-width =>10)->place(-x => 560, -y => 270);  
+$b->attach($sample6, -msg => "Enter the CustomProperty Name, which you like to get separatly");
+
+
+my $entry7;
+my $sample7 = $mw->Entry(-textvariable => \$entry7,-width =>10)->place(-x => 560, -y => 300);
+$b->attach($sample7, -msg => "Enter the CustomProperty Name, which you like to get separatly");
+
+my $entry8;
+my $sample8 = $mw->Entry(-textvariable => \$entry8,-width =>10)->place(-x => 560, -y => 330);
+$b->attach($sample8, -msg => "Enter the CustomProperty Name, which you like to get separatly");
+
+my $entry9;
+my $sample9 = $mw->Entry(-textvariable => \$entry9,-width =>10)->place(-x => 560, -y => 360);
+$b->attach($sample9, -msg => "Enter the CustomProperty Name, which you like to get separatly");
+
+
+my $aa = "-NONE-";
+my $bb = "SLDASM";
+my $cc = "SLDDRW";
+my $dd = "SLDPRT";
+my $ee = "ALL";
+
+$dropdown->insert('end', $aa);
+$dropdown->insert('end', $bb);
+$dropdown->insert('end', $cc);
+$dropdown->insert('end', $dd);
+$dropdown->insert('end', $ee);
+
+
+sub browse1 {
+
+    $path1 = $mw->chooseDirectory(-parent => $mw,-mustexist => 1);
+
+		    $path1 =~ s/\//\\/g;
+			$path3 = $path1;
+
+	 if (defined $path1 ne "") 
+          {
+   $sample->delete("0.0", "end"); 
+   $sample->insert('end', "$path3");
+    }
+}
+
+#$mw->bind(<Enter>, => \&custom );
+
+$mw->bind('Tk::Entry','<Return>',sub{&custom;}); 
+ 
+
+
+MainLoop;	
+
+
+sub custom 
+ {
+
+     $output_text->delete("0.0", "end"); 
+
+     $timer = localtime();
+	 if (($entry1 ne "") and ($dropdown_value ne "")) 
+     { 
+
+  
+   	my $dir = $entry1;	
+	my $file;
+    my $file1;
+   	unless (opendir(DIR, $dir))
+	{
+	 print" There is no Such Directory $dir:\nChoose Valid directory";
+	 printMessage("info","ok","There is no Such Directory $dir:\nChoose Valid directory"); 
+	 $sample->delete("0.0", "end");
+	}
+	
+  
+     
+	 open (TCF, ">MM BETA_Custom Properies.txt");
+     my $workbook  = Spreadsheet::WriteExcel->new("MM BETA.xls");
+
+     my $worksheet = $workbook->add_worksheet("LOOKUP TABLE");
+     my $worksheet1 = $workbook->add_worksheet("LOOKUP TABLE_Continious");
+     my $format = $workbook->add_format( border   => 1);
+     my $heading = $workbook->add_format(bg_color => 'Orange',align => 'center', bold => 1,border   => 1);
+
+    my $rev1;my $rev2;my $rev3;my $rev4;my $rev5;my $rev6;
+    my $cts1;my $cts2;my $cts3;my $cts4;my $cts5;my $cts6;
+    my $part_no1;my $part_no2;my $part_no3;my $part_no4;my $part_no5;my $part_no6;my $part_no7;my $part_no8;
+	my $num1;my $num2;my $num3;my $num4;my $num5;my $num6;
+    my $des1;my $des2;my $des3;my $des4;my $des5;my $des6;my $des7;
+    my $proj;my $proj;my $proj;my $status;my $status1;my $status2;
+  
+   	$pause->configure(-state=>'normal');
+	$sample->configure(-state=>'disabled');
+    $sample1->configure(-state=>'disabled');
+   	$control11->configure(-state=>'disabled');
+	$source->configure(-state=>'disabled');
+	$run->configure(-state=>'disabled');
+	$dropdown->configure(-state=>'disabled');
+	$sample5->configure(-state=>'disabled');
+	$descript->configure(-state=>'disabled');
+    $revision->configure(-state=>'disabled');
+    $CTS11->configure(-state=>'disabled');
+    $Part_No11->configure(-state=>'disabled');
+	$Number11->configure(-state=>'disabled');
+    $Project11->configure(-state=>'disabled');
+    $Status11->configure(-state=>'disabled');
+    $sample6->configure(-state=>'disabled');
+   	$sample7->configure(-state=>'disabled');
+	$sample8->configure(-state=>'disabled');
+    $sample9->configure(-state=>'disabled');
+   	
+	
+	
+	    my $t = 0; #File count
+		my $ff;
+	    my $j;
+		my $h;
+    while (my $file = readdir(DIR)) 
+    { 
+	
+
+	my $i = 0; #Excel write row
+     
+    #   $lower = lc ($dropdown_value);
+
+       if($dropdown_value eq "ALL")
+	   
+	   {
+	     $f1 = "SLDASM";
+		 $f2 = "sldasm";
+	     $f3 = "SLDDRW";
+		 $f4 = "slddrw";
+		 $f5 = "SLDPRT";
+		 $f6 = "sldprt";
+        }
+		elsif($dropdown_value eq "SLDASM")
+		  {
+	     $f1 = "SLDASM";
+		 $f2 = "sldasm";
+	     $f3 = "XXXXX";
+		 $f4 = "XXXXX";
+		 $f5 = "XXXXX";
+		 $f6 = "XXXXX";
+          }
+		  
+		  elsif($dropdown_value eq "SLDDRW")
+		  {
+	     $f1 = "XXXXX";
+		 $f2 = "XXXXX";
+	     $f3 = "SLDDRW";
+		 $f4 = "slddrw";
+		 $f5 = "XXXXX";
+		 $f6 = "XXXXX";
+          }
+		elsif($dropdown_value eq "SLDPRT")
+		  {
+	     $f1 = "XXXXX";
+		 $f2 = "XXXXX";
+	     $f3 = "XXXXX";
+		 $f4 = "XXXXX";
+		 $f5 = "SLDPRT";
+		 $f6 = "sldprt";
+          }
+          elsif($dropdown_value eq "-NONE-")
+		  {
+	     $f1 = "XXXXX";
+		 $f2 = "XXXXX";
+	     $f3 = "XXXXX";
+		 $f4 = "XXXXX";
+		 $f5 = "XXXXX";
+		 $f6 = "XXXXX";
+          }
+		  if($entry5 eq "")
+		  {
+		   $entry5 = " "; 
+		  }
+		
+        $lower1 = lc ($entry5);
+        $upper1 = uc ($entry5);
+
+	     if ($t <= 55000)
+	    {
+	    if(($file =~ /(.*)\.$f1/)||($file =~ /(.*)\.$f2/)||($file =~ /(.*)\.$f3/)||($file =~ /(.*)\.$f4/)||($file =~ /(.*)\.$f5/)||($file =~ /(.*)\.$f6/)||($file =~ /(.*)\.$entry5/)||($file =~ /(.*)\.$lower1/)||($file =~ /(.*)\.$upper1/))
+        {
+     
+	    $file1 = $1;
+        $t++;
+    
+        print "=============================================\n";
+    	$timer = localtime();
+		print " $timer : ($t) : File Name : $file\n";
+    	print "=============================================\n";
+    	print TCF "=============================================\n";
+    	$timer = localtime();
+		print TCF "$timer : ($t) : File Name : $file\n";
+    	print TCF "=============================================\n";
+        $output_text->update();
+		$entry3 = $entry1;
+	    $entry3 =~ s/\//\\/g;
+
+         my $dso = Win32::OLE->new('DSOFile.OleDocumentProperties');
+         $dso->open("$entry3\\$file",0,0);
+
+    
+    	$format->set_align('center');
+    	my $xx = 1;
+   		my $yy = 0;
+		
+   	    	$worksheet->set_column($xx, $yy, 40);
+		
+    	$worksheet->write(0, $yy, "S.No", $heading);
+   		$yy++;
+		$worksheet->write(0, $yy, "File Name", $heading);
+		 $j++; 
+	     $worksheet->write($j, $i,$t,$format);
+		 $i++;
+		 $worksheet->write($j, $i,$file,$format);
+
+         # See if this file has any custom properties set
+
+         unless ($dso->CustomProperties->Count) {
+         print "There are no custom properties defined for the file : $file\n";
+         print TCF "There are no custom properties defined for the file : $file\n";
+		 if ($descript1 == 1)
+	     {
+	      $i++;
+	      $worksheet->write($j, $i,"NoCustom properties",$format);
+      
+	      } 
+	 
+	     if ($revision1 == 1)
+         {
+          $i++;
+	       $worksheet->write($j, $i,"NoCustom properties",$format);
+         } 
+
+	     if ($CTS111 == 1)
+	     {
+          $i++;
+	      $worksheet->write($j, $i,"NoCustom properties",$format);
+      	  }
+	  	 if ($Part_No111 == 1)
+        { 
+          $i++;
+	      $worksheet->write($j, $i,"NoCustom properties",$format);
+         }
+
+	   if ($Number111 == 1)
+       {	 
+         $i++;
+	     $worksheet->write($j, $i,"NoCustom properties",$format);
+	     
+        }
+     
+       if ($Project111 == 1)
+       {
+	    $i++;
+	    $worksheet->write($j, $i,"NoCustom properties",$format);
+	    }
+
+       if ($Status111 == 1)
+       {	
+		   $i++;
+		   $worksheet->write($j, $i,"NoCustom properties",$format);
+	      		 
+       }
+	 
+		
+	  if ($entry6 ne "")
+	   {
+	       $i++;
+		   $worksheet->write($j, $i,"NoCustom properties",$format);
+		   
+		}
+
+   		if ($entry7 ne "")
+		{
+    	       $i++;
+   			   $worksheet->write($j, $i,"NoCustom properties",$format);
+			   
+			   
+		}
+	
+		if ($entry8 ne "")
+    	{
+    	       $i++;
+    		   $worksheet->write($j, $i,"NoCustom properties",$format);
+			   
+    		  
+    	}
+    
+   		if ($entry9 ne "")
+   			{
+	    	       $i++;
+    		   $worksheet->write($j, $i,"NoCustom properties",$format);
+   	
+		   }    
+		
+			 if (($control1 == 1))
+            {
+	        $worksheet->write($j, $i,"",$format);
+		    $ff = $i;
+	  
+	        }
+		    
+	        
+             }
+    
+            $count = $dso->CustomProperties->Count;
+	
+
+    	 
+    	if ($descript1 == 1)
+    	{
+		 $xx++;
+    	 $yy++;
+    	 $des1     = "description";
+   		 $des2     = "Descript";
+		 $des3     = "descript";
+         $des4     = "Descrip";
+	 $des5     = "descrip";
+	 $des6     = "Description";
+     $des7     = "DESCRIPTION";
+    
+	$worksheet->set_column($xx, $yy, 60);
+	$worksheet->write(0, $yy, "DESCRIPTION", $heading);
+	}
+    
+    if ($revision1 == 1)
+    {
+     $xx++;
+	 $yy++;
+     $rev1     = "Revision";
+     $rev2	   = "REVISION";
+     $rev3     = "revision";
+     $rev4     = "rev";
+     $rev5     = "Rev";
+     $rev6     = "REV";
+	 $worksheet->set_column($xx, $yy, 10);
+	 $worksheet->write(0, $yy, "Revision", $heading);
+    }
+    
+    if ($CTS111 == 1)
+	{
+	 $xx++;
+	 $yy++;
+	$cts1     = "CTS";
+    $cts2     = "cts";
+    $cts3     = "CTS#";
+    $cts4     = "cts#";
+    $cts5     = "CTS #";
+    $cts6     = "cts #";
+	$worksheet->set_column($xx, $yy, 10);
+	$worksheet->write(0, $yy, "CTS", $heading);
+    }
+    
+    if ($Part_No111 == 1)
+    {
+	 $xx++;
+	 $yy++;
+     $part_no1 = "Part_No";
+	 $part_no2 = "PART_NO";
+     $part_no3 = "part_no";
+     $part_no4 = "Part_no";
+     $part_no5 = "part_No";
+     $part_no6 = "partNo";
+     $part_no7 = "partno";
+     $part_no8 = "PartNo";
+	 $worksheet->set_column($xx, $yy, 15);
+	 $worksheet->write(0, $yy, "Part_No", $heading);
+    }
+	
+	if ($Number111 == 1)
+    {
+	 $xx++;
+	 $yy++;
+    $num1 = "Number";
+	$num2 = "NUMBER";
+    $num3 = "number";
+    $num4 = "Num";
+	$num5 = "num";
+	$num6 = "NUM";
+    $worksheet->set_column($xx, $yy, 15);
+	$worksheet->write(0, $yy, "Number", $heading);
+    }
+    
+    if ($Project111 == 1)
+    {
+	 $xx++;
+	 $yy++;
+    $proj = "Project";
+    $proj1 = "project";
+    $proj2 = "PROJECT";
+	$worksheet->set_column($xx, $yy, 20);
+	$worksheet->write(0, $yy, "Project", $heading);
+    }
+    
+    if ($Status111 == 1)
+    {
+	 $xx++;
+	 $yy++;
+    $status = "Status";
+    $status1 = "status";
+    $status2 = "STATUS";
+	$worksheet->set_column($xx, $yy, 20);
+	$worksheet->write(0, $yy, "Status", $heading);
+    }
+
+	if ($entry6 ne "")
+	{
+	 $xx++;
+	 $yy++;
+    
+	$worksheet->set_column($xx, $yy, 20);
+	$worksheet->write(0, $yy, "$entry6", $heading);
+	}
+	if ($entry7 ne "")
+	{
+	 $xx++;
+	 $yy++;
+    
+	$worksheet->set_column($xx, $yy, 20);
+	$worksheet->write(0, $yy, "$entry7", $heading);
+	}
+	if ($entry8 ne "")
+	{
+	 $xx++;
+	 $yy++;
+    
+	$worksheet->set_column($xx, $yy, 20);
+	$worksheet->write(0, $yy, "$entry8", $heading);
+	}
+	if ($entry9 ne "")
+	{
+	 $xx++;
+	 $yy++;
+    
+	$worksheet->set_column($xx, $yy, 20);
+	$worksheet->write(0, $yy, "$entry9", $heading);
+	}
+	
+		 if ($control1 == 1)
+    {
+	 $xx++;
+	 $yy++;
+	$worksheet->set_column($xx, $yy, 80);
+	$worksheet->write(0, $yy, "Control File", $heading);
+    }
+	
+ 	my $c;
+	my $xxxx =0;
+	my $yyyy = 0;	
+    my $controlfile;
+	for($c=0;$c<$count;$c++)
+
+	{
+
+	@b = $dso->CustomProperties->Item($c)->Name;
+	@m = $dso->CustomProperties->Item($c)->Value; 
+	
+	my $name = $dso->CustomProperties->Item($c)->Name;
+	my $value = $dso->CustomProperties->Item($c)->Value; 	
+    my $bhaskar;
+     	print "@b    		::    @m\n";
+     	print TCF "@b    		::    @m\n";
+
+	    $output_text->update();
+
+	if ($descript1 == 1)
+	{
+	 $i++;
+	 $worksheet->write($j, $i,"",$format);
+      if (($name eq $des1) || ($name eq $des2)||($name eq $des3)||($name eq $des4)||($name eq $des5)||($name eq $des6)||($name eq $des7))
+      {
+	    
+	      $worksheet->write($j, $i,$value,$format);
+		  
+		  $xxxx++;
+		  $bhaskar = "$value";
+		   		  
+      }
+	 } 
+	 
+	 if ($revision1 == 1)
+    {
+     $i++;
+	 $worksheet->write($j, $i,"",$format);
+      if (($name eq $rev1)||($name eq $rev2)||($name eq $rev3)||($name eq $rev4)||($name eq $rev5)||($name eq $rev6))
+      {
+	   
+           $worksheet->write($j, $i,$value,$format);
+      }
+     } 
+
+	  if ($CTS111 == 1)
+	  {
+      $i++;
+	  $worksheet->write($j, $i,"",$format);
+      if (($name eq $cts1) || ($name eq $cts2)||($name eq $cts3)||($name eq $cts4)||($name eq $cts5)||($name eq $cts6))
+      {
+		  $worksheet->write($j, $i,$value,$format);
+      }
+	  }
+	  
+	 if ($Part_No111 == 1)
+     { 
+     $i++;
+	 $worksheet->write($j, $i,"",$format);
+       if (($name eq $part_no1) || ($name eq $part_no2)||($name eq $part_no3)||($name eq $part_no4)||($name eq $part_no5)||($name eq $part_no6)||($name eq $part_no7)||($name eq $part_no8))
+      {
+
+     	  $worksheet->write($j, $i,$value,$format);
+      }
+     }
+
+	if ($Number111 == 1)
+    {	 
+      $i++;
+	  $worksheet->write($j, $i,"",$format);
+	     if (($name eq $num1) || ($name eq $num2) || ($name eq $num3)||($name eq $num4) || ($name eq $num5) || ($name eq $num6))
+           {
+	       
+		   $worksheet->write($j, $i,$value,$format);
+           }
+     }
+     
+    if ($Project111 == 1)
+    {
+	 $i++;
+	 $worksheet->write($j, $i,"",$format);
+	 if (($name eq $proj) || ($name eq $proj1) || ($name eq $proj2))
+           {
+	       
+		   $worksheet->write($j, $i,$value,$format);
+           }
+	}
+
+    if ($Status111 == 1)
+    {	
+		   $i++;
+		   $worksheet->write($j, $i,"",$format);
+	        if (($name eq $status) || ($name eq $status1) || ($name eq $status2))
+           {
+			   $worksheet->write($j, $i,$value,$format);
+           }			 
+     }
+	 
+	if ($entry6 ne "")
+	{
+	       $i++;
+		   $worksheet->write($j, $i,"",$format);
+
+		   $uc6 = uc ($entry6);
+		   $lc6 = lc ($entry6);
+		   
+	        if (($name eq $entry6) || ($name eq $uc6) || ($name eq $lc6))
+           {
+		   
+			   $worksheet->write($j, $i,$value,$format);
+           }			 
+	}
+
+	if ($entry7 ne "")
+	{
+	       $i++;
+		   $worksheet->write($j, $i,"",$format);
+		   
+		   $uc7 = uc($entry7);
+		   $lc7 = lc($entry7);
+		   
+	        if (($name eq $entry7) || ($name eq $uc7) || ($name eq $lc7))
+           {
+			   $worksheet->write($j, $i,$value,$format);
+           }			 
+	}
+
+	if ($entry8 ne "")
+	{
+	       $i++;
+		   $worksheet->write($j, $i,"",$format);
+		   
+		   $uc8 = uc($entry8);
+		   $lc8 = lc($entry8);
+		   
+	        if (($name eq $entry8) || ($name eq $uc8) || ($name eq $lc8))
+           {
+			   $worksheet->write($j, $i,$value,$format);
+           }			 
+	}
+
+	if ($entry9 ne "")
+	{
+	       $i++;
+		   $worksheet->write($j, $i,"",$format);
+		   
+		   $uc9 = uc($entry9);
+		   $lc9 = lc($entry9);
+		   
+	        if (($name eq $entry9) || ($name eq $uc9) || ($name eq $lc9))
+           {
+			   $worksheet->write($j, $i,$value,$format);
+           }			 
+	}    
+	
+	 if (($control1 == 1) && ($xxxx == 1))
+       {
+	    $i++;
+	      $yyyy = 1;
+	      $str1 = substr($file1,0,25);
+		   $str2 = substr($bhaskar,0,40);
+		   
+		   $controlfile = "$entry2\\$file|$str1||$str2||";
+		   
+
+			 $worksheet->write($j, $i,"",$format);
+		     $worksheet->write($j, $i,$controlfile,$format);
+	  
+	    }
+	
+	
+	     $ff = $i;
+        $i=1;
+		$xxxx =0;
+    }
+	
+  
+	 if(($control1 == 1) and ($yyyy == 0))
+
+	   {
+	      $ff++;
+		   
+	      $str1 = substr($file1,0,25);
+  
+		   $controlfile = "$entry2\\$file|$str1||||";
+		   
+
+	        $worksheet->write($j, $ff,"",$format);
+		   $worksheet->write($j, $ff,$controlfile,$format);
+	   }
+   }
+
+   }
+   
+   else ############### greater than 55000
+   
+   {
+    if(($file =~ /(.*)\.$f1/)||($file =~ /(.*)\.$f2/)||($file =~ /(.*)\.$f3/)||($file =~ /(.*)\.$f4/)||($file =~ /(.*)\.$f5/)||($file =~ /(.*)\.$f6/)||($file =~ /(.*)\.$entry5/)||($file =~ /(.*)\.$lower1/)||($file =~ /(.*)\.$upper1/))
+        {
+     
+	    $file1 = $1;
+        $t++;
+    
+        print "=============================================\n";
+    	$timer = localtime();
+		print " $timer : ($t) : File Name : $file\n";
+    	print "=============================================\n";
+    	print TCF "=============================================\n";
+    	$timer = localtime();
+		print TCF "$timer : ($t) : File Name : $file\n";
+    	print TCF "=============================================\n";
+        $output_text->update();
+		$entry3 = $entry1;
+	    $entry3 =~ s/\//\\/g;
+
+         my $dso = Win32::OLE->new('DSOFile.OleDocumentProperties');
+         $dso->open("$entry3\\$file",0,0);
+
+    
+    	$format->set_align('center');
+    	my $xx = 1;
+   		my $yy = 0;
+		
+   	    	$worksheet1->set_column($xx, $yy, 40);
+		
+    	$worksheet1->write(0, $yy, "S.No", $heading);
+   		$yy++;
+		$worksheet1->write(0, $yy, "File Name", $heading);
+		 $h++; 
+	     $worksheet1->write($h, $i,$t,$format);
+		 $i++;
+		 $worksheet1->write($h, $i,$file,$format);
+
+         # See if this file has any custom properties set
+
+		    
+         unless ($dso->CustomProperties->Count) {
+         print "There are no custom properties defined for the file : $file\n";
+         print TCF "There are no custom properties defined for the file : $file\n";
+		 if ($descript1 == 1)
+	     {
+	      $i++;
+	      $worksheet1->write($h, $i,"NoCustom properties",$format);
+      
+	      } 
+	 
+	     if ($revision1 == 1)
+         {
+          $i++;
+	       $worksheet1->write($h, $i,"NoCustom properties",$format);
+         } 
+
+	     if ($CTS111 == 1)
+	     {
+          $i++;
+	      $worksheet1->write($h, $i,"NoCustom properties",$format);
+      	  }
+	  	 if ($Part_No111 == 1)
+        { 
+          $i++;
+	      $worksheet1->write($h, $i,"NoCustom properties",$format);
+         }
+
+	   if ($Number111 == 1)
+       {	 
+         $i++;
+	     $worksheet1->write($h, $i,"NoCustom properties",$format);
+	     
+        }
+     
+       if ($Project111 == 1)
+       {
+	    $i++;
+	    $worksheet1->write($h, $i,"NoCustom properties",$format);
+	    }
+
+       if ($Status111 == 1)
+       {	
+		   $i++;
+		   $worksheet1->write($h, $i,"NoCustom properties",$format);
+	      		 
+       }
+	 
+		
+	  if ($entry6 ne "")
+	   {
+	       $i++;
+		   $worksheet1->write($h, $i,"NoCustom properties",$format);
+		   
+		}
+
+   		if ($entry7 ne "")
+		{
+    	       $i++;
+   			   $worksheet1->write($h, $i,"NoCustom properties",$format);
+			   
+			   
+		}
+	
+		if ($entry8 ne "")
+    	{
+    	       $i++;
+    		   $worksheet1->write($h, $i,"NoCustom properties",$format);
+			   
+    		  
+    	}
+    
+   		if ($entry9 ne "")
+   			{
+	    	       $i++;
+    		   $worksheet1->write($h, $i,"NoCustom properties",$format);
+   	
+		   }    
+		
+			 if (($control1 == 1))
+            {
+	        $worksheet1->write($h, $i,"",$format);
+		    $ff = $i;
+	  
+	        }
+		    
+	        
+             }
+    
+            $count = $dso->CustomProperties->Count;
+	
+
+    	 
+    	if ($descript1 == 1)
+    	{
+		 $xx++;
+    	 $yy++;
+    	 $des1     = "description";
+   		 $des2     = "Descript";
+		 $des3     = "descript";
+         $des4     = "Descrip";
+	     $des5     = "descrip";
+	     $des6     = "Description";
+         $des7     = "DESCRIPTION";
+    
+	     $worksheet1->set_column($xx, $yy, 60);
+	     $worksheet1->write(0, $yy, "DESCRIPTION", $heading);
+	    }
+    
+    if ($revision1 == 1)
+    {
+     $xx++;
+	 $yy++;
+     $rev1     = "Revision";
+     $rev2	   = "REVISION";
+     $rev3     = "revision";
+     $rev4     = "rev";
+     $rev5     = "Rev";
+     $rev6     = "REV";
+	 $worksheet1->set_column($xx, $yy, 10);
+	 $worksheet1->write(0, $yy, "Revision", $heading);
+    }
+    
+    if ($CTS111 == 1)
+	{
+	 $xx++;
+	 $yy++;
+	$cts1     = "CTS";
+    $cts2     = "cts";
+    $cts3     = "CTS#";
+    $cts4     = "cts#";
+    $cts5     = "CTS #";
+    $cts6     = "cts #";
+	$worksheet1->set_column($xx, $yy, 10);
+	$worksheet1->write(0, $yy, "CTS", $heading);
+    }
+    
+    if ($Part_No111 == 1)
+    {
+	 $xx++;
+	 $yy++;
+     $part_no1 = "Part_No";
+	 $part_no2 = "PART_NO";
+     $part_no3 = "part_no";
+     $part_no4 = "Part_no";
+     $part_no5 = "part_No";
+     $part_no6 = "partNo";
+     $part_no7 = "partno";
+     $part_no8 = "PartNo";
+	 $worksheet1->set_column($xx, $yy, 15);
+	 $worksheet1->write(0, $yy, "Part_No", $heading);
+    }
+	
+	if ($Number111 == 1)
+    {
+	 $xx++;
+	 $yy++;
+    $num1 = "Number";
+	$num2 = "NUMBER";
+    $num3 = "number";
+    $num4 = "Num";
+	$num5 = "num";
+	$num6 = "NUM";
+    $worksheet1->set_column($xx, $yy, 15);
+	$worksheet1->write(0, $yy, "Number", $heading);
+    }
+    
+    if ($Project111 == 1)
+    {
+	 $xx++;
+	 $yy++;
+    $proj = "Project";
+    $proj1 = "project";
+    $proj2 = "PROJECT";
+	$worksheet1->set_column($xx, $yy, 20);
+	$worksheet1->write(0, $yy, "Project", $heading);
+    }
+    
+    if ($Status111 == 1)
+    {
+	 $xx++;
+	 $yy++;
+    $status = "Status";
+    $status1 = "status";
+    $status2 = "STATUS";
+	$worksheet1->set_column($xx, $yy, 20);
+	$worksheet1->write(0, $yy, "Status", $heading);
+    }
+
+	if ($entry6 ne "")
+	{
+	 $xx++;
+	 $yy++;
+    
+	$worksheet1->set_column($xx, $yy, 20);
+	$worksheet1->write(0, $yy, "$entry6", $heading);
+	}
+	if ($entry7 ne "")
+	{
+	 $xx++;
+	 $yy++;
+    
+	$worksheet1->set_column($xx, $yy, 20);
+	$worksheet1->write(0, $yy, "$entry7", $heading);
+	}
+	if ($entry8 ne "")
+	{
+	 $xx++;
+	 $yy++;
+    
+	$worksheet1->set_column($xx, $yy, 20);
+	$worksheet1->write(0, $yy, "$entry8", $heading);
+	}
+	if ($entry9 ne "")
+	{
+	 $xx++;
+	 $yy++;
+    
+	$worksheet1->set_column($xx, $yy, 20);
+	$worksheet1->write(0, $yy, "$entry9", $heading);
+	}
+	
+		 if ($control1 == 1)
+    {
+	 $xx++;
+	 $yy++;
+	$worksheet1->set_column($xx, $yy, 80);
+	$worksheet1->write(0, $yy, "Control File", $heading);
+    }
+	
+ 	my $c;
+	my $xxxx =0;
+	my $yyyy = 0;	
+    my $controlfile;
+	for($c=0;$c<$count;$c++)
+
+	{
+
+	@b = $dso->CustomProperties->Item($c)->Name;
+	@m = $dso->CustomProperties->Item($c)->Value; 
+	
+	my $name = $dso->CustomProperties->Item($c)->Name;
+	my $value = $dso->CustomProperties->Item($c)->Value; 	
+    my $bhaskar;
+     	print "@b    		::    @m\n";
+     	print TCF "@b    		::    @m\n";
+
+	    $output_text->update();
+
+	if ($descript1 == 1)
+	{
+	 $i++;
+	 $worksheet1->write($h, $i,"",$format);
+      if (($name eq $des1) || ($name eq $des2)||($name eq $des3)||($name eq $des4)||($name eq $des5)||($name eq $des6)||($name eq $des7))
+      {
+	    
+	      $worksheet1->write($h, $i,$value,$format);
+		  
+		  $xxxx++;
+		  $bhaskar = "$value";
+		   		  
+      }
+	 } 
+	 
+	 if ($revision1 == 1)
+    {
+     $i++;
+	 $worksheet1->write($h, $i,"",$format);
+      if (($name eq $rev1)||($name eq $rev2)||($name eq $rev3)||($name eq $rev4)||($name eq $rev5)||($name eq $rev6))
+      {
+	   
+           $worksheet1->write($h, $i,$value,$format);
+      }
+     } 
+
+	  if ($CTS111 == 1)
+	  {
+      $i++;
+	  $worksheet1->write($h, $i,"",$format);
+      if (($name eq $cts1) || ($name eq $cts2)||($name eq $cts3)||($name eq $cts4)||($name eq $cts5)||($name eq $cts6))
+      {
+		  $worksheet1->write($h, $i,$value,$format);
+      }
+	  }
+	  
+	 if ($Part_No111 == 1)
+     { 
+     $i++;
+	 $worksheet1->write($h, $i,"",$format);
+       if (($name eq $part_no1) || ($name eq $part_no2)||($name eq $part_no3)||($name eq $part_no4)||($name eq $part_no5)||($name eq $part_no6)||($name eq $part_no7)||($name eq $part_no8))
+      {
+
+     	  $worksheet1->write($h, $i,$value,$format);
+      }
+     }
+
+	if ($Number111 == 1)
+    {	 
+      $i++;
+	  $worksheet1->write($h, $i,"",$format);
+	     if (($name eq $num1) || ($name eq $num2) || ($name eq $num3)||($name eq $num4) || ($name eq $num5) || ($name eq $num6))
+           {
+	       
+		   $worksheet1->write($h, $i,$value,$format);
+           }
+     }
+     
+    if ($Project111 == 1)
+    {
+	 $i++;
+	 $worksheet1->write($h, $i,"",$format);
+	 if (($name eq $proj) || ($name eq $proj1) || ($name eq $proj2))
+           {
+	       
+		   $worksheet1->write($h, $i,$value,$format);
+           }
+	}
+
+    if ($Status111 == 1)
+    {	
+		   $i++;
+		   $worksheet1->write($h, $i,"",$format);
+	        if (($name eq $status) || ($name eq $status1) || ($name eq $status2))
+           {
+			   $worksheet1->write($h, $i,$value,$format);
+           }			 
+     }
+	 
+	if ($entry6 ne "")
+	{
+	       $i++;
+		   $worksheet1->write($h, $i,"",$format);
+
+		   $uc6 = uc ($entry6);
+		   $lc6 = lc ($entry6);
+		   
+	        if (($name eq $entry6) || ($name eq $uc6) || ($name eq $lc6))
+           {
+		   
+			   $worksheet1->write($h, $i,$value,$format);
+           }			 
+	}
+
+	if ($entry7 ne "")
+	{
+	       $i++;
+		   $worksheet1->write($h, $i,"",$format);
+		   
+		   $uc7 = uc($entry7);
+		   $lc7 = lc($entry7);
+		   
+	        if (($name eq $entry7) || ($name eq $uc7) || ($name eq $lc7))
+           {
+			   $worksheet1->write($h, $i,$value,$format);
+           }			 
+	}
+
+	if ($entry8 ne "")
+	{
+	       $i++;
+		   $worksheet1->write($h, $i,"",$format);
+		   
+		   $uc8 = uc($entry8);
+		   $lc8 = lc($entry8);
+		   
+	        if (($name eq $entry8) || ($name eq $uc8) || ($name eq $lc8))
+           {
+			   $worksheet1->write($h, $i,$value,$format);
+           }			 
+	}
+
+	if ($entry9 ne "")
+	{
+	       $i++;
+		   $worksheet1->write($h, $i,"",$format);
+		   
+		   $uc9 = uc($entry9);
+		   $lc9 = lc($entry9);
+		   
+	        if (($name eq $entry9) || ($name eq $uc9) || ($name eq $lc9))
+           {
+			   $worksheet1->write($h, $i,$value,$format);
+           }			 
+	}    
+	
+	 if (($control1 == 1) && ($xxxx == 1))
+       {
+	    $i++;
+	      $yyyy = 1;
+	      $str1 = substr($file1,0,25);
+		   $str2 = substr($bhaskar,0,40);
+		   
+		   $controlfile = "$entry2\\$file|$str1||$str2||";
+		   
+
+			 $worksheet1->write($h, $i,"",$format);
+		     $worksheet1->write($h, $i,$controlfile,$format);
+	  
+	    }
+	
+	
+	     $ff = $i;
+        $i=1;
+		$xxxx =0;
+    }
+	
+  
+	 if(($control1 == 1) and ($yyyy == 0))
+
+	   {
+	      $ff++;
+		   
+	      $str1 = substr($file1,0,25);
+  
+		   $controlfile = "$entry2\\$file|$str1||||";
+		   
+ 	        $worksheet1->write($h, $ff,"",$format);
+		   $worksheet1->write($h, $ff,$controlfile,$format);
+	   }
+   }
+              
+     
+
+  
+   
+   }
+
+  }   # While end
+
+   	$workbook->close();
+	close(TCF);
+    $pause->configure(-state=>'disabled');
+   	$entry5 = "";
+	#$info = "Gathered custom Properties, refer MM BETA.xls";
+	#$status->update();
+	
+	$sample->configure(-state=>'normal');
+	$sample1->configure(-state=>'normal');
+    $control11->configure(-state=>'normal');
+    $source->configure(-state=>'normal');
+    $run->configure(-state=>'normal');
+	$dropdown->configure(-state=>'normal');
+    $sample5->configure(-state=>'normal');
+    $descript->configure(-state=>'normal');
+    $revision->configure(-state=>'normal');
+   	$CTS11->configure(-state=>'normal');
+	$Part_No11->configure(-state=>'normal');
+    $Number11->configure(-state=>'normal');
+   	$Project11->configure(-state=>'normal');
+	$Status11->configure(-state=>'normal');
+    $sample6->configure(-state=>'normal');
+   	$sample7->configure(-state=>'normal');
+	$sample8->configure(-state=>'normal');
+	$sample9->configure(-state=>'normal');
+	
+	    printMessage("info", "OK",
+	                "Gathered custom Properties, refer MM BETA.xls \n \n Total no of files : $t \n");
+        }
+         else {
+              
+	              printMessage("warning", "OK",
+                    "Enter or select the solidworks file location path \n or Select file extension");
+               }	
+    
+}
+	
+    
+sub printMessage
+{
+  my ($icon, $type, $outputmsg) = @_;
+  my $msg = $mw->messageBox(-icon => $icon, -type => $type,
+  -title => $TITLE, -message => $outputmsg);
+}
+
+sub Pause
+{
+ printMessage("info","ok","Paused!!! Click OK to Re-Start/Continue the Run"); 
+  
+}
+	
+
+
+sub aboutDialog {
+     my $popup = $mw->Dialog(
+         -popover        => $mw,-background=>'Cyan',
+         -title          => 'About Author',
+         -default_button => 'OK',
+         -buttons        => ['OK'],
+         -text           => "Designed/Developed By \n\n Bhaskar Reddy Marrikunta\n\n".
+                            "         11-Nov-2011 \n\n". ' Reach me at: m.bhaskar@hcl.com',);
+     $popup->resizable('no', 'no');
+     $popup->Show();
+ }
+ 
+  sub help {
+      my $popup = $mw->Dialog(
+          -popover        => $mw,-background=>'Cyan',
+          -title          => 'Help',
+          -default_button => 'OK',
+          -buttons        => ['OK'],
+          -text           => "1.Select Respective file extention,\n no need to give . before file extn\n\n 2. Best Viewed in 14 inch screen with 1280x800 resolution",);
+      $popup->resizable("no", "no");
+      $popup->Show();
+ }
