@@ -15,6 +15,14 @@ app.logger.setLevel(logging.INFO)
 # End of Logging
 '''
 http://blog.luisrei.com/articles/flaskrest.html
+
+curl http://127.0.0.1:5000/
+curl -X PATCH http://127.0.0.1:5000/echo
+curl -H "Content-type: application/json" -X POST http://127.0.0.1:5000/messages -d '{"message":"Hello Data"}'
+curl -H "Content-type: application/octet-stream" -X POST http://127.0.0.1:5000/messages --data-binary @message.bin
+curl -i http://127.0.0.1:5000/hello
+curl -v -u "admin:secret" http://127.0.0.1:5000/secrets
+
 '''
 
 # First method for Pages
