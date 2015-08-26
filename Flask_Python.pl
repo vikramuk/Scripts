@@ -12,6 +12,7 @@ app = Flask(__name__)
 file_handler = logging.FileHandler('app.log')
 app.logger.addHandler(file_handler)
 app.logger.setLevel(logging.INFO)
+app.run(debug=True)
 # End of Logging
 '''
 http://blog.luisrei.com/articles/flaskrest.html
