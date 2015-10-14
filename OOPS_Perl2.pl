@@ -159,3 +159,14 @@ print "@has_digit\n";
  
 Cd  a
 find . -type f -print | xargs grep -il "name"
+
+
+
+#!/usr/bin/perl -w
+
+@myNames = ('jacob', 'alexander', 'ethan', 'andrew');
+@ucNames = map(ucfirst, @myNames);
+
+foreach $key ( @ucNames ){
+ print "$key\n";
+}
