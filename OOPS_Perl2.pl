@@ -152,5 +152,8 @@ sub DESTROY
     print "MyClass::DESTROY called\n";
 }
 
- 
+#!/usr/bin/perl
+@list = (1,"Test", 0, "foo", 20 );
+@has_digit = grep ( /\d/, @list );
+print "@has_digit\n";
  
