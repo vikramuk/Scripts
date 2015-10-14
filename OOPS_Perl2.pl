@@ -157,3 +157,5 @@ sub DESTROY
 @has_digit = grep ( /\d/, @list );
 print "@has_digit\n";
  
+Cd  a
+find . -type f -print | xargs grep -il "name"
