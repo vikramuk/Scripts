@@ -197,6 +197,18 @@ $datestring = gmtime();
 print "GMT date and time $datestring\n";
 
 
-/* */ 
+/*
 Package Export
 h2xs  -Ax -n Person (ModuleName)
+ */ 
+
+/* 
+ Installing Perl Module
+
+Download a Perl module in the form tar.gz file. Use the following sequence to install any Perl Module Person.pm which has been downloaded in as Person.tar.gz file.
+*/
+tar xvfz Person.tar.gz
+cd Person
+perl Makefile.PL
+make
+make install
