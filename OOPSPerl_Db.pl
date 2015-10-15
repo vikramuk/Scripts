@@ -177,3 +177,21 @@ print "\n Group Partition and Sub partition creation shall take few hours\n";
 `./KpiSetupSubPartitionsGroup.sh &`;
 
 print "Complete \n\n";
+
+/* */
+Package name : main 1
+Package name : Foo 10
+Package name : main 100
+Package name : main 10
+
+
+#!/usr/local/bin/perl
+ use TIME::Local;
+
+$datestring = localtime();
+print "Local date and time $datestring\n";
+
+#!/usr/local/bin/perl
+
+$datestring = gmtime();
+print "GMT date and time $datestring\n";
