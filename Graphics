@@ -1,0 +1,200 @@
+
+C:\Users\lotustest\Desktop>title "Android ADB Shell"
+
+C:\Users\lotustest\Desktop>set PATH=C:\Python27\;C:\Python27\Scripts;C:\ProgramD
+ata\Oracle\Java\javapath;C:\Program Files (x86)\CA\SC\CAWIN\;C:\Windows\system32
+;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\
+;C:\PROGRA~2\CA\SC\CAM\bin;C:\Program Files (x86)\CA\SC\Csam\SockAdapter\bin;C:\
+Program Files (x86)\CA\DSM\bin;C:\Program Files (x86)\CA\SC\CBB\;C:\Program File
+s (x86)\QuickTime\QTSystem\;C:\Program Files\Perforce;C:\Program Files (x86)\And
+roid\android-sdk\tools;C:\Program Files\Agilent\IO Libraries Suite\bin;C:\Progra
+m Files\IVI Foundation\VISA\Win64\agvisa;C:\Program Files\IVI Foundation\VISA\Wi
+n64\bin;C:\Program Files (x86)\Agilent\IO Libraries Suite\bin;C:\Program Files (
+x86)\IVI Foundation\VISA\WinNT\agvisa;C:\Program Files (x86)\IVI Foundation\VISA
+\WinNT\bin;C:\Program Files (x86)\IVI Foundation\IVI\bin;C:\Program Files\IVI Fo
+undation\IVI\bin;C:\Program Files (x86)\IVI Foundation\VISA\WinNT\Bin\;C:\Progra
+m Files\IVI Foundation\VISA\Win64\Bin\;C:\Windows\system32\config\systemprofile\
+.dnx\bin;C:\Program Files\Microsoft DNX\Dnvm\;C:\Program Files (x86)\Windows Kit
+s\8.1\Windows Performance Toolkit\;C:\Users\lotustest\Desktop\android-sdk-window
+s;C:\Users\lotustest\Desktop\android-sdk-windows\platform-tools;C:\Users\lotuste
+st\Desktop\android-sdk-windows\tools;C:\Lotus\Nodejs\;C:\Python27\;C:\Python27\S
+cripts;C:\ProgramData\Oracle\Java\javapath;C:\Program Files (x86)\CA\SC\CAWIN\;C
+:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\Windo
+wsPowerShell\v1.0\;C:\PROGRA~2\CA\SC\CAM\bin;C:\Program Files (x86)\CA\SC\Csam\S
+ockAdapter\bin;C:\Program Files (x86)\CA\DSM\bin;C:\Program Files (x86)\CA\SC\CB
+B\;C:\Program Files (x86)\QuickTime\QTSystem\;C:\Program Files\Perforce;C:\Progr
+am Files (x86)\Android\android-sdk\tools;;C:\Program Files\Agilent\IO Libraries
+Suite\bin;C:\Program Files\IVI Foundation\VISA\Win64\agvisa;C:\Program Files\IVI
+ Foundation\VISA\Win64\bin;C:\Program Files (x86)\Agilent\IO Libraries Suite\bin
+;C:\Program Files (x86)\IVI Foundation\VISA\WinNT\agvisa;C:\Program Files (x86)\
+IVI Foundation\VISA\WinNT\bin;C:\Program Files (x86)\IVI Foundation\IVI\bin;C:\P
+rogram Files\IVI Foundation\IVI\bin;C:\Program Files (x86)\IVI Foundation\VISA\W
+inNT\Bin\;C:\Program Files\IVI Foundation\VISA\Win64\Bin";C:\Users\lotustest\App
+Data\Roaming\npm;C:\Users\lotustest\Desktop\android-sdk-windows;C:\Users\lotuste
+st\Desktop\android-sdk-windows\tools;C:\Users\lotustest\Desktop\android-sdk-wind
+ows\platform-tools
+
+C:\Users\lotustest\Desktop>echo "Set Android Path"
+"Set Android Path"
+
+C:\Users\lotustest\Desktop>cmd.exe
+Microsoft Windows [Version 6.1.7601]
+Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
+
+C:\Users\lotustest\Desktop>adb shell dumpsys SurfaceFlinger
+Visible layers (count = 5)
++ Layer 0x1902780 (com.android.systemui.ImageWallpaper)
+      z=    21000, pos=(-320,-264), size=(1920,1280), isOpaque=1, needsDithering
+=0, invalidate=0, alpha=0xff, flags=0x00000001, tr=[1.00, 0.00][0.00, 1.00]
+      client=0x1900c88, identity=5
+      format= 2, activeBuffer=[1920x1280:1920,  1], transform-hint=0x00, queued-
+frames=0
+            mBufferCount=3, mSynchronousMode=1, default-size=[1920x1280], mPixelFormat=1, mTexName=7
+            current: {crop=[0,0,-1,-1], transform=0x00, current=-1}
+            next   : {crop=[0,0,-1,-1], transform=0x00, FIFO(0)={}}
+             [00] state=FREE    , crop=[0,0,-1,-1], transform=0x00, timestamp=17370335003
+             [01] state=FREE    , crop=[0,0,-1,-1], transform=0x00, timestamp=0
+             [02] state=FREE    , crop=[0,0,-1,-1], transform=0x00, timestamp=0
+  Region transparentRegion (this=0x1902920, count=1)
+    [  0,   0,   0,   0]
+  Region transparentRegionScreen (this=0x19027b4, count=1)
+    [  0,   0,   0,   0]
+  Region visibleRegionScreen (this=0x1902790, count=1)
+    [  0,   0,   0,   0]
++ Layer 0x1907588 (SurfaceView)
+      z=    21015, pos=(4,71), size=( 900, 668), isOpaque=1, needsDithering=0, invalidate=0, alpha=0xff, flags=0x00000000, tr=[1.00, 0.00][0.00, 1.00]
+      client=0x19046d0, identity=11
+      format= 4, activeBuffer=[ 900x 668: 928,  4], transform-hint=0x00, queued-frames=0
+            mBufferCount=3, mSynchronousMode=1, default-size=[900x668], mPixelFormat=4, mTexName=6
+            current: {crop=[0,0,-1,-1], transform=0x00, current=2}
+            next   : {crop=[0,0,-1,-1], transform=0x00, FIFO(0)={}}
+             [00] state=FREE    , crop=[0,0,-1,-1], transform=0x00, timestamp=661225214004, 0x18fc8f0 [ 900x 668: 928,  4]
+             [01] state=FREE    , crop=[0,0,-1,-1], transform=0x00, timestamp=661476307004, 0x1904568 [ 900x 668: 928,  4]
+            >[02] state=QUEUED  , crop=[0,0,-1,-1], transform=0x00, timestamp=661713034006, 0x19069d0 [ 900x 668: 928,  4]
+  Region transparentRegion (this=0x1907728, count=1)
+    [  0,   0,   0,   0]
+  Region transparentRegionScreen (this=0x19075bc, count=1)
+    [  0,   0,   0,   0]
+  Region visibleRegionScreen (this=0x1907598, count=1)
+    [  4,  71, 904, 739]
++ Layer 0x1905660 (com.ge.med.mic.lotus/com.ge.med.mic.lotus.activities.MonitoringActivity)
+      z=    21020, pos=(0,0), size=(1280, 800), isOpaque=0, needsDithering=0, invalidate=0, alpha=0xff, flags=0x00000000, tr=[1.00, 0.00][0.00, 1.00]
+      client=0x19046d0, identity=10
+      format= 1, activeBuffer=[1280x 800:1280,  1], transform-hint=0x00, queued-frames=0
+            mBufferCount=2, mSynchronousMode=1, default-size=[1280x800], mPixelFormat=1, mTexName=3
+            current: {crop=[0,0,-1,-1], transform=0x00, current=1}
+            next   : {crop=[0,0,-1,-1], transform=0x00, FIFO(0)={}}
+             [00] state=FREE    , crop=[0,0,-1,-1], transform=0x00, timestamp=661487868004, 0x18fe350 [1280x 800:1280,  1]
+            >[01] state=QUEUED  , crop=[0,0,-1,-1], transform=0x00, timestamp=661507049004, 0x1904040 [1280x 800:1280,  1]
+  Region transparentRegion (this=0x1905800, count=1)
+    [  4,  71, 904, 739]
+  Region transparentRegionScreen (this=0x1905694, count=1)
+    [  4,  71, 904, 739]
+  Region visibleRegionScreen (this=0x1905670, count=4)
+    [  0,   0, 1280,  71]
+    [  0,  71,   4, 739]
+    [904,  71, 1280, 739]
+    [  0, 739, 1280, 800]
++ LayerDim 0x1905990 (DimSurface)
+      z=    22009, pos=(0,0), size=(1280, 800), isOpaque=0, needsDithering=0, in
+validate=0, alpha=0xff, flags=0x00000001, tr=[1.00, 0.00][0.00, 1.00]
+      client=0x18fd550, identity=8
+  Region transparentRegion (this=0x1905b30, count=1)
+    [  0,   0,   0,   0]
+  Region transparentRegionScreen (this=0x19059c4, count=1)
+    [  0,   0,   0,   0]
+  Region visibleRegionScreen (this=0x19059a0, count=1)
+    [  0,   0,   0,   0]
++ Layer 0x18fe430 (PointerLocation)
+      z=   211000, pos=(0,0), size=(1280, 800), isOpaque=0, needsDithering=0, in
+validate=0, alpha=0xff, flags=0x00000000, tr=[1.00, 0.00][0.00, 1.00]
+      client=0x18fd5b0, identity=3
+      format= 1, activeBuffer=[1280x 800:1280,  1], transform-hint=0x00, queued-
+frames=0
+            mBufferCount=2, mSynchronousMode=1, default-size=[1280x800], mPixelFormat=1, mTexName=5
+            current: {crop=[0,0,-1,-1], transform=0x00, current=1}
+            next   : {crop=[0,0,-1,-1], transform=0x00, FIFO(0)={}}
+             [00] state=FREE    , crop=[0,0,-1,-1], transform=0x00, timestamp=49374069003, 0x1900658 [1280x 800:1280,  1]
+            >[01] state=QUEUED  , crop=[0,0,-1,-1], transform=0x00, timestamp=49408863002, 0x18de280 [1280x 800:1280,  1]
+  Region transparentRegion (this=0x18fe5d0, count=1)
+    [  0,   0,   0,   0]
+  Region transparentRegionScreen (this=0x18fe464, count=1)
+    [  0,   0,   0,   0]
+  Region visibleRegionScreen (this=0x18fe440, count=1)
+    [  0,   0, 1280, 800]
+Purgatory state (0 entries)
+SurfaceFlinger global state:
+GLES: NVIDIA Corporation, NVIDIA AP, OpenGL ES-CM 1.1
+EGL : 1.4
+EXTS: GL_EXT_bgra GL_EXT_texture_compression_dxt1 GL_EXT_texture_compression_s3t
+c GL_EXT_texture_format_BGRA8888 GL_EXT_unpack_subimage GL_NV_texture_npot_2D_mi
+pmap GL_OES_byte_coordinates GL_OES_compressed_ETC1_RGB8_texture GL_OES_compress
+ed_paletted_texture GL_OES_draw_texture GL_OES_extended_matrix_palette GL_OES_EG
+L_image GL_OES_EGL_image_external GL_OES_EGL_sync GL_OES_fbo_render_mipmap GL_OE
+S_fixed_point GL_OES_framebuffer_object GL_OES_matrix_get GL_OES_matrix_palette
+GL_OES_point_size_array GL_OES_point_sprite GL_OES_query_matrix GL_OES_read_form
+at GL_OES_rgb8_rgba8 GL_OES_single_precision GL_OES_stencil8 GL_OES_texture_cube
+_map GL_OES_vertex_half_float
+  Region WormholeRegion (this=0x187eb44, count=4)
+    [  0,   0, 1280,  71]
+    [  0,  71,   4, 739]
+    [904,  71, 1280, 739]
+    [  0, 739, 1280, 800]
+  orientation=0, canDraw=1
+  last eglSwapBuffers() time: 205.000000 us
+  last transaction time     : 76.000000 us
+  refresh-rate              : 60.000000 fps
+  x-dpi                     : 160.157639
+  y-dpi                     : 160.000000
+  h/w composer present and enabled
+Hardware Composer state:
+  numHwLayers=3, flags=00000000
+   type   |  handle  |   hints  |   flags  | tr | blend |  format  |       sourc
+e crop         |           frame           name
+----------+----------+----------+----------+----+-------+----------+------------
+---------------+--------------------------------
+  OVERLAY | 019069d0 | 00000003 | 00000000 | 00 | 00100 | 00000004 | [    0,
+0,  900,  668] | [    4,   71,  904,  739] SurfaceView
+       FB | 01904040 | 00000000 | 00000000 | 00 | 00105 | 00000001 | [    0,
+0, 1280,  800] | [    0,    0, 1280,  800] com.ge.med.mic.lotus/com.ge.med.mic.lotus.activities.MonitoringActivity
+       FB | 018de280 | 00000000 | 00000000 | 00 | 00105 | 00000001 | [    0,
+0, 1280,  800] | [    0,    0, 1280,  800] PointerLocation
+  Nvidia HWC:
+    SurfaceFlinger rotation: 0
+    Current config (Internal):
+        Protected: false
+        Overlay 0 (phys 1 caps 0): unused
+        Overlay 1 (phys 2 caps 1 blend 0x1 xform 0x0): framebuffer containing 2layers
+                src (0,0,1280,800), dst (0,0,1280,800)
+        Overlay 2 (phys 0 caps 0 blend 0x0 xform 0x0): overlay layer 0 scratch 0x0
+                src (0,0,900,668), dst (4,71,904,739)
+    Current config (HDMI):
+        disabled
+Allocated buffers:
+ 0x18de280: 4000.00 KiB | 1280 (1280) x  800 |        1 | 0x00000933
+ 0x18fc8f0: 1210.75 KiB |  900 ( 928) x  668 |        4 | 0x00000b00
+ 0x18fe350: 4000.00 KiB | 1280 (1280) x  800 |        1 | 0x00000b00
+ 0x1900658: 4000.00 KiB | 1280 (1280) x  800 |        1 | 0x00000933
+ 0x1904040: 4000.00 KiB | 1280 (1280) x  800 |        1 | 0x00000b00
+ 0x1904438: 9600.00 KiB | 1920 (1920) x 1280 |        1 | 0x00000b00
+ 0x1904568: 1210.75 KiB |  900 ( 928) x  668 |        4 | 0x00000b00
+ 0x19069d0: 1210.75 KiB |  900 ( 928) x  668 |        4 | 0x00000b00
+Total allocated (estimate): 29232.25 KB
+Nvidia Gralloc
+Nvidia Framebuffer (0x187ee68):
+        hdmi_enabled: false
+        demo_mode:    disabled
+        480p:         no
+        720p:         no
+        1080p:        no
+        current_mode: none
+        Current buffers (Internal):
+                0x0
+                0x19
+                0x2a
+        Current buffers (HDMI):
+                0x0
+                0x0
+                0x0
+
+C:\Users\lotustest\Desktop>
