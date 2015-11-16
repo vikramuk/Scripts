@@ -19,3 +19,15 @@ if __name__ == "__main__":
     c1=Test("")
     c1.TestX()
     c1.TestY("Vikram")
+#=====================
+from Test import Test1
+
+def CheckClass():
+    c1=Test1("")
+    c1.TestX()
+    c1.TestY("Vikram")
+    
+
+if __name__ == "__main__":
+    CheckClass()
+    
