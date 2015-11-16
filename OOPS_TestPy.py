@@ -1,4 +1,4 @@
-class Test():
+class Test1():
     name =""
     
     def __init__(self, name):
@@ -16,7 +16,7 @@ class Test():
         print "In TestY:" + "Hi " + name       
     
 if __name__ == "__main__":
-    c1=Test("")
+    c1=Test1("")
     c1.TestX()
     c1.TestY("Vikram")
 #=====================
@@ -25,7 +25,7 @@ from Test import Test1
 def CheckClass():
     c1=Test1("")
     c1.TestX()
-    c1.TestY("Vikram")
+    c1.TestY("Vikram2")
     
 
 if __name__ == "__main__":
