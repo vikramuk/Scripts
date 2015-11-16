@@ -11,6 +11,7 @@ class Test():
     def TestX():
         print "In TestX:" + "Hi Vikram"
         
+    @classmethod
     def TestY(self, name):
         print "In TestY:" + "Hi " + name       
     
