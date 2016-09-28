@@ -1,0 +1,87 @@
+package Simo;
+
+import com.thoughtworks.selenium.Selenium;
+import com.thoughtworks.selenium.webdriven.WebDriverBackedSelenium;
+
+import org.openqa.selenium.*;
+import org.openqa.selenium.htmlunit.*;
+import org.openqa.selenium.firefox.*;
+import org.openqa.selenium.chrome.*;
+import org.openqa.selenium.ie.*;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.annotations.*;
+
+import static org.testng.Assert.*;
+
+public class SimoGUITest {
+
+	WebDriver driver;
+	Selenium selenium;
+
+	@BeforeMethod
+	public void startSelenium() {
+		driver = new FirefoxDriver();
+		selenium = new WebDriverBackedSelenium(driver, "http://localhost:8270/gui/");
+	}
+
+	@AfterMethod
+	public void stopSelenium() {
+		driver.close();
+	}
+
+	@Test
+	public void testSimoGUI() {
+		selenium.open("/gui/");
+		selenium.click("id=openAddDeviceDialog");
+		selenium.type("id=newDeviceInput", "COM2");
+		/*
+		selenium.click("xpath=(//*[@id='selectNewDeviceType-button'])");  //("css=span.ui-selectmenu-text");
+		selenium.click("id=ui-id-4");
+		*/
+		Select select = new Select(driver.findElement(By.xpath("//*[@id='selectNewDeviceCategory']"))).Click();;  
+		//By.xpath("//*[@id='selectNewDeviceCategory-button']/span[2]")));
+		select.selectByVisibleText("ACM");
+		/*
+		selenium.click("css=#selectNewDeviceType-button > span.ui-selectmenu-text");
+		selenium.click("id=ui-id-9");
+		selenium.click("id=addNewDeviceButton");
+		*/
+		Select select2 = new Select(driver.findElement(By.xpath("//*[@id='selectNewDeviceType-button']/span[2]"))).Click();; 
+		//By.xpath("//*[@id='selectNewDeviceType-button']/span[2]")));
+		select2.selectByVisibleText(" U-PP1");
+		selenium.click("//div[@id='ACM-deviceInfoContents-COM2']/table[2]/thead/tr");
+		selenium.click("//div[@id='ACM-deviceInfoContents-COM2']/table[3]/thead/tr");
+		selenium.click("//div[@id='ACM-deviceInfoContents-COM2']/table[4]/thead/tr");
+		selenium.click("//div[@id='ACM-deviceInfoContents-COM2']/table[5]/thead/tr");
+		selenium.click("//div[@id='ACM-deviceInfoContents-COM2']/table[6]/thead/tr");
+		selenium.click("css=span.bootstrap-switch-handle-off.bootstrap-switch-danger");
+		selenium.type("id=ACM-COM2-parameterValue-P1-input", "10");
+		selenium.type("id=ACM-COM2-parameterValue-P1_Cable_Fault", "1");
+		selenium.click("id=ACM-device-COM2-parameterButton");
+		selenium.click("css=span.bootstrap-switch-handle-on.bootstrap-switch-success");
+		selenium.click("css=span.bootstrap-switch-handle-off.bootstrap-switch-danger");
+		selenium.click("id=ACM-device-COM2-removeDeviceButton");
+		selenium.click("//div[3]/div[3]/div");
+		selenium.click("xpath=(//button[@type='button'])[4]");
+		selenium.click("id=openAddDeviceDialog");
+		selenium.type("id=newDeviceInput", "COM3");
+		selenium.click("css=span.ui-selectmenu-text");
+		selenium.click("id=ui-id-23");
+		selenium.click("css=#selectNewDeviceType-button > span.ui-selectmenu-text");
+		selenium.click("id=ui-id-31");
+		selenium.click("id=addNewDeviceButton");
+		selenium.click("//div[@id='ACM-deviceInfoContents-COM3']/table[2]/thead/tr");
+		selenium.click("//div[@id='ACM-deviceInfoContents-COM3']/table[3]/thead/tr");
+		selenium.click("//div[@id='ACM-deviceInfoContents-COM3']/table[4]/thead/tr");
+		selenium.click("//div[@id='ACM-deviceInfoContents-COM3']/table[5]/thead/tr");
+		selenium.click("//div[@id='ACM-deviceInfoContents-COM3']/table[6]/thead/tr");
+		selenium.click("css=span.bootstrap-switch-handle-off.bootstrap-switch-danger");
+		selenium.type("id=ACM-COM3-parameterValue-P3-input", "20");
+		selenium.click("id=ACM-device-COM3-parameterButton");
+		selenium.click("id=ACM-device-COM3-removeDeviceButton");
+		selenium.click("xpath=(//button[@type='button'])[5]");
+		selenium.click("id=ACM-device-COM3-removeDeviceButton");
+		selenium.click("xpath=(//button[@type='button'])[4]");
+	}
+
+}
