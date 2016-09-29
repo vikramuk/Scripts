@@ -1,13 +1,12 @@
 package Simo;
 
-import com.thoughtworks.selenium.Selenium;
-import com.thoughtworks.selenium.webdriven.WebDriverBackedSelenium;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.htmlunit.*;
 import org.openqa.selenium.firefox.*;
 import org.openqa.selenium.chrome.*;
 import org.openqa.selenium.ie.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.annotations.*;
 
@@ -16,12 +15,12 @@ import static org.testng.Assert.*;
 public class SimoGUITest {
 
 	WebDriver driver;
-	Selenium selenium;
+	//Selenium selenium;
 
 	@BeforeMethod
 	public void startSelenium() {
 		driver = new FirefoxDriver();
-		selenium = new WebDriverBackedSelenium(driver, "http://localhost:8270/gui/");
+		
 	}
 
 	@AfterMethod
@@ -30,15 +29,21 @@ public class SimoGUITest {
 	}
 
 	@Test
-	public void testSimoGUI() {
-		selenium.open("/gui/");
-		selenium.click("id=openAddDeviceDialog");
-		selenium.type("id=newDeviceInput", "COM2");
+	public void testSimoGUI() throws InterruptedException {
+		driver.get("http://localhost:8270/gui/");
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		driver.findElement(By.id("openAddDeviceDialog")).click();
+		driver.findElement(By.id("newDeviceInput")).sendKeys("COM2");
 		/*
 		selenium.click("xpath=(//*[@id='selectNewDeviceType-button'])");  //("css=span.ui-selectmenu-text");
 		selenium.click("id=ui-id-4");
-		*/
-		Select select = new Select(driver.findElement(By.xpath("//*[@id='selectNewDeviceCategory']"))).Click();;  
+	
+		Select select = new Select(driver.findElement(By.id("/html/body/div[2]/main/div[1]/form/span[1]/span[2]")));  
 		//By.xpath("//*[@id='selectNewDeviceCategory-button']/span[2]")));
 		select.selectByVisibleText("ACM");
 		/*
@@ -46,9 +51,42 @@ public class SimoGUITest {
 		selenium.click("id=ui-id-9");
 		selenium.click("id=addNewDeviceButton");
 		*/
-		Select select2 = new Select(driver.findElement(By.xpath("//*[@id='selectNewDeviceType-button']/span[2]"))).Click();; 
+		WebElement mySelectElm = driver.findElement(By.className("ui-selectmenu-text"));
+		mySelectElm.click();
+		Thread.sleep(1000);		
+		Actions action = new Actions(driver); 
+		  action.sendKeys(Keys.ARROW_DOWN).perform();
+		  action.sendKeys(Keys.ENTER).perform();
+			Thread.sleep(1000);		
+		Actions action2 = new Actions(driver); 
+		  action2.sendKeys(Keys.ARROW_DOWN).perform();
+			Thread.sleep(1000);	
+		  action2.sendKeys(Keys.ARROW_DOWN).perform();
+			Thread.sleep(1000);	
+		  action2.sendKeys(Keys.ARROW_DOWN).perform();
+			Thread.sleep(1000);	
+		  action2.sendKeys(Keys.ARROW_DOWN).perform();
+			Thread.sleep(1000);	
+		  action2.sendKeys(Keys.ARROW_DOWN).perform();
+			Thread.sleep(1000);	
+		  action2.sendKeys(Keys.ARROW_DOWN).perform();
+			Thread.sleep(1000);	
+		  action2.sendKeys(Keys.ARROW_DOWN).perform();
+			Thread.sleep(1000);	
+		  action2.sendKeys(Keys.ARROW_DOWN).perform();
+			Thread.sleep(1000);	
+		  action2.sendKeys(Keys.ENTER).perform();
+		
+		/*Select mySelect= new Select(mySelectElm);
+		mySelect.selectByVisibleText("ACM");
+		*/
+
+
+		/*
+	    Select select2 = new Select(driver.findElement(By.xpath("/html/body/div[2]/main/div[1]/form/span[2]/span[2]")));
 		//By.xpath("//*[@id='selectNewDeviceType-button']/span[2]")));
-		select2.selectByVisibleText(" U-PP1");
+	    select2.selectByVisibleText(" U-PP1");
+
 		selenium.click("//div[@id='ACM-deviceInfoContents-COM2']/table[2]/thead/tr");
 		selenium.click("//div[@id='ACM-deviceInfoContents-COM2']/table[3]/thead/tr");
 		selenium.click("//div[@id='ACM-deviceInfoContents-COM2']/table[4]/thead/tr");
@@ -82,6 +120,7 @@ public class SimoGUITest {
 		selenium.click("xpath=(//button[@type='button'])[5]");
 		selenium.click("id=ACM-device-COM3-removeDeviceButton");
 		selenium.click("xpath=(//button[@type='button'])[4]");
+			    */
 	}
 
 }
