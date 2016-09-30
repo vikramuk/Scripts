@@ -15,8 +15,6 @@ import static org.testng.Assert.*;
 public class SimoGUITest {
 
 	WebDriver driver;
-	//Selenium selenium;
-
 	@BeforeMethod
 	public void startSelenium() {
 		driver = new FirefoxDriver();
@@ -39,49 +37,24 @@ public class SimoGUITest {
 		}
 		driver.findElement(By.id("openAddDeviceDialog")).click();
 		driver.findElement(By.id("newDeviceInput")).sendKeys("COM2");
-		/*
-		selenium.click("xpath=(//*[@id='selectNewDeviceType-button'])");  //("css=span.ui-selectmenu-text");
-		selenium.click("id=ui-id-4");
-	
-		Select select = new Select(driver.findElement(By.id("/html/body/div[2]/main/div[1]/form/span[1]/span[2]")));  
-		//By.xpath("//*[@id='selectNewDeviceCategory-button']/span[2]")));
-		select.selectByVisibleText("ACM");
-		/*
-		selenium.click("css=#selectNewDeviceType-button > span.ui-selectmenu-text");
-		selenium.click("id=ui-id-9");
-		selenium.click("id=addNewDeviceButton");
-		*/
-		WebElement mySelectElm = driver.findElement(By.className("ui-selectmenu-text"));
+		WebElement mySelectElm = driver.findElement(By.id("selectNewDeviceCategory-button"));
 		mySelectElm.click();
 		Thread.sleep(1000);		
 		Actions action = new Actions(driver); 
 		  action.sendKeys(Keys.ARROW_DOWN).perform();
 		  action.sendKeys(Keys.ENTER).perform();
 			Thread.sleep(1000);		
-		Actions action2 = new Actions(driver); 
-		  action2.sendKeys(Keys.ARROW_DOWN).perform();
-			Thread.sleep(1000);	
-		  action2.sendKeys(Keys.ARROW_DOWN).perform();
-			Thread.sleep(1000);	
-		  action2.sendKeys(Keys.ARROW_DOWN).perform();
-			Thread.sleep(1000);	
-		  action2.sendKeys(Keys.ARROW_DOWN).perform();
-			Thread.sleep(1000);	
-		  action2.sendKeys(Keys.ARROW_DOWN).perform();
-			Thread.sleep(1000);	
-		  action2.sendKeys(Keys.ARROW_DOWN).perform();
-			Thread.sleep(1000);	
-		  action2.sendKeys(Keys.ARROW_DOWN).perform();
-			Thread.sleep(1000);	
-		  action2.sendKeys(Keys.ARROW_DOWN).perform();
-			Thread.sleep(1000);	
-		  action2.sendKeys(Keys.ENTER).perform();
+		if (true)
+			{
+			WebElement mySelectElm2 = driver.findElement(By.id("selectNewDeviceType-button"));
+			mySelectElm2.click();
+				Thread.sleep(1000);	
+			Actions action2 = new Actions(driver); 
+			  action2.sendKeys(Keys.ARROW_DOWN,Keys.ARROW_DOWN,Keys.ARROW_DOWN,Keys.ARROW_DOWN,Keys.ARROW_DOWN,Keys.ARROW_DOWN,Keys.ARROW_DOWN).perform();Thread.sleep(1000);					
+			  action2.sendKeys(Keys.ENTER).perform();
+			}
+		driver.findElement(By.id("addNewDeviceButton")).click();
 		
-		/*Select mySelect= new Select(mySelectElm);
-		mySelect.selectByVisibleText("ACM");
-		*/
-
-
 		/*
 	    Select select2 = new Select(driver.findElement(By.xpath("/html/body/div[2]/main/div[1]/form/span[2]/span[2]")));
 		//By.xpath("//*[@id='selectNewDeviceType-button']/span[2]")));
