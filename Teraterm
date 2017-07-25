@@ -53,3 +53,38 @@ pscp -scp -pw ubuntu123 ubuntu@10.177.218.175:/home/ubuntu/APK-Downloads/aosp/re
 @echo Macro file to stop boot
 
 START /B C:\Data\Builds\Automated Flashing\ttermpro.exe /M=C:\Data\Builds\Automated Flashing\TeraTerm-Macro.ttl
+====================
+
+;;  Tera Term Macro
+;;  ============================================================================
+;;  file    __uboot-config-common.ttl
+;;
+;;  desc    Common u-boot related definitions
+
+ 
+;;  ============================================================================
+;;  DEFINITIONS
+;;  ============================================================================
+ 
+;;
+;;  The u-boot message to stop autoboot.
+;;
+sendln 'd'
+sendln 'reboot'
+MsgAutoboot     = 'Hit any key to stop autoboot:'
+ 
+;;
+;;  The u-boot prompt
+;;
+PromptUboot     = '=>'
+ 
+ 
+;;  ============================================================================
+;;  EXECUTION
+;;  ============================================================================
+
+
+wait MsgAutoboot
+sendln 'd'
+wait PromptUboot
+sendln 'fastboot usb_imx'
