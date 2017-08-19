@@ -1,0 +1,78 @@
+repo init -u ssh://git@github.build.xx com/miclotus/android-manifest-xx.git -b LOTUS_MAIN_DEV -m ge_manifest.xml -g all repo sync -j8
+
+
+For AOSP development, raise a request with IT to get a VM created. Other modules please use a Virtual Box (refer Instructions for using VirtualBox to set up Ubuntu 14.04 LTS image from BOX ) installed on your windows system. APPS and ACHC will use their windows laptops.
+PDM
+To get access to pdm code in gitolite, write a mail to @HEALTH Springdale B&I Team <springdale.b-n-i@xx com> with request to get RW access to helix/pdm after generating a ssh key added as an attachment. Refer Gitolite access and usage
+•git clone gitolite-blr:helix/pdm
+•Git checkout remotes/origin/blr_lotus_mvp-dev –b blr_lotus_mvp-dev
+•Git pull –rebase
+•Git push origin <local branch>:blr_lotus_mvp-dev
+To get access to pdm-tools and lotusdeps in github @ https://github.build.xx com/ , login to https://github.build.xx com/ and then write a mail to ainiyan.charles@xx com or Sachin.mahishi@xx com to get access. Add your public key in github->settings-> SSH & GPG keys -> add ssh key. Then login to github and then clone with ssh or http protocol. 
+
+APPS
+Cloning APPS git code:
+–Raise a ticket on https://healthcare.service-now.com/help/com.glideapp.servicecatalog_cat_item_view.do?v=1&sysparm_id=00a707c36f49fd00f6ea5e109d3ee41e&lang=en&sysparm_hprecord=8ccdf6106f54b9c0c31b391f5d3ee473&sysparm_hpci=&sysparm_hpgroup=&sysparm_portal=helpdesk.xx com > GEHC engineering tools>perforce and get your ssh keys added to the server.
+–ssh-keygen -t rsa -b 2048 -C 'Git Access' -f ~/.ssh/id_rsa.git
+–In the ~/.ssh/config you will need to add:
+host p4gf-milwaukee.engops.health.xx com
+    IdentityFile ~/.ssh/id_rsa.git
+–git clone git@p4gf-milwaukee.engops.health.xx com:Attendant_0xS_LSP_MAIN_DEV_V1.0
+•git checkout remotes/origin/master –b local_branch_name (checkout a new branch)
+•git pull –rebase (updating local branch from remote branch)
+•git push origin local_branch_name:blr_lotus_mvp-dev (pushing code to remote branch)
+
+
+AOSP:
+
+To get access to github mail ainiyan.charles@xx com or sachin.mahishi@xx com after logging in once to https://github.build.xx com . Then, add your public key in github->settings-> SSH & GPG keys (use command ssh-keygen -t rsa , to generate public key).
+Also get access to APPS git Attendant_0xS_LSP_MAIN_DEV_V1.0 -follow the process below:
+–ssh-keygen -t rsa -b 2048 -C 'Git Access' -f ~/.ssh/id_rsa.git
+–In the ~/.ssh/config you will need to add:
+ host p4gf-milwaukee.engops.health.xx com
+ 
+    IdentityFile ~/.ssh/id_rsa.git
+
+Make sure all the needed packages are installed as in Prerequisites for setting up AOSP/PDM/APPS in Fresh Ubuntu machine 
+
+repo init -u ssh://git@github.build.xx com/miclotus/android-manifest-ge.git -b LOTUS_MAIN_DEV -m ge_manifest.xml -g all
+repo sync -j8
+ 
+To sync to a tag:
+repo init -u ssh://git@github.build.xx com/miclotus/android-manifest-ge.git -b LOTUS_MAIN_DEV -m <tagname>.xml -g all
+(eg) repo init -u ssh://git@github.build.xx com/miclotus/android-manifest-ge.git -b LOTUS_MAIN_DEV -m Lotus-AOSP.1.0.2_24Mar2017.xml -g all
+repo sync -j8
+If sync fails with publickey permission denied, remove ~/.ssh and create .ssh and keys afresh, add to github and try.
+Make sure the http_proxy and https_proxy are set in the terminal of the VM.
+ 
+How to build AOSP:
+==revC Board==
+export JAVA_HOME=/usr/lib/jvm/jdk1.6.0_45 (change to your java path)
+export PATH=$JAVA_HOME/bin:$PATH
+make clean
+source build/envsetup.sh
+lunch lotus-user
+make  -j16
+img files will be generated here:
+/out/target/product/lotus/boot.img 
+/out/target/product/lotus/system.img 
+out/target/product/lotus/recovery.img
+==revB Board==
+export JAVA_HOME=/usr/lib/jvm/jdk1.6.0_45 (change to your java path)
+export PATH=$JAVA_HOME/bin:$PATH
+make clean
+source build/envsetup.sh
+lunch lotus_revB-user
+make  -j16
+img files will be generated here:
+/out/target/product/lotus_revB/boot.img 
+/out/target/product/lotus_revB/system.img 
+out/target/product/lotus_revB/recovery.img
+==To Build SDK==
+export JAVA_HOME=/usr/lib/jvm/jdk1.6.0_45
+export PATH=$JAVA_HOME/bin:$PATH
+make installclean
+source build/envsetup.sh
+lunch sdk-eng
+make sdk
+
