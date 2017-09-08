@@ -1,0 +1,1514 @@
+Set default port to COM11
+WARNING:  RXTX Version mismatch
+	Jar version = RXTX-2.2pre1
+	native lib Version = RXTX-2.2pre2
+Found port: COM11
+configuration
+stepsFactory
+configuration
+current dir = D:\Perforce\ACHC_SubsystemVerification_Temp
+storyPaths
+Processing system properties {}
+Using controls EmbedderControls[batch=false,skip=false,generateViewAfterStories=true,ignoreFailureInStories=true,ignoreFailureInView=false,verboseFailures=false,verboseFiltering=false,storyTimeoutInSecs=500,failOnStoryTimeout=false,threads=1]
+
+(BeforeStories)
+
+Running story SubSystemVerificationForNibpToneGeneration.story
+
+(SubSystemVerificationForNibpToneGeneration.story)
+Narrative:
+In order to perform subsystem verification for NIBP tone generation with independent volume control
+As a Java  application, the appliation acts as a TCP client to send command to labview TCP server to process the audio/beep signals
+signals, also acts as iMX and send commands to ACHC through audio control interface
+I want to verify the processed  PWM signals from labview and the response from ACHC board
+Scenario: Communicate with ACHC as iMX to initialize sequence number
+Examples:
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in 'ACHCConstants.java'. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+When we send GET_PARAM_VOLUME {commandGetVolumeACHC} to get the NIBP volume from the ACHC
+Then the ACHC should respond
+!-- The above command is used to set the sequence number of the target to a known value
+
+|commandGetVolumeACHC|
+|85,55,06,FF,CF,07,00,00,00,CrcMsb,CrcLsb|
+
+Example: {commandGetVolumeACHC=85,55,06,FF,CF,07,00,00,00,CrcMsb,CrcLsb}
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in 'ACHCConstants.java'. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+Command Send		>>GET_PARAM_VOLUME - NIBP
+Packet Send 		>>[855506FFCF07000000B952] 
+Expected Packet		>>[85AA06XXFF0003FFXXXXXX85AA06XXCF07000XXXXXX] 
+Packet Received		<<[85AA0600FF0003FF007ECE]
+Response Received1	<<ERROR :: Incorrect Sequence Number
+			  Received [0xff]	 Expected [0x00]
+			 >>Multiple Response Received<<
+Packet Received		<<[85AA0601CF07000009AD2B]
+Response Received2	<<GET_PARAM_VOLUME - NIBP
+
+When we send GET_PARAM_VOLUME {commandGetVolumeACHC} to get the NIBP volume from the ACHC
+Then the ACHC should respond
+!-- The above command is used to set the sequence number of the target to a known value
+
+
+Scenario: Communicate with ACHC as iMX to generate NIBP tone with independent volume control to analyze change in Volume and
+ to simulate situations where the volume is increasing due to user action for beeps
+Examples:
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in 'ACHCConstants.java'. Refer DEFAULT_SERIAL_PORT.
+!-- TCP/IP connection should be established between Java and LabView on Port 2000
+Given we are connected to the audio control interface of the ACHC
+And we are connected to the audio signal measurement system
+And the audio signal measurement system is set up to detect NIBP beep {commandListenSignalsLabview}
+When we send SET_PARAM_VOLUME command to ACHC to set the NIBP volume in increasing order using {commandSetVolumeACHC},
+and verify the volume is updated internally in ACHC using GET_PARAM_VOLUME command, which is {commandGetVolumeACHC}, 
+and generate a beep using GENERATE_BEEP {commandGenerategNibpBeep}
+Then the ACHC should respond
+And the audio signal measurement system should analyse the beep and respond
+!-- No response packet from ACHC is expected in case of generate Beeps (as per protocol)
+!-- Response of GET_PARAM_VOLUME is used to verify the volume is updated internally in ACHC when instructed to update volume using SET_PARAM_VOLUME
+
+|commandListenSignalsLabview|commandSetVolumeACHC|commandGetVolumeACHC|commandGenerategNibpBeep|
+|LSTNPWM -CH 6 -D 6 -N 9|85,55,06,SeqNo,30,07,00,00,Vol,CrcMsb,CrcLsb|85,55,06,SeqNo,CF,07,00,00,00,CrcMsb,CrcLsb|85,55,06,SeqNo,36,07,00,00,00,CrcMsb,CrcLsb|
+
+Example: {commandListenSignalsLabview=LSTNPWM -CH 6 -D 6 -N 9, commandSetVolumeACHC=85,55,06,SeqNo,30,07,00,00,Vol,CrcMsb,CrcLsb, commandGetVolumeACHC=85,55,06,SeqNo,CF,07,00,00,00,CrcMsb,CrcLsb, commandGenerategNibpBeep=85,55,06,SeqNo,36,07,00,00,00,CrcMsb,CrcLsb}
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in 'ACHCConstants.java'. Refer DEFAULT_SERIAL_PORT.
+!-- TCP/IP connection should be established between Java and LabView on Port 2000
+Given we are connected to the audio control interface of the ACHC
+Server: Connected to Server 10.197.74.115
+And we are connected to the audio signal measurement system
+Command Send to Labview ::LSTNPWM -CH 6 -D 6 -N 9
+And the audio signal measurement system is set up to detect NIBP beep {commandListenSignalsLabview}
+Command Send		>>SET_PARAM_VOLUME- VOLUME_LEVEL[1] - NIBP
+Packet Send 		>>[855506003007000001A763] 
+Expected Packet		>>[85AA06023007000001B86C] 
+Packet Received		<<[85AA06023007000001B86C]
+Response Received1	<<SET_PARAM_VOLUME - NIBP
+
+Command Send		>>GET_PARAM_VOLUME - NIBP
+Packet Send 		>>[85550601CF07000000A84D] 
+Expected Packet		>>[85AA0603CF07000001A763] 
+Packet Received		<<[85AA0603CF07000001A763]
+Response Received1	<<GET_PARAM_VOLUME - NIBP
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[855506023607000000F187] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>SET_PARAM_VOLUME- VOLUME_LEVEL[2] - NIBP
+Packet Send 		>>[85550603300700000259E0] 
+Expected Packet		>>[85AA0604300700000205EE] 
+Packet Received		<<[85AA0604300700000205EE]
+Response Received1	<<SET_PARAM_VOLUME - NIBP
+
+Command Send		>>GET_PARAM_VOLUME - NIBP
+Packet Send 		>>[85550604CF07000000EB4C] 
+Expected Packet		>>[85AA0605CF070000021AE1] 
+Packet Received		<<[85AA0605CF070000021AE1]
+Response Received1	<<GET_PARAM_VOLUME - NIBP
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[85550605360700000039C6] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>SET_PARAM_VOLUME- VOLUME_LEVEL[3] - NIBP
+Packet Send 		>>[8555060630070000030AC0] 
+Expected Packet		>>[85AA060630070000039E8F] 
+Packet Received		<<[85AA060630070000039E8F]
+Response Received1	<<SET_PARAM_VOLUME - NIBP
+
+Command Send		>>GET_PARAM_VOLUME - NIBP
+Packet Send 		>>[85550607CF0700000025AC] 
+Expected Packet		>>[85AA0607CF070000038180] 
+Packet Received		<<[85AA0607CF070000038180]
+Response Received1	<<GET_PARAM_VOLUME - NIBP
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555060836070000007785] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>SET_PARAM_VOLUME- VOLUME_LEVEL[4] - NIBP
+Packet Send 		>>[855506093007000004BF24] 
+Expected Packet		>>[85AA060830070000046ECB] 
+Packet Received		<<[85AA060830070000046ECB]
+Response Received1	<<SET_PARAM_VOLUME - NIBP
+
+Command Send		>>GET_PARAM_VOLUME - NIBP
+Packet Send 		>>[8555060ACF070000006BEF] 
+Expected Packet		>>[85AA0609CF0700000471C4] 
+Packet Received		<<[85AA0609CF0700000471C4]
+Response Received1	<<GET_PARAM_VOLUME - NIBP
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555060B3607000000B965] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>SET_PARAM_VOLUME- VOLUME_LEVEL[5] - NIBP
+Packet Send 		>>[8555060C3007000005EC04] 
+Expected Packet		>>[85AA060A3007000005F5AA] 
+Packet Received		<<[85AA060A3007000005F5AA]
+Response Received1	<<SET_PARAM_VOLUME - NIBP
+
+Command Send		>>GET_PARAM_VOLUME - NIBP
+Packet Send 		>>[8555060DCF07000000A3AE] 
+Expected Packet		>>[85AA060BCF07000005EAA5] 
+Packet Received		<<[85AA060BCF07000005EAA5]
+Response Received1	<<GET_PARAM_VOLUME - NIBP
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555060E3607000000FA64] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>SET_PARAM_VOLUME- VOLUME_LEVEL[6] - NIBP
+Packet Send 		>>[8555060F30070000061287] 
+Expected Packet		>>[85AA060C30070000064828] 
+Packet Received		<<[85AA060C30070000064828]
+Response Received1	<<SET_PARAM_VOLUME - NIBP
+
+Command Send		>>GET_PARAM_VOLUME - NIBP
+Packet Send 		>>[85550610CF07000000F769] 
+Expected Packet		>>[85AA060DCF070000065727] 
+Packet Received		<<[85AA060DCF070000065727]
+Response Received1	<<GET_PARAM_VOLUME - NIBP
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[85550611360700000025E3] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>SET_PARAM_VOLUME- VOLUME_LEVEL[7] - NIBP
+Packet Send 		>>[8555061230070000075661] 
+Expected Packet		>>[85AA060E3007000007D349] 
+Packet Received		<<[85AA060E3007000007D349]
+Response Received1	<<SET_PARAM_VOLUME - NIBP
+
+Command Send		>>GET_PARAM_VOLUME - NIBP
+Packet Send 		>>[85550613CF070000003989] 
+Expected Packet		>>[85AA060FCF07000007CC46] 
+Packet Received		<<[85AA060FCF07000007CC46]
+Response Received1	<<GET_PARAM_VOLUME - NIBP
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[85550614360700000066E2] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>SET_PARAM_VOLUME- VOLUME_LEVEL[8] - NIBP
+Packet Send 		>>[8555061530070000086FCF] 
+Expected Packet		>>[85AA06103007000008B881] 
+Packet Received		<<[85AA06103007000008B881]
+Response Received1	<<SET_PARAM_VOLUME - NIBP
+
+Command Send		>>GET_PARAM_VOLUME - NIBP
+Packet Send 		>>[85550616CF070000007A88] 
+Expected Packet		>>[85AA0611CF07000008A78E] 
+Packet Received		<<[85AA0611CF07000008A78E]
+Response Received1	<<GET_PARAM_VOLUME - NIBP
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[855506173607000000A802] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>SET_PARAM_VOLUME- VOLUME_LEVEL[9] - NIBP
+Packet Send 		>>[85550618300700000931AD] 
+Expected Packet		>>[85AA0612300700000923E0] 
+Packet Received		<<[85AA0612300700000923E0]
+Response Received1	<<SET_PARAM_VOLUME - NIBP
+
+Command Send		>>GET_PARAM_VOLUME - NIBP
+Packet Send 		>>[85550619CF07000000BF8B] 
+Expected Packet		>>[85AA0613CF070000093CEF] 
+Packet Received		<<[85AA0613CF070000093CEF]
+Response Received1	<<GET_PARAM_VOLUME - NIBP
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555061A3607000000E641] 
+Expected Packet		>>[No Response] 
+
+No of Commands send to ACHC	>>[9]
+When we send SET_PARAM_VOLUME command to ACHC to set the NIBP volume in increasing order using {commandSetVolumeACHC},
+and verify the volume is updated internally in ACHC using GET_PARAM_VOLUME command, which is {commandGetVolumeACHC}, 
+and generate a beep using GENERATE_BEEP {commandGenerategNibpBeep}
+Then the ACHC should respond
+Server Response :: 
+ >>START LSTNPWM -CH 6 -D 6 -N 9
+PWM -N 9
+PWM -F 1500.01 -A 0.20 -D 45.17 -T 16:00:37:708
+PWM -F 1500.00 -A 0.36 -D 45.17 -T 16:00:38:565
+PWM -F 1500.02 -A 0.52 -D 45.17 -T 16:00:39:143
+PWM -F 1503.59 -A 0.67 -D 45.17 -T 16:00:39:720
+PWM -F 1511.63 -A 0.82 -D 45.17 -T 16:00:40:286
+PWM -F 1511.29 -A 0.99 -D 45.17 -T 16:00:40:853
+PWM -F 1512.83 -A 1.11 -D 45.17 -T 16:00:41:418
+PWM -F 1499.99 -A 1.24 -D 45.17 -T 16:00:41:469
+PWM -F 1500.01 -A 1.39 -D 45.17 -T 16:00:42:029
+STOP
+
+
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1500.01Hz] Deviation% [0.0]
+INFO :: Current Volume Level [1]
+INFO :: Expected Amplitude Range [0.1665-0.2035]V Actual Amplitude[0.2V] Deviation% [8.11]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:00:37:641] Beep Generation [16:00:37:708] Delay [67ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1500.0Hz] Deviation% [0.0]
+INFO :: Current Volume Level [2]
+INFO :: Expected Amplitude Range [0.35099998-0.429]V Actual Amplitude[0.36V] Deviation% [-7.69]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:00:38:254] Beep Generation [16:00:38:565] Delay [311ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1500.02Hz] Deviation% [0.0]
+INFO :: Current Volume Level [3]
+INFO :: Expected Amplitude Range [0.459-0.561]V Actual Amplitude[0.52V] Deviation% [1.96]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:00:38:866] Beep Generation [16:00:39:143] Delay [277ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1503.59Hz] Deviation% [0.24]
+INFO :: Current Volume Level [4]
+INFO :: Expected Amplitude Range [0.5985-0.7315]V Actual Amplitude[0.67V] Deviation% [0.75]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:00:39:479] Beep Generation [16:00:39:720] Delay [241ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1511.63Hz] Deviation% [0.78]
+INFO :: Current Volume Level [5]
+INFO :: Expected Amplitude Range [0.729-0.89100003]V Actual Amplitude[0.82V] Deviation% [1.23]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:00:40:087] Beep Generation [16:00:40:286] Delay [199ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1511.29Hz] Deviation% [0.75]
+INFO :: Current Volume Level [6]
+INFO :: Expected Amplitude Range [0.873-1.067]V Actual Amplitude[0.99V] Deviation% [2.06]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:00:40:697] Beep Generation [16:00:40:853] Delay [156ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1512.83Hz] Deviation% [0.86]
+INFO :: Current Volume Level [7]
+INFO :: Expected Amplitude Range [1.0125-1.2375]V Actual Amplitude[1.11V] Deviation% [-1.33]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:00:41:307] Beep Generation [16:00:41:418] Delay [111ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1499.99Hz] Deviation% [0.0]
+INFO :: Current Volume Level [8]
+INFO :: Expected Amplitude Range [1.161-1.4189999]V Actual Amplitude[1.24V] Deviation% [-3.88]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:00:41:916] Beep Generation [16:00:41:469] Delay [-447ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1500.01Hz] Deviation% [0.0]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.39V] Deviation% [-4.14]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:00:42:525] Beep Generation [16:00:42:029] Delay [-496ms]
+
+
+INFO :: Expected No: Responses [9]	 Received No: Responses [9]
+
+And the audio signal measurement system should analyse the beep and respond
+!-- No response packet from ACHC is expected in case of generate Beeps (as per protocol)
+!-- Response of GET_PARAM_VOLUME is used to verify the volume is updated internally in ACHC when instructed to update volume using SET_PARAM_VOLUME
+
+
+Scenario: ACHC should be able to generate 30...300 NIBP beeps per minute
+Examples:
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+!-- TCP/IP connection should establish between Java and LabView on Port 2000
+Given we are connected to the audio control interface of the ACHC
+And we are connected to the audio signal measurement system
+And the audio signal measurement system is set up to detect NIBP beep {commandListenSignalsLabview}
+When we use the command GENERATE_BEEP to generate {noOfBeeps} beeps for a minute. The command to ACHC is {commandGenerateBeep}
+Then the ACHC should respond
+And the audio signal measurement system should analyse the beep and respond
+!-- No response packet  is expected in case of generated Beeps
+
+|commandListenSignalsLabview|noOfBeeps|commandGenerateBeep|
+|LSTNPWM -CH 6 -D 6 -N 3|3|85,55,06,SeqNo,36,07,00,00,00,CrcMsb,CrcLsb|
+|LSTNPWM -CH 6 -D 6 -N 15|15|85,55,06,SeqNo,36,07,00,00,00,CrcMsb,CrcLsb|
+|LSTNPWM -CH 6 -D 6 -N 30|30|85,55,06,SeqNo,36,07,00,00,00,CrcMsb,CrcLsb|
+
+Example: {commandListenSignalsLabview=LSTNPWM -CH 6 -D 6 -N 3, noOfBeeps=3, commandGenerateBeep=85,55,06,SeqNo,36,07,00,00,00,CrcMsb,CrcLsb}
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+!-- TCP/IP connection should establish between Java and LabView on Port 2000
+Given we are connected to the audio control interface of the ACHC
+And we are connected to the audio signal measurement system
+Command Send to Labview ::LSTNPWM -CH 6 -D 6 -N 3
+And the audio signal measurement system is set up to detect NIBP beep {commandListenSignalsLabview}
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555061B3607000000A3E1] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555061C36070000006BA0] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555061D36070000002E00] 
+Expected Packet		>>[No Response] 
+
+When we use the command GENERATE_BEEP to generate {noOfBeeps} beeps for a minute. The command to ACHC is {commandGenerateBeep}
+Then the ACHC should respond
+Server Response :: 
+ >>START LSTNPWM -CH 6 -D 6 -N 3
+PWM -N 3
+PWM -F 1513.55 -A 1.42 -D 45.17 -T 16:00:49:631
+PWM -F 1510.14 -A 1.42 -D 45.17 -T 16:00:51:572
+PWM -F 1499.99 -A 1.35 -D 45.17 -T 16:00:53:524
+STOP
+
+
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1513.55Hz] Deviation% [0.9]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.42V] Deviation% [-2.07]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:00:49:455] Beep Generation [16:00:49:631] Delay [176ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1510.14Hz] Deviation% [0.68]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.42V] Deviation% [-2.07]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:00:51:458] Beep Generation [16:00:51:572] Delay [114ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1499.99Hz] Deviation% [0.0]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.35V] Deviation% [-6.9]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:00:53:461] Beep Generation [16:00:53:524] Delay [63ms]
+
+
+INFO :: Expected No: Responses [3]	 Received No: Responses [3]
+
+And the audio signal measurement system should analyse the beep and respond
+!-- No response packet  is expected in case of generated Beeps
+
+Example: {commandListenSignalsLabview=LSTNPWM -CH 6 -D 6 -N 15, noOfBeeps=15, commandGenerateBeep=85,55,06,SeqNo,36,07,00,00,00,CrcMsb,CrcLsb}
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+!-- TCP/IP connection should establish between Java and LabView on Port 2000
+Given we are connected to the audio control interface of the ACHC
+And we are connected to the audio signal measurement system
+Command Send to Labview ::LSTNPWM -CH 6 -D 6 -N 15
+And the audio signal measurement system is set up to detect NIBP beep {commandListenSignalsLabview}
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555061E3607000000E0E0] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555061F3607000000A540] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555062036070000004FCF] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555062136070000000A6F] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[855506223607000000C48F] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[855506233607000000812F] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[855506243607000000496E] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555062536070000000CCE] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[855506263607000000C22E] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[855506273607000000878E] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[855506283607000000428D] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[855506293607000000072D] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555062A3607000000C9CD] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555062B36070000008C6D] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555062C3607000000442C] 
+Expected Packet		>>[No Response] 
+
+When we use the command GENERATE_BEEP to generate {noOfBeeps} beeps for a minute. The command to ACHC is {commandGenerateBeep}
+Then the ACHC should respond
+Server Response :: 
+ >>START LSTNPWM -CH 6 -D 6 -N 15
+PWM -N 15
+PWM -F 1499.65 -A 1.38 -D 45.17 -T 16:01:01:664
+PWM -F 1509.81 -A 1.40 -D 45.17 -T 16:01:02:015
+PWM -F 1510.11 -A 1.42 -D 45.17 -T 16:01:02:357
+PWM -F 1499.98 -A 1.41 -D 45.17 -T 16:01:02:706
+PWM -F 1500.08 -A 1.39 -D 45.17 -T 16:01:03:051
+PWM -F 1507.29 -A 1.42 -D 45.17 -T 16:01:03:401
+PWM -F 1510.40 -A 1.47 -D 45.17 -T 16:01:03:747
+PWM -F 1499.94 -A 1.35 -D 45.17 -T 16:01:04:093
+PWM -F 1509.07 -A 1.41 -D 45.17 -T 16:01:04:438
+PWM -F 1500.22 -A 1.52 -D 45.17 -T 16:01:04:781
+PWM -F 1500.00 -A 1.44 -D 45.17 -T 16:01:05:124
+PWM -F 1500.24 -A 1.52 -D 45.17 -T 16:01:05:474
+PWM -F 1500.00 -A 1.39 -D 45.17 -T 16:01:05:820
+PWM -F 1499.98 -A 1.38 -D 45.17 -T 16:01:05:868
+PWM -F 1508.42 -A 1.42 -D 45.17 -T 16:01:06:203
+STOP
+
+
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1499.65Hz] Deviation% [-0.02]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.38V] Deviation% [-4.83]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:01:487] Beep Generation [16:01:01:664] Delay [177ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1509.81Hz] Deviation% [0.65]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.4V] Deviation% [-3.45]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:01:890] Beep Generation [16:01:02:015] Delay [125ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1510.11Hz] Deviation% [0.67]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.42V] Deviation% [-2.07]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:02:293] Beep Generation [16:01:02:357] Delay [64ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1499.98Hz] Deviation% [0.0]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.41V] Deviation% [-2.76]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:02:696] Beep Generation [16:01:02:706] Delay [10ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1500.08Hz] Deviation% [0.01]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.39V] Deviation% [-4.14]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:03:099] Beep Generation [16:01:03:051] Delay [-48ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1507.29Hz] Deviation% [0.49]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.42V] Deviation% [-2.07]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:03:502] Beep Generation [16:01:03:401] Delay [-101ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1510.4Hz] Deviation% [0.69]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.47V] Deviation% [1.38]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:03:905] Beep Generation [16:01:03:747] Delay [-158ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1499.94Hz] Deviation% [0.0]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.35V] Deviation% [-6.9]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:04:308] Beep Generation [16:01:04:093] Delay [-215ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1509.07Hz] Deviation% [0.6]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.41V] Deviation% [-2.76]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:04:711] Beep Generation [16:01:04:438] Delay [-273ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1500.22Hz] Deviation% [0.01]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.52V] Deviation% [4.83]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:05:113] Beep Generation [16:01:04:781] Delay [-332ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1500.0Hz] Deviation% [0.0]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.44V] Deviation% [-0.69]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:05:516] Beep Generation [16:01:05:124] Delay [-392ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1500.24Hz] Deviation% [0.02]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.52V] Deviation% [4.83]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:05:919] Beep Generation [16:01:05:474] Delay [-445ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1500.0Hz] Deviation% [0.0]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.39V] Deviation% [-4.14]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:06:322] Beep Generation [16:01:05:820] Delay [-502ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1499.98Hz] Deviation% [0.0]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.38V] Deviation% [-4.83]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:06:725] Beep Generation [16:01:05:868] Delay [-857ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1508.42Hz] Deviation% [0.56]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.42V] Deviation% [-2.07]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:07:127] Beep Generation [16:01:06:203] Delay [-924ms]
+
+
+INFO :: Expected No: Responses [15]	 Received No: Responses [15]
+
+And the audio signal measurement system should analyse the beep and respond
+!-- No response packet  is expected in case of generated Beeps
+
+Example: {commandListenSignalsLabview=LSTNPWM -CH 6 -D 6 -N 30, noOfBeeps=30, commandGenerateBeep=85,55,06,SeqNo,36,07,00,00,00,CrcMsb,CrcLsb}
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+!-- TCP/IP connection should establish between Java and LabView on Port 2000
+Given we are connected to the audio control interface of the ACHC
+And we are connected to the audio signal measurement system
+Command Send to Labview ::LSTNPWM -CH 6 -D 6 -N 30
+And the audio signal measurement system is set up to detect NIBP beep {commandListenSignalsLabview}
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555062D3607000000018C] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555062E3607000000CF6C] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555062F36070000008ACC] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[855506303607000000554B] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[85550631360700000010EB] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[855506323607000000DE0B] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555063336070000009BAB] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[85550634360700000053EA] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[855506353607000000164A] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[855506363607000000D8AA] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555063736070000009D0A] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555063836070000005809] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555063936070000001DA9] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555063A3607000000D349] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555063B360700000096E9] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555063C36070000005EA8] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555063D36070000001B08] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555063E3607000000D5E8] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555063F36070000009048] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[85550640360700000010D7] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555064136070000005577] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555064236070000009B97] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[855506433607000000DE37] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555064436070000001676] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[85550645360700000053D6] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555064636070000009D36] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[855506473607000000D896] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555064836070000001D95] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555064936070000005835] 
+Expected Packet		>>[No Response] 
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555064A360700000096D5] 
+Expected Packet		>>[No Response] 
+
+When we use the command GENERATE_BEEP to generate {noOfBeeps} beeps for a minute. The command to ACHC is {commandGenerateBeep}
+Then the ACHC should respond
+Server Response :: 
+ >>START LSTNPWM -CH 6 -D 6 -N 30
+PWM -N 30
+PWM -F 1499.59 -A 1.37 -D 45.17 -T 16:01:13:638
+PWM -F 1500.06 -A 1.46 -D 45.17 -T 16:01:13:789
+PWM -F 1499.99 -A 1.45 -D 45.17 -T 16:01:13:927
+PWM -F 1500.19 -A 1.39 -D 45.17 -T 16:01:14:073
+PWM -F 1512.96 -A 1.47 -D 45.17 -T 16:01:14:220
+PWM -F 1513.00 -A 1.47 -D 45.17 -T 16:01:14:364
+PWM -F 1500.12 -A 1.52 -D 45.17 -T 16:01:14:508
+PWM -F 1499.98 -A 1.38 -D 45.17 -T 16:01:14:655
+PWM -F 1513.01 -A 1.42 -D 45.17 -T 16:01:14:794
+PWM -F 1499.98 -A 1.46 -D 45.17 -T 16:01:14:843
+PWM -F 1511.29 -A 1.42 -D 45.17 -T 16:01:14:978
+PWM -F 1499.98 -A 1.37 -D 45.17 -T 16:01:15:122
+PWM -F 1500.11 -A 1.46 -D 45.17 -T 16:01:15:279
+PWM -F 1500.12 -A 1.43 -D 45.17 -T 16:01:15:408
+PWM -F 1499.95 -A 1.46 -D 45.17 -T 16:01:15:553
+PWM -F 1500.01 -A 1.39 -D 45.17 -T 16:01:15:697
+PWM -F 1499.99 -A 1.35 -D 45.17 -T 16:01:15:845
+PWM -F 1510.33 -A 1.42 -D 45.17 -T 16:01:15:993
+PWM -F 1499.99 -A 1.39 -D 45.17 -T 16:01:16:135
+PWM -F 1499.98 -A 1.42 -D 45.17 -T 16:01:16:282
+PWM -F 1500.43 -A 1.46 -D 45.17 -T 16:01:16:426
+PWM -F 1510.38 -A 1.42 -D 45.17 -T 16:01:16:569
+PWM -F 1499.98 -A 1.41 -D 45.17 -T 16:01:16:711
+PWM -F 1511.47 -A 1.46 -D 45.17 -T 16:01:16:858
+PWM -F 1499.98 -A 1.46 -D 45.17 -T 16:01:17:000
+PWM -F 1499.98 -A 1.36 -D 45.17 -T 16:01:17:137
+PWM -F 1499.99 -A 1.38 -D 45.17 -T 16:01:17:282
+PWM -F 1511.16 -A 1.52 -D 45.17 -T 16:01:17:435
+PWM -F 1499.96 -A 1.38 -D 45.17 -T 16:01:17:573
+PWM -F 1500.47 -A 1.44 -D 45.17 -T 16:01:17:721
+STOP
+
+
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1499.59Hz] Deviation% [-0.03]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.37V] Deviation% [-5.52]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:13:462] Beep Generation [16:01:13:638] Delay [176ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1500.06Hz] Deviation% [0.0]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.46V] Deviation% [0.69]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:13:664] Beep Generation [16:01:13:789] Delay [125ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1499.99Hz] Deviation% [0.0]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.45V] Deviation% [0.0]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:13:868] Beep Generation [16:01:13:927] Delay [59ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1500.19Hz] Deviation% [0.01]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.39V] Deviation% [-4.14]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:14:071] Beep Generation [16:01:14:073] Delay [2ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1512.96Hz] Deviation% [0.86]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.47V] Deviation% [1.38]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:14:274] Beep Generation [16:01:14:220] Delay [-54ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1513.0Hz] Deviation% [0.87]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.47V] Deviation% [1.38]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:14:477] Beep Generation [16:01:14:364] Delay [-113ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1500.12Hz] Deviation% [0.01]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.52V] Deviation% [4.83]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:14:679] Beep Generation [16:01:14:508] Delay [-171ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1499.98Hz] Deviation% [0.0]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.38V] Deviation% [-4.83]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:14:882] Beep Generation [16:01:14:655] Delay [-227ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1513.01Hz] Deviation% [0.87]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.42V] Deviation% [-2.07]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:15:085] Beep Generation [16:01:14:794] Delay [-291ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1499.98Hz] Deviation% [0.0]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.46V] Deviation% [0.69]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:15:288] Beep Generation [16:01:14:843] Delay [-445ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1511.29Hz] Deviation% [0.75]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.42V] Deviation% [-2.07]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:15:491] Beep Generation [16:01:14:978] Delay [-513ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1499.98Hz] Deviation% [0.0]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.37V] Deviation% [-5.52]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:15:694] Beep Generation [16:01:15:122] Delay [-572ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1500.11Hz] Deviation% [0.01]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.46V] Deviation% [0.69]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:15:896] Beep Generation [16:01:15:279] Delay [-617ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1500.12Hz] Deviation% [0.01]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.43V] Deviation% [-1.38]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:16:098] Beep Generation [16:01:15:408] Delay [-690ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1499.95Hz] Deviation% [0.0]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.46V] Deviation% [0.69]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:16:301] Beep Generation [16:01:15:553] Delay [-748ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1500.01Hz] Deviation% [0.0]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.39V] Deviation% [-4.14]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:16:504] Beep Generation [16:01:15:697] Delay [-807ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1499.99Hz] Deviation% [0.0]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.35V] Deviation% [-6.9]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:16:707] Beep Generation [16:01:15:845] Delay [-862ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1510.33Hz] Deviation% [0.69]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.42V] Deviation% [-2.07]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:16:910] Beep Generation [16:01:15:993] Delay [-917ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1499.99Hz] Deviation% [0.0]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.39V] Deviation% [-4.14]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:17:113] Beep Generation [16:01:16:135] Delay [-978ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1499.98Hz] Deviation% [0.0]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.42V] Deviation% [-2.07]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:17:316] Beep Generation [16:01:16:282] Delay [-1034ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1500.43Hz] Deviation% [0.03]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.46V] Deviation% [0.69]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:17:519] Beep Generation [16:01:16:426] Delay [-1093ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1510.38Hz] Deviation% [0.69]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.42V] Deviation% [-2.07]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:17:722] Beep Generation [16:01:16:569] Delay [-1153ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1499.98Hz] Deviation% [0.0]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.41V] Deviation% [-2.76]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:17:925] Beep Generation [16:01:16:711] Delay [-1214ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1511.47Hz] Deviation% [0.76]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.46V] Deviation% [0.69]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:18:128] Beep Generation [16:01:16:858] Delay [-1270ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1499.98Hz] Deviation% [0.0]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.46V] Deviation% [0.69]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:18:331] Beep Generation [16:01:17:000] Delay [-1331ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1499.98Hz] Deviation% [0.0]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.36V] Deviation% [-6.21]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:18:533] Beep Generation [16:01:17:137] Delay [-1396ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1499.99Hz] Deviation% [0.0]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.38V] Deviation% [-4.83]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:18:737] Beep Generation [16:01:17:282] Delay [-1455ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1511.16Hz] Deviation% [0.74]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.52V] Deviation% [4.83]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:18:940] Beep Generation [16:01:17:435] Delay [-1505ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1499.96Hz] Deviation% [0.0]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.38V] Deviation% [-4.83]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:19:143] Beep Generation [16:01:17:573] Delay [-1570ms]
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1500.47Hz] Deviation% [0.03]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.44V] Deviation% [-0.69]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:19:346] Beep Generation [16:01:17:721] Delay [-1625ms]
+
+
+INFO :: Expected No: Responses [30]	 Received No: Responses [30]
+
+And the audio signal measurement system should analyse the beep and respond
+!-- No response packet  is expected in case of generated Beeps
+
+
+Scenario: ACHC should be able to flag the inetgrity of the received packet for NIBP module commands
+Examples:
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+When we send GENERATE_BEEP {commandGenerateBeep} command to ACHC to test packet integrity by giving wrong CRC value in
+Then the ACHC should respond
+!-- A CRC error response should be generated by ACHC indicating the correct CRC value
+!-- Beep will not be generated ie, the command will not be executed
+
+|commandGenerateBeep|
+|85,55,06,SeqNo,36,07,00,00,00,CrcMsb,CrcLsb|
+
+Example: {commandGenerateBeep=85,55,06,SeqNo,36,07,00,00,00,CrcMsb,CrcLsb}
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555064B360700000075D3] 
+Expected Packet		>>[85AA0614FF0001D3756132] 
+Packet Received		<<[85AA0614FF0001D3756132]
+Response Received1	<<ERROR :: Validity Check Fail
+			  Calculated CRC [0xd375]
+
+When we send GENERATE_BEEP {commandGenerateBeep} command to ACHC to test packet integrity by giving wrong CRC value in
+Then the ACHC should respond
+!-- A CRC error response should be generated by ACHC indicating the correct CRC value
+!-- Beep will not be generated ie, the command will not be executed
+
+
+Scenario: Communicate with ACHC as iMX to validate the error responses from ACHC for invalid device ID in NIBP
+Examples:
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+When we send GENERATE_BEEP command with an invalid device id in {commandGenerateBeep}
+Then the ACHC should respond
+!-- An error response, the response received will contain the indication of expected and actual device ID
+!-- Invalid Device ID Error Response:: 85,AA,06,SeqNoACHC,FF,00,02,RecDeviceID,ExpDeviceID,CrcMsb,CrcLsb
+!-- Beep will not be generated ie, the command will not be executed
+
+|commandGenerateBeep|
+|85,50,06,SeqNo,36,07,00,00,00,CrcMsb,CrcLsb|
+
+Example: {commandGenerateBeep=85,50,06,SeqNo,36,07,00,00,00,CrcMsb,CrcLsb}
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8550064C3607000000538A] 
+Expected Packet		>>[85AA0615FF00025055176B] 
+Packet Received		<<[85AA0615FF00025055176B]
+Response Received1	<<ERROR :: Device ID Invalid
+			  Received [0x50]	 Expected [0x55]
+
+When we send GENERATE_BEEP command with an invalid device id in {commandGenerateBeep}
+Then the ACHC should respond
+!-- An error response, the response received will contain the indication of expected and actual device ID
+!-- Invalid Device ID Error Response:: 85,AA,06,SeqNoACHC,FF,00,02,RecDeviceID,ExpDeviceID,CrcMsb,CrcLsb
+!-- Beep will not be generated ie, the command will not be executed
+
+
+Scenario: Communicate with ACHC as iMX to validate the error responses from ACHC for incorrect sequence number in NIBP and the generation of audiable beep
+Examples:
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+!-- TCP/IP connection should be established between Java and LabView on Port 2000
+Given we are connected to the audio control interface of the ACHC
+And we are connected to the audio signal measurement system
+And the audio signal measurement system is set up to detect NIBP beep {commandListenSignalsLabview}
+When we send GENERATE_BEEP with an incorrect sequence number in {commandGenerateBeep}
+Then the ACHC should respond
+And the audio signal measurement system should analyse the beep and respond
+!-- An error response, the response received will contain the indication of incorrect sequence number
+!-- Incorrect sequence number Error Response:: 85,AA,06,SeqNoACHC,FF,00,03,RecSeqNo,ExpSeqNo,CrcMsb,CrcLsb
+!-- Beep will be generated ie, the command will get executed
+
+|commandListenSignalsLabview|commandGenerateBeep|
+|LSTNPWM -CH 6 -D 1 -N 1|85,55,06,SeqNo,36,07,00,00,00,CrcMsb,CrcLsb|
+
+Example: {commandListenSignalsLabview=LSTNPWM -CH 6 -D 1 -N 1, commandGenerateBeep=85,55,06,SeqNo,36,07,00,00,00,CrcMsb,CrcLsb}
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+!-- TCP/IP connection should be established between Java and LabView on Port 2000
+Given we are connected to the audio control interface of the ACHC
+And we are connected to the audio signal measurement system
+Command Send to Labview ::LSTNPWM -CH 6 -D 1 -N 1
+And the audio signal measurement system is set up to detect NIBP beep {commandListenSignalsLabview}
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555064D36070000005E94] 
+Expected Packet		>>[85AA0616FF00034D0091C4] 
+Packet Received		<<[85AA0616FF00034D4B686B]
+Response Received1	<<ERROR :: Incorrect Sequence Number
+			  Received [0x4d]	 Expected [0x4b]
+Mismatch		>>Expected wValue2Lsb		 [0x00]	  Received wValue2Lsb		 [0x4b]
+Mismatch		>>Expected CrcMsb		 [0x91]	  Received CrcMsb		 [0x68]
+Mismatch		>>Expected CrcLsb		 [0xc4]	  Received CrcLsb		 [0x6b]
+
+When we send GENERATE_BEEP with an incorrect sequence number in {commandGenerateBeep}
+Then the ACHC should respond
+Server Response :: 
+ >>START LSTNPWM -CH 6 -D 1 -N 1
+PWM -N 1
+PWM -F 1499.64 -A 1.52 -D 45.17 -T 16:01:25:714
+STOP
+
+
+
+INFO :: Expected Frequency Range [1350.0-1650.0]Hz Actual Frequency[1499.64Hz] Deviation% [-0.02]
+INFO :: Current Volume Level [9]
+INFO :: Expected Amplitude Range [1.3050001-1.595]V Actual Amplitude[1.52V] Deviation% [4.83]
+INFO :: Expected Duration Range [40.5-49.5]ms Actual Duration[45.17ms] Deviation% [0.38]
+INFO :: TimeStamp - Trigger Beep Command [16:01:25:435] Beep Generation [16:01:25:714] Delay [279ms]
+
+
+INFO :: Expected No: Responses [1]	 Received No: Responses [1]
+
+And the audio signal measurement system should analyse the beep and respond
+!-- An error response, the response received will contain the indication of incorrect sequence number
+!-- Incorrect sequence number Error Response:: 85,AA,06,SeqNoACHC,FF,00,03,RecSeqNo,ExpSeqNo,CrcMsb,CrcLsb
+!-- Beep will be generated ie, the command will get executed
+
+
+Scenario: Communicate with ACHC as iMX to validate the error responses from ACHC for invalid Source
+Examples:
+!-- Actual port number is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+When we send command {command} with an invalid source
+Then the ACHC should respond
+
+|command|
+|85,55,06,SeqNo,30,08,00,00,09,CrcMsb,CrcLsb|
+|85,55,06,SeqNo,CF,08,00,00,00,CrcMsb,CrcLsb|
+|85,55,06,SeqNo,36,08,00,00,00,CrcMsb,CrcLsb|
+
+Example: {command=85,55,06,SeqNo,30,08,00,00,09,CrcMsb,CrcLsb}
+!-- Actual port number is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+Command Send		>>SET_PARAM_VOLUME- VOLUME_LEVEL[9]
+Packet Send 		>>[8555064E30080000091836] 
+Expected Packet		>>[85AA0617300800FF09B7F0] 
+Packet Received		<<[85AA0617300800FF09B7F0]
+Response Received1	<<SET_PARAM_VOLUME
+
+When we send command {command} with an invalid source
+Then the ACHC should respond
+
+Example: {command=85,55,06,SeqNo,CF,08,00,00,00,CrcMsb,CrcLsb}
+!-- Actual port number is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+Command Send		>>GET_PARAM_VOLUME
+Packet Send 		>>[8555064FCF080000009610] 
+Expected Packet		>>[85AA0618CF0800FF09285C] 
+Packet Received		<<[85AA0618CF0800FF0A183F]
+Response Received1	<<GET_PARAM_VOLUME
+Mismatch		>>Expected wValue2Lsb		 [0x09]	  Received wValue2Lsb		 [0x0a]
+Mismatch		>>Expected CrcMsb		 [0x28]	  Received CrcMsb		 [0x18]
+Mismatch		>>Expected CrcLsb		 [0x5c]	  Received CrcLsb		 [0x3f]
+
+When we send command {command} with an invalid source
+Then the ACHC should respond
+
+Example: {command=85,55,06,SeqNo,36,08,00,00,00,CrcMsb,CrcLsb}
+!-- Actual port number is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+Command Send		>>GENERATE_BEEP
+Packet Send 		>>[855506503608000000DEBD] 
+Expected Packet		>>[85AA0619FF00050801047F] 
+Packet Received		<<[85AA0619FF00050801047F]
+Response Received1	<<ERROR :: Incorrect SpO2 Value in Generate Beep Command
+			  Received Erroneous Byte [0x01]
+
+When we send command {command} with an invalid source
+Then the ACHC should respond
+
+
+Scenario: Communicate with ACHC as iMX to validate the error responses from ACHC for invalid NIBP Source
+Examples:
+!-- Actual port number is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+When we send command {command} with an invalid NIBP source
+Then the ACHC should respond
+
+|command|
+|85,55,06,SeqNo,30,07,04,00,09,CrcMsb,CrcLsb|
+|85,55,06,SeqNo,CF,07,05,00,00,CrcMsb,CrcLsb|
+|85,55,06,SeqNo,36,07,06,00,00,CrcMsb,CrcLsb|
+
+Example: {command=85,55,06,SeqNo,30,07,04,00,09,CrcMsb,CrcLsb}
+!-- Actual port number is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+Command Send		>>SET_PARAM_VOLUME- VOLUME_LEVEL[9] - NIBP
+Packet Send 		>>[855506513007040009CF9F] 
+Expected Packet		>>[85AA061A3007040009F262] 
+Packet Received		<<[85AA061A3007040009F262]
+Response Received1	<<SET_PARAM_VOLUME - NIBP
+
+When we send command {command} with an invalid NIBP source
+Then the ACHC should respond
+
+Example: {command=85,55,06,SeqNo,CF,07,05,00,00,CrcMsb,CrcLsb}
+!-- Actual port number is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+Command Send		>>GET_PARAM_VOLUME - NIBP
+Packet Send 		>>[85550652CF07050000FDC9] 
+Expected Packet		>>[85AA061BCF07050009DA5D] 
+Packet Received		<<[85AA061BCF07050009DA5D]
+Response Received1	<<GET_PARAM_VOLUME - NIBP
+
+When we send command {command} with an invalid NIBP source
+Then the ACHC should respond
+
+Example: {command=85,55,06,SeqNo,36,07,06,00,00,CrcMsb,CrcLsb}
+!-- Actual port number is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555065336070600007613] 
+Expected Packet		>>[No Response] 
+
+When we send command {command} with an invalid NIBP source
+Then the ACHC should respond
+
+
+Scenario: Communicate with ACHC as iMX to validate the error responses from ACHC for invalid NIBP Make
+Examples:
+!-- Actual port number is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+When we send command {command} with an invalid NIBP make
+Then the ACHC should respond
+
+|command|
+|85,55,06,SeqNo,30,07,00,0A,09,CrcMsb,CrcLsb|
+|85,55,06,SeqNo,CF,07,00,0B,00,CrcMsb,CrcLsb|
+|85,55,06,SeqNo,36,07,00,0C,00,CrcMsb,CrcLsb|
+
+Example: {command=85,55,06,SeqNo,30,07,00,0A,09,CrcMsb,CrcLsb}
+!-- Actual port number is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+Command Send		>>SET_PARAM_VOLUME- VOLUME_LEVEL[9] - NIBP
+Packet Send 		>>[855506543007000A09BF95] 
+Expected Packet		>>[85AA061C3007000009A343] 
+Packet Received		<<[85AA061C3007000009A343]
+Response Received1	<<SET_PARAM_VOLUME - NIBP
+
+When we send command {command} with an invalid NIBP make
+Then the ACHC should respond
+
+Example: {command=85,55,06,SeqNo,CF,07,00,0B,00,CrcMsb,CrcLsb}
+!-- Actual port number is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+Command Send		>>GET_PARAM_VOLUME - NIBP
+Packet Send 		>>[85550655CF07000B000282] 
+Expected Packet		>>[85AA061DCF07000009BC4C] 
+Packet Received		<<[85AA061DCF07000009BC4C]
+Response Received1	<<GET_PARAM_VOLUME - NIBP
+
+When we send command {command} with an invalid NIBP make
+Then the ACHC should respond
+
+Example: {command=85,55,06,SeqNo,36,07,00,0C,00,CrcMsb,CrcLsb}
+!-- Actual port number is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[855506563607000C00C2DF] 
+Expected Packet		>>[No Response] 
+
+When we send command {command} with an invalid NIBP make
+Then the ACHC should respond
+
+
+Scenario: Communicate with ACHC as iMX to validate the error responses from ACHC for incorrect NIBP value
+Examples:
+!-- Actual port number is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+When we send command {command} with an incorrect NIBP value
+Then the ACHC should respond
+!-- Beep will not be generated ie, the command will not be executed
+
+|command|
+|85,55,06,SeqNo,30,07,00,00,AA,CrcMsb,CrcLsb|
+|85,55,06,SeqNo,CF,07,00,00,BB,CrcMsb,CrcLsb|
+|85,55,06,SeqNo,36,07,00,00,CC,CrcMsb,CrcLsb|
+
+Example: {command=85,55,06,SeqNo,30,07,00,00,AA,CrcMsb,CrcLsb}
+!-- Actual port number is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+Command Send		>>SET_PARAM_VOLUME- VOLUME_LEVEL[-86] - NIBP
+Packet Send 		>>[8555065730070000AA1B37] 
+Expected Packet		>>[85AA061E300700FFAAAE75] 
+Packet Received		<<[85AA061E300700FFAAAE75]
+Response Received1	<<SET_PARAM_VOLUME - NIBP
+
+When we send command {command} with an incorrect NIBP value
+Then the ACHC should respond
+!-- Beep will not be generated ie, the command will not be executed
+
+Example: {command=85,55,06,SeqNo,CF,07,00,00,BB,CrcMsb,CrcLsb}
+!-- Actual port number is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+Command Send		>>GET_PARAM_VOLUME - NIBP
+Packet Send 		>>[85550658CF070000BB868B] 
+Expected Packet		>>[85AA061FCF07000009370C] 
+Packet Received		<<[85AA061FCF07000009370C]
+Response Received1	<<GET_PARAM_VOLUME - NIBP
+
+When we send command {command} with an incorrect NIBP value
+Then the ACHC should respond
+!-- Beep will not be generated ie, the command will not be executed
+
+Example: {command=85,55,06,SeqNo,36,07,00,00,CC,CrcMsb,CrcLsb}
+!-- Actual port number is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555065936070000CC5A71] 
+Expected Packet		>>[No Response] 
+
+When we send command {command} with an incorrect NIBP value
+Then the ACHC should respond
+!-- Beep will not be generated ie, the command will not be executed
+
+
+Scenario: Communicate with ACHC as iMX to validate the responses from ACHC for malformatted packets in NIBP with packet too long
+Examples:
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+When we send command {command} with packet too long
+Then the ACHC should respond
+
+|command|
+|85,55,09,SeqNo,30,07,00,00,09,CF,A0,D0,CrcMsb,CrcLsb|
+|85,55,07,SeqNo,36,07,00,00,00,FA,CrcMsb,CrcLsb|
+|85,55,08,SeqNo,CF,07,00,00,00,DF,FD,CrcMsb,CrcLsb|
+|85,55,FF,SeqNo,36,07,00,00,00,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,00,00,00,00,00,00,00,00,00,00,00,00,BB,BB,BB,AA,AA,00,00,00,99,99,60,11,22,33,44,55,66,77,88,99,B,BB,BB,AA,AA,00,00,00,99,99,60,11,22,33,44,55,66,77,88,99,00,00,00,00,00,00,00,BB,BB,BB,AA,AA,00,00,00,99,99,60,11,12,13,14,15,16,17,18,19,21,22,23,24,25,33,43,54,64,76,87,DD,DA,DB,DC,DD,DF,DE,14,15,16,17,18,19,21,22,23,24,25,33,43,54,64,76,87,DD,DA,DB,00,99,99,60,11,22,33,44,55,66,77,DD,DA,DB,00,99,99,60,BB,BB,BB,AA,AA,AA,AA,AA,00,00,FF,FF,FF,00,00,99,99,60,11,12,13,14,15,99,98,97,96,95,94,93,92,91,77,76,75,74,73,72,71,78,79,45,46,47,48,49,33,32,31,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,90,AA,AA,AA,AA,AA,00,00,00,00,DA,DB,DC,DD,DF,DE,14,15,16,17,18,19,99,60,11,12,13,14,15,99,98,97,DD,FF,AA,CrcMsb,CrcLsb|
+|85,55,FF,SeqNo,30,07,00,00,09,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,00,00,00,00,00,00,00,00,00,00,00,00,BB,BB,BB,AA,AA,00,00,00,99,99,60,11,22,33,44,55,66,77,88,99,B,BB,BB,AA,AA,00,00,00,99,99,60,11,22,33,44,55,66,77,88,99,00,00,00,00,00,00,00,BB,BB,BB,AA,AA,00,00,00,99,99,60,11,12,13,14,15,16,17,18,19,21,22,23,24,25,33,43,54,64,76,87,DD,DA,DB,DC,DD,DF,DE,14,15,16,17,18,19,21,22,23,24,25,33,43,54,64,76,87,DD,DA,DB,00,99,99,60,11,22,33,44,55,66,77,DD,DA,DB,00,99,99,60,BB,BB,BB,AA,AA,AA,AA,AA,00,00,FF,FF,FF,00,00,99,99,60,11,12,13,14,15,99,98,97,96,95,94,93,92,91,77,76,75,74,73,72,71,78,79,45,46,47,48,49,33,32,31,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,90,AA,AA,AA,AA,AA,00,00,00,00,DA,DB,DC,DD,DF,DE,14,15,16,17,18,19,99,60,11,12,13,14,15,99,98,97,DD,FF,AA,CrcMsb,CrcLsb|
+|85,55,FF,SeqNo,CF,07,00,00,00,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,00,00,00,00,00,00,00,00,00,00,00,00,BB,BB,BB,AA,AA,00,00,00,99,99,60,11,22,33,44,55,66,77,88,99,B,BB,BB,AA,AA,00,00,00,99,99,60,11,22,33,44,55,66,77,88,99,00,00,00,00,00,00,00,BB,BB,BB,AA,AA,00,00,00,99,99,60,11,12,13,14,15,16,17,18,19,21,22,23,24,25,33,43,54,64,76,87,DD,DA,DB,DC,DD,DF,DE,14,15,16,17,18,19,21,22,23,24,25,33,43,54,64,76,87,DD,DA,DB,00,99,99,60,11,22,33,44,55,66,77,DD,DA,DB,00,99,99,60,BB,BB,BB,AA,AA,AA,AA,AA,00,00,FF,FF,FF,00,00,99,99,60,11,12,13,14,15,99,98,97,96,95,94,93,92,91,77,76,75,74,73,72,71,78,79,45,46,47,48,49,33,32,31,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,90,AA,AA,AA,AA,AA,00,00,00,00,DA,DB,DC,DD,DF,DE,14,15,16,17,18,19,99,60,11,12,13,14,15,99,98,97,DD,FF,AA,CrcMsb,CrcLsb|
+
+Example: {command=85,55,09,SeqNo,30,07,00,00,09,CF,A0,D0,CrcMsb,CrcLsb}
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+Command Send		>>SET_PARAM_VOLUME- VOLUME_LEVEL[9] - NIBP
+Packet Send 		>>[8555095A3007000009CFA0D08A7D] 
+Expected Packet		>>[85AA0620FF0004090617F7] 
+Packet Received		<<[85AA0620FF0004090617F7]
+
+When we send command {command} with packet too long
+Then the ACHC should respond
+
+Example: {command=85,55,07,SeqNo,36,07,00,00,00,FA,CrcMsb,CrcLsb}
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555075B3607000000FAB0E3] 
+Expected Packet		>>[85AA0621FF000407067158] 
+Packet Received		<<[85AA0621FF000407067158]
+
+When we send command {command} with packet too long
+Then the ACHC should respond
+
+Example: {command=85,55,08,SeqNo,CF,07,00,00,00,DF,FD,CrcMsb,CrcLsb}
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+Command Send		>>GET_PARAM_VOLUME - NIBP
+Packet Send 		>>[8555085CCF07000000DFFDD862] 
+Expected Packet		>>[85AA0622FF00040806AF86] 
+Packet Received		<<[85AA0622FF00040806AF86]
+
+When we send command {command} with packet too long
+Then the ACHC should respond
+
+Example: {command=85,55,FF,SeqNo,36,07,00,00,00,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,00,00,00,00,00,00,00,00,00,00,00,00,BB,BB,BB,AA,AA,00,00,00,99,99,60,11,22,33,44,55,66,77,88,99,B,BB,BB,AA,AA,00,00,00,99,99,60,11,22,33,44,55,66,77,88,99,00,00,00,00,00,00,00,BB,BB,BB,AA,AA,00,00,00,99,99,60,11,12,13,14,15,16,17,18,19,21,22,23,24,25,33,43,54,64,76,87,DD,DA,DB,DC,DD,DF,DE,14,15,16,17,18,19,21,22,23,24,25,33,43,54,64,76,87,DD,DA,DB,00,99,99,60,11,22,33,44,55,66,77,DD,DA,DB,00,99,99,60,BB,BB,BB,AA,AA,AA,AA,AA,00,00,FF,FF,FF,00,00,99,99,60,11,12,13,14,15,99,98,97,96,95,94,93,92,91,77,76,75,74,73,72,71,78,79,45,46,47,48,49,33,32,31,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,90,AA,AA,AA,AA,AA,00,00,00,00,DA,DB,DC,DD,DF,DE,14,15,16,17,18,19,99,60,11,12,13,14,15,99,98,97,DD,FF,AA,CrcMsb,CrcLsb}
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555FF5D3607000000AAAAAAAAAAAAAAAAAAAAAAAAAAAA000000000000000000000000BBBBBBAAAA0000009999601122334455667788990BBBBBAAAA00000099996011223344556677889900000000000000BBBBBBAAAA0000009999601112131415161718192122232425334354647687DDDADBDCDDDFDE1415161718192122232425334354647687DDDADB0099996011223344556677DDDADB00999960BBBBBBAAAAAAAAAA0000FFFFFF0000999960111213141599989796959493929177767574737271787945464748493332313435363738394041424344454647484990AAAAAAAAAA00000000DADBDCDDDFDE14151617181999601112131415999897DDFFAA5415] 
+Expected Packet		>>[85AA0623FF0004FF066070] 
+Packet Received		<<[85AA0623FF0004FF066070]
+
+When we send command {command} with packet too long
+Then the ACHC should respond
+
+Example: {command=85,55,FF,SeqNo,30,07,00,00,09,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,00,00,00,00,00,00,00,00,00,00,00,00,BB,BB,BB,AA,AA,00,00,00,99,99,60,11,22,33,44,55,66,77,88,99,B,BB,BB,AA,AA,00,00,00,99,99,60,11,22,33,44,55,66,77,88,99,00,00,00,00,00,00,00,BB,BB,BB,AA,AA,00,00,00,99,99,60,11,12,13,14,15,16,17,18,19,21,22,23,24,25,33,43,54,64,76,87,DD,DA,DB,DC,DD,DF,DE,14,15,16,17,18,19,21,22,23,24,25,33,43,54,64,76,87,DD,DA,DB,00,99,99,60,11,22,33,44,55,66,77,DD,DA,DB,00,99,99,60,BB,BB,BB,AA,AA,AA,AA,AA,00,00,FF,FF,FF,00,00,99,99,60,11,12,13,14,15,99,98,97,96,95,94,93,92,91,77,76,75,74,73,72,71,78,79,45,46,47,48,49,33,32,31,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,90,AA,AA,AA,AA,AA,00,00,00,00,DA,DB,DC,DD,DF,DE,14,15,16,17,18,19,99,60,11,12,13,14,15,99,98,97,DD,FF,AA,CrcMsb,CrcLsb}
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+Command Send		>>SET_PARAM_VOLUME- VOLUME_LEVEL[9] - NIBP
+Packet Send 		>>[8555FF5E3007000009AAAAAAAAAAAAAAAAAAAAAAAAAAAA000000000000000000000000BBBBBBAAAA0000009999601122334455667788990BBBBBAAAA00000099996011223344556677889900000000000000BBBBBBAAAA0000009999601112131415161718192122232425334354647687DDDADBDCDDDFDE1415161718192122232425334354647687DDDADB0099996011223344556677DDDADB00999960BBBBBBAAAAAAAAAA0000FFFFFF0000999960111213141599989796959493929177767574737271787945464748493332313435363738394041424344454647484990AAAAAAAAAA00000000DADBDCDDDFDE14151617181999601112131415999897DDFFAAF300] 
+Expected Packet		>>[85AA0624FF0004FF06A831] 
+
+When we send command {command} with packet too long
+Then the ACHC should respond
+
+Example: {command=85,55,FF,SeqNo,CF,07,00,00,00,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,AA,00,00,00,00,00,00,00,00,00,00,00,00,BB,BB,BB,AA,AA,00,00,00,99,99,60,11,22,33,44,55,66,77,88,99,B,BB,BB,AA,AA,00,00,00,99,99,60,11,22,33,44,55,66,77,88,99,00,00,00,00,00,00,00,BB,BB,BB,AA,AA,00,00,00,99,99,60,11,12,13,14,15,16,17,18,19,21,22,23,24,25,33,43,54,64,76,87,DD,DA,DB,DC,DD,DF,DE,14,15,16,17,18,19,21,22,23,24,25,33,43,54,64,76,87,DD,DA,DB,00,99,99,60,11,22,33,44,55,66,77,DD,DA,DB,00,99,99,60,BB,BB,BB,AA,AA,AA,AA,AA,00,00,FF,FF,FF,00,00,99,99,60,11,12,13,14,15,99,98,97,96,95,94,93,92,91,77,76,75,74,73,72,71,78,79,45,46,47,48,49,33,32,31,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,90,AA,AA,AA,AA,AA,00,00,00,00,DA,DB,DC,DD,DF,DE,14,15,16,17,18,19,99,60,11,12,13,14,15,99,98,97,DD,FF,AA,CrcMsb,CrcLsb}
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+Command Send		>>GET_PARAM_VOLUME - NIBP
+Packet Send 		>>[8555FF5FCF07000000AAAAAAAAAAAAAAAAAAAAAAAAAAAA000000000000000000000000BBBBBBAAAA0000009999601122334455667788990BBBBBAAAA00000099996011223344556677889900000000000000BBBBBBAAAA0000009999601112131415161718192122232425334354647687DDDADBDCDDDFDE1415161718192122232425334354647687DDDADB0099996011223344556677DDDADB00999960BBBBBBAAAAAAAAAA0000FFFFFF0000999960111213141599989796959493929177767574737271787945464748493332313435363738394041424344454647484990AAAAAAAAAA00000000DADBDCDDDFDE14151617181999601112131415999897DDFFAA351A] 
+Expected Packet		>>[85AA0625FF0004FF06ED91] 
+Packet Received		<<[85AA0625FF0004FF06ED91]
+
+When we send command {command} with packet too long
+Then the ACHC should respond
+
+
+Scenario: Communicate with ACHC as iMX to validate the responses from ACHC for malformatted packets in NIBP with packet too short
+Examples:
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+When we send command {command} with packet too short
+Then the ACHC should respond
+
+|command|
+|85,55,00,CrcMsb,CrcLsb|
+|85,55,01,SeqNo,CrcMsb,CrcLsb|
+|85,55,05,SeqNo,CF,07,00,00,CrcMsb,CrcLsb|
+|85,55,04,SeqNo,30,07,00,CrcMsb,CrcLsb|
+|85,55,03,SeqNo,36,07,CrcMsb,CrcLsb|
+
+Example: {command=85,55,00,CrcMsb,CrcLsb}
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+Packet Send 		>>[85550021E0] 
+Expected Packet		>>[No Response] 
+
+When we send command {command} with packet too short
+Then the ACHC should respond
+
+Example: {command=85,55,01,SeqNo,CrcMsb,CrcLsb}
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+Packet Send 		>>[855501608BD4] 
+Expected Packet		>>[No Response] 
+
+When we send command {command} with packet too short
+Then the ACHC should respond
+
+Example: {command=85,55,05,SeqNo,CF,07,00,00,CrcMsb,CrcLsb}
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+Command Send		>>GET_PARAM_VOLUME - NIBP
+Packet Send 		>>[85550560CF0700009E08] 
+Expected Packet		>>[85AA0626FF00040506DF7B] 
+Packet Received		<<[85AA0626FF00040506DF7B]
+
+When we send command {command} with packet too short
+Then the ACHC should respond
+
+Example: {command=85,55,04,SeqNo,30,07,00,CrcMsb,CrcLsb}
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+Command Send		>>SET_PARAM_VOLUME- VOLUME_LEVEL[-103] - NIBP
+Packet Send 		>>[855504613007001B99] 
+Expected Packet		>>[85AA0627FF00040406A9EA] 
+Packet Received		<<[85AA0627FF00040406A9EA]
+
+When we send command {command} with packet too short
+Then the ACHC should respond
+
+Example: {command=85,55,03,SeqNo,36,07,CrcMsb,CrcLsb}
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+Given we are connected to the audio control interface of the ACHC
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[8555036236071047] 
+Expected Packet		>>[85AA0628FF00040306F57E] 
+Packet Received		<<[85AA0628FF00040306F57E]
+
+When we send command {command} with packet too short
+Then the ACHC should respond
+
+
+Scenario: Communicate with ACHC as iMX to validate no beep is generated for volume level 0 in NIBP
+Examples:
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+!-- TCP/IP connection should be established between Java and LabView on Port 2000
+Given we are connected to the audio control interface of the ACHC
+And we are connected to the audio signal measurement system
+And the audio signal measurement system is set up to detect NIBP beep {commandListenSignalsLabview}
+When we send SET_PARAM_VOLUME command to ACHC to set the NIBP volume to level 0 {commandSetVolumeACHC},
+	and verify the volume is updated internally in ACHC using GET_PARAM_VOLUME command, which is {commandGetVolumeACHC}, 
+	and generate a beep using GENERATE_BEEP {commandGenerateNibpBeep}
+Then the ACHC should respond
+And the audio signal measurement system should analyse the beep and respond
+!-- No response packet from ACHC is expected in case of generate Beeps (as per protocol)
+!-- Response of GET_PARAM_VOLUME is used to verify the volume is updated internally in ACHC when instructed to update volume using SET_PARAM_VOLUME
+!-- Beep will not be generated if the SET_PARAM_VOLUME sets Volume to 0
+
+|commandListenSignalsLabview|commandSetVolumeACHC|commandGetVolumeACHC|commandGenerateNibpBeep|
+|LSTNPWM -CH 6 -D 1 -N 0|85,55,06,SeqNo,30,07,00,00,00,CrcMsb,CrcLsb|85,55,06,SeqNo,CF,05,07,00,00,CrcMsb,CrcLsb|85,55,06,SeqNo,36,07,00,00,00,CrcMsb,CrcLsb|
+
+Example: {commandListenSignalsLabview=LSTNPWM -CH 6 -D 1 -N 0, commandSetVolumeACHC=85,55,06,SeqNo,30,07,00,00,00,CrcMsb,CrcLsb, commandGetVolumeACHC=85,55,06,SeqNo,CF,05,07,00,00,CrcMsb,CrcLsb, commandGenerateNibpBeep=85,55,06,SeqNo,36,07,00,00,00,CrcMsb,CrcLsb}
+!-- Precondition:
+!-- Interface should be opened to communicate with ACHC.
+!-- Interface configuration is defined in ACHCConstants.java. Refer DEFAULT_SERIAL_PORT.
+!-- TCP/IP connection should be established between Java and LabView on Port 2000
+Given we are connected to the audio control interface of the ACHC
+And we are connected to the audio signal measurement system
+Command Send to Labview ::LSTNPWM -CH 6 -D 1 -N 0
+And the audio signal measurement system is set up to detect NIBP beep {commandListenSignalsLabview}
+Command Send		>>SET_PARAM_VOLUME- VOLUME_LEVEL[0] - NIBP
+Packet Send 		>>[85550663300700000026BA] 
+Expected Packet		>>[85AA062930070000005EE7] 
+Packet Received		<<[85AA062930070000005EE7]
+Response Received1	<<SET_PARAM_VOLUME - NIBP
+
+Command Send		>>GET_PARAM_VOLUME - MHR
+Packet Send 		>>[85550664CF05070000DCAC] 
+Expected Packet		>>[85AA062ACF05070000A250] 
+Packet Received		<<[85AA062ACF0507FF0A00E5]
+Response Received1	<<GET_PARAM_VOLUME - MHR
+Mismatch		>>Expected wValue2Msb		 [0x00]	  Received wValue2Msb		 [0xff]
+Mismatch		>>Expected wValue2Lsb		 [0x00]	  Received wValue2Lsb		 [0x0a]
+Mismatch		>>Expected CrcMsb		 [0xa2]	  Received CrcMsb		 [0x00]
+Mismatch		>>Expected CrcLsb		 [0x50]	  Received CrcLsb		 [0xe5]
+
+Command Send		>>GENERATE_BEEP - NIBP
+Packet Send 		>>[85550665360700000066DE] 
+Expected Packet		>>[No Response] 
+
+When we send SET_PARAM_VOLUME command to ACHC to set the NIBP volume to level 0 {commandSetVolumeACHC},
+	and verify the volume is updated internally in ACHC using GET_PARAM_VOLUME command, which is {commandGetVolumeACHC}, 
+	and generate a beep using GENERATE_BEEP {commandGenerateNibpBeep}
+Then the ACHC should respond
+Server Response :: 
+ >>START LSTNPWM -CH 6 -D 1 -N 0
+E106 PWM -N 0
+STOP
+
+
+
+
+E106 Signal not detected
+INFO :: Expected No: Responses [0]	 Received No: Responses [0]
+
+And the audio signal measurement system should analyse the beep and respond
+!-- No response packet from ACHC is expected in case of generate Beeps (as per protocol)
+!-- Response of GET_PARAM_VOLUME is used to verify the volume is updated internally in ACHC when instructed to update volume using SET_PARAM_VOLUME
+!-- Beep will not be generated if the SET_PARAM_VOLUME sets Volume to 0
+
+
+
+
+(AfterStories)
+
+Generating reports view to 'D:\Perforce\ACHC_SubsystemVerification_Temp\jbehave' using formats '[stats, achctestreportgenerator, html, xml, console]' and view properties '{navigator=ftl/jbehave-navigator.ftl, views=ftl/jbehave-views.ftl, reports=ftl/jbehave-reports-with-totals.ftl, nonDecorated=ftl/jbehave-report-non-decorated.ftl, decorated=ftl/jbehave-report-decorated.ftl, maps=ftl/jbehave-maps.ftl}'
+log4j:WARN No appenders could be found for logger (freemarker.cache).
+log4j:WARN Please initialize the log4j system properly.
+log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
+Reports view generated with 6 stories (of which 0 pending) containing 57 scenarios (of which 0 pending)
