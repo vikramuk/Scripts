@@ -1,0 +1,1248 @@
+#include "FrontEnd_Defines.h"
+ #include "AlarmMngr.h"
+ #include "CtrlThr.h"
+ #include "string.h"
+ #include "stdio.h"
+ #include "stdlib.h"
+ //#include "UsAlgo.h"
+ #include "UsFhr.h"
+ #include "AudioMngr.h"
+ #include "Cli_Interpreter.h"
+ #include "EventHandler.h"
+ extern AudioMngr* g_pAudioMngrInstance;
+ extern AlarmMngr* g_pAlarmMngrInstance;
+ extern EventHandler* g_pEventHandlerInstance;
+ extern UsFhr* g_pUs1FhrInstance;
+CliInterpreter::CliInterpreter(void):CtrlThr(osPriorityLow) {
+}
+CliInterpreter::~CliInterpreter() {
+}
+void CliInterpreter::CtrlThread(void) {
+  char input[20];
+  char Command[2], Action[10]  = {0xFF,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
+  int Channel = 0xFF, Code = 0xFF;
+  unsigned int NumInputs = 0;
+  while(1) {
+    if(fgets(&input[0],20,stdin)) {
+      NumInputs = sscanf(&input[0],"%s %d %d %s",&Command[0],&Channel, &Code ,&Action[0]);
+    }
+    if(4 == NumInputs) {
+      //Parse the input
+      if(!strncmp(&Command[0],"US",2)) {
+        unsigned int Len = strlen(Action);
+        switch(Code) {
+        case 1: //Connect disconnect
+          if(Len == 1) {
+            UsStatusType UsTdrStatus = WITHOUT_LENS_CONNECTED;
+            if(Channel == 1) {
+              if(Action[0] == '0') { //disconnect
+                UsTdrStatus = DISCONNECTED;
+                g_pUs1FhrInstance->SetTransducerInfo(UsTdrStatus);
+                g_pEventHandlerInstance->LogEvent(US1_DISCONNECTED);
+              } else if(Action[0] == '1') { //Connect
+                g_pUs1FhrInstance->SetTransducerInfo(UsTdrStatus);
+                g_pEventHandlerInstance->LogEvent(US1_CONNECTED);
+              } else if(Action[0] == '?') {
+                printf("%d\n",g_pUs1FhrInstance->GetTransducerInfo());
+              }
+            }
+          }
+          break;
+        case 2 : //Set / Get FHR
+           if(Channel == 1) {
+             UsDataType FhrValue;
+             if((Len == 1) && (Action[0] == '?')) {
+               g_pUs1FhrInstance->GetFhr(FhrValue);
+               printf("%d\n",FhrValue.u16Fhr);
+             } else if(Len <= 3) {
+               char* endptr = 0;
+               int Fhr = strtol(&Action[0],&endptr,10);
+               if(Fhr) {
+                 if(Fhr > 300) Fhr = 300;
+                g_pUs1FhrInstance->SetFhr(Fhr);
+              }
+            }
+          }
+          break;
+        case 3 :    //parameter volume control
+          if(Len == 1) {
+            if (Action[0] == '?') {
+              u8 Us1Vol = 0;
+              g_pAudioMngrInstance->GetVolume(AudioMngr::AD_US1_AUDIO,Us1Vol);
+              printf("%d\n",Us1Vol);
+            } else {
+              if(Action[0] >= '0' && Action[0] <= '9') {
+                g_pAudioMngrInstance->SetVolume(AudioMngr::AD_US1_AUDIO,Action[0] - '0');
+              }
+            }
+          }
+          break;
+        case 4:     //Connect disconnect
+          if(Len == 1) {
+            bool Us1EnableStatus = false;
+            if(Channel == 1) {
+              if(Action[0] == '0') { //disconnect
+                g_pUs1FhrInstance->EnableAcq(Us1EnableStatus);
+              } else if(Action[0] == '1') { //Connect
+                Us1EnableStatus = true;
+                g_pUs1FhrInstance->EnableAcq(Us1EnableStatus);
+              } else if(Action[0] == '?') {
+                printf("%d\n",g_pUs1FhrInstance->IsEnabled());
+              }
+            }
+          }
+          break;
+        case 5:     //Connect disconnect
+          if(Len == 1) {
+            UsFhr::SignalQuality SigQual = UsFhr::GREEN;
+            if(Channel == 1) {
+              if(Action[0] == '0') { //disconnect
+                g_pUs1FhrInstance->SetSignalQuality(SigQual);
+              } else if(Action[0] == '1') { //Connect
+                SigQual = UsFhr::YELLOW;
+                g_pUs1FhrInstance->SetSignalQuality(SigQual);
+              } else if(Action[0] == '2') { //Connect
+                SigQual = UsFhr::RED;
+                g_pUs1FhrInstance->SetSignalQuality(SigQual);
+              } else if(Action[0] == '?') {
+                printf("%d\n",g_pUs1FhrInstance->GetSignalQuality());
+              }
+            }
+          }
+          break;
+        case 40:
+          break;
+        case 41:    //Alarm start / stop
+        case 42:
+        case 43:
+          if(Len == 1) {
+            AlarmMngr::AlarmPriority Priority = AlarmMngr::PARAM_HP_ALARM;
+            if(42 == Code) {
+              Priority = AlarmMngr::PARAM_MP_ALARM;
+            }
+            else if(41 == Code) {
+              Priority = AlarmMngr::PARAM_LP_ALARM;
+            }
+            if (Action[0] == '?') {
+              printf("%d\n",g_pAlarmMngrInstance->GetAlarmStatus(Priority));
+            } else if((Action[0] >= '0') && (Action[0] <= '2')) {
+              g_pAlarmMngrInstance->StartAlarm(Priority,(AlarmMngr::AlarmType)(Action[0]-'0'));
+            }
+          }
+          break;
+        case 45:    //Alarm start / stop
+        case 46:
+        case 47:
+          if(Len == 1) {
+            AlarmMngr::AlarmPriority Priority = AlarmMngr::TECH_LP_ALARM;
+            if(46 == Code) {
+              Priority = AlarmMngr::TECH_MP_ALARM;
+            }
+            else if(47 == Code) {
+              Priority = AlarmMngr::TECH_HP_ALARM;
+            }
+            if (Action[0] == '?') {
+              printf("%d\n",g_pAlarmMngrInstance->GetAlarmStatus(Priority));
+            } else if((Action[0] >= '0') && (Action[0] <= '2')) {
+              g_pAlarmMngrInstance->StartAlarm(Priority,(AlarmMngr::AlarmType)(Action[0]-'0'));
+            }
+          }
+          break;
+        case 51 :    //alarm volume control
+        case 52 :
+        case 53 :
+        case 54 :
+          if(Len == 1) {
+            u8 AlarmVol = 0;
+            AudioMngr::AudioDevice AudioSource = AudioMngr::AD_PHY_HP_ALARM;
+            if(52 == Code) {
+              AudioSource = AudioMngr::AD_PHY_MP_ALARM;
+            }
+            else if(51 == Code) {
+              AudioSource = AudioMngr::AD_PHY_LP_ALARM;
+            }
+            if ((Action[0] == '?') && (54 != Code) ) {
+              g_pAudioMngrInstance->GetVolume(AudioSource,AlarmVol);
+              printf("%d\n",AlarmVol);
+            } else {
+              if(Action[0] >= '1' && Action[0] <= '9') {
+                AlarmVol = Action[0] - '0';
+                if(54 == Code) {
+                  g_pAudioMngrInstance->SetVolume(AudioMngr::AD_PHY_HP_ALARM,AlarmVol);
+                  g_pAudioMngrInstance->SetVolume(AudioMngr::AD_PHY_MP_ALARM,AlarmVol);
+                  g_pAudioMngrInstance->SetVolume(AudioMngr::AD_PHY_LP_ALARM,AlarmVol);
+                } else {
+                  g_pAudioMngrInstance->SetVolume(AudioSource,AlarmVol);
+                }
+              }
+            }
+          }
+          break;
+        case 55 :    //alarm volume control
+        case 56 :
+        case 57 :
+        case 58 :
+          if(Len == 1) {
+            u8 AlarmVol = 0;
+            AudioMngr::AudioDevice AudioSource = AudioMngr::AD_TECH_LP_ALARM;
+            if(56 == Code) {
+              AudioSource = AudioMngr::AD_TECH_MP_ALARM;
+            }
+            else if(57 == Code) {
+              AudioSource = AudioMngr::AD_TECH_HP_ALARM;
+            }
+            if (Action[0] == '?' && (58 != Code)) {
+              g_pAudioMngrInstance->GetVolume(AudioSource,AlarmVol);
+              printf("%d\n",AlarmVol);
+            } else {
+              if(Action[0] >= '1' && Action[0] <= '9') {
+                AlarmVol = Action[0] - '0';
+                if(58 == Code) {
+                  g_pAudioMngrInstance->SetVolume(AudioMngr::AD_TECH_HP_ALARM,AlarmVol);
+                  g_pAudioMngrInstance->SetVolume(AudioMngr::AD_TECH_MP_ALARM,AlarmVol);
+                  g_pAudioMngrInstance->SetVolume(AudioMngr::AD_TECH_LP_ALARM,AlarmVol);
+                } else {
+                  g_pAudioMngrInstance->SetVolume(AudioSource,AlarmVol);
+                }
+              }
+            }
+          }
+          break;
+        default:
+          break;
+        }
+      }
+    }
+    //cleanup to get ready for next input.
+    memset((void*)&input[0],0,20);
+    Command[0] = Command[1] = 0x00;
+    Channel = Code = 0xFF;
+    memset((void*)&Action[0],0xff,10);
+  }
+}
+#include "UsSetTransducerStatusCliCommand.h"
+ #include "UsFhr.h"
+ //#include "EventHandler.h"
+ #include "AcquisitionInterface.h"
+ #include "ISqdAlgo.h"
+ extern UsFhr* g_pUs1FhrInstance;
+ //extern EventHandler* g_pEventHandlerInstance;
+ void UsSetTransducerStatusCliCommand::executeCommand() {
+   if( false == isValidValue() )
+     return;
+   UsStatusType UsTdrStatus =  (( m_u32Value == 0 )? DISCONNECTED : WITHOUT_LENS_CONNECTED );
+   if( 1 == m_u32Channel ) {
+ 		AcquisitionInterface *pAcquisitionInterface = AcquisitionInterface::GetAcqInterfaceInstance();
+ 		UsDataType UsDataTypeFhr; 		
+     g_pUs1FhrInstance->SetTransducerInfo(UsTdrStatus);
+ 		g_pUs1FhrInstance->GetFhr(UsDataTypeFhr);
+     //g_pEventHandlerInstance->LogEvent(( m_u32Value == 0 )?US1_DISCONNECTED:US1_CONNECTED);
+ 		pAcquisitionInterface->OnFhrValueCalculated(IFhrValueObserver::FHR_US1 , UsDataTypeFhr.u16Fhr, 0x0002, UsTdrStatus, ISqdAlgo::GREEN_SQ);
+   } else if ( 2 == m_u32Channel ) {
+   }
+ }
+ inline bool UsSetTransducerStatusCliCommand::isValidValue() {
+  return (( m_u32Value == 0 ) || ( 1 == m_u32Value ) );
+}
+
+Event.h
+#ifndef EVENT_HANDLER_HPP
+ #define EVENT_HANDLER_HPP
+ #include "Attendant_Datatypes.h"
+ #include "CtrlThr.h"
+ #include "HandleMngr.h"
+ #include "Common.h"
+     
+ class EventHandler : public CtrlThr {
+ private :
+     static EventHandler *ms_pEventHandler;
+     static osMutexId  ms_EventHandlerMutex;  ///< Mutex for the Eventhandler Static functions
+     /** Since no Api is provided in CMSIS in order to delete the mail Queue. So we cannot create the same Mail Queue
+     again.So this is made static and created in advance for the module.*/
+     static osMailQId ms_EventMailBox; ///< MsgBox to store the various events logged by various component.
+ public:
+     enum {
+         LOG_EVENT_FAILED = CTRL_THR_MAX,
+         MEMORY_ALLOC_FAIL_FOR_LOG_EVENT,
+         LOG_EVENT_UNSUPPORTED
+     };
+     /**
+         * \Structure :- Structure to hold Event Code i.e source of event and Data associated with that event.
+     **/
+     typedef struct {
+         EventSourceList EventCode;
+         EventData Data;
+     } EventLog;
+ private:
+     HandleMngr* m_pHandleMngr;	//   A handle mngr to manage the multiple readers of the different channels
+     EventCbInfo* m_ArpSubscriberList[MAX_SUPPORTED_EVENTS][MAX_SUBSCRIBERS]; ///< maintains the list of subscribers for every event.
+     osMutexId	m_EventMutex; //Mutex to ensure only one is doing registration for an event at a given time.
+ public:
+     static EventHandler* GetInstance(osPriority Priority = osPriorityHigh,u16 u16StackSize = 0);
+     static bool DeleteInstance(void);
+       
+     HANDLE Register(const EventSourceList Event,EventCbInfo&  rEventCbInfo);
+     EventHndlrStatus Unregister(HANDLE Handle);
+     EventHndlrStatus LogEvent(EventSourceList Source,EventData pData = NULL);
+     i32 Activate(void); //Activate the thread which is reading the event logged in mail queue.
+     i32 Deactivate(void); //Deactivate the thread i.e disable reading of event from message queue.
+    
+ private:
+    
+     EventHandler(osPriority Priority ,u16 u16StackSize);  ///< Constructor
+     ~EventHandler(void);                                  ///< destructor.
+         
+     void CtrlThread(void);   //This thread will run whenever an event is logged 
+ };
+ #endif
+ 
+ 
+ #include "EventHandler.h"
+ #include "cmsis_os.h"
+ #include "string.h"
+ #define MAX_QUEUE_SIZE  256
+ /* Mutex definitions */
+ osMutexDef(EVENT_HANDLER_CLASS); ///< Mutex Control definition for control on static functions
+ osMutexDef(EVENT_REGISTER_UNREGISTER);   ///< Mutex Control Register and Unregister functions.
+ osMailQDef(EVENTHANDLER_MBOX, MAX_QUEUE_SIZE, EventHandler::EventLog);
+ /* Initialize EventHandler class static variables */
+ EventHandler* EventHandler::ms_pEventHandler =  NULL;
+ osMutexId  EventHandler::ms_EventHandlerMutex = osMutexCreate(osMutex(EVENT_HANDLER_CLASS)); /* Create Mutex control */
+ osMailQId  EventHandler:: ms_EventMailBox = osMailCreate(osMailQ(EVENTHANDLER_MBOX),NULL); /*mail queue to log event data*/
+ /**
+     * \fn EventHandler::EventHandler(osPriority Priority,u16 u16StackSize)
+     * \brief Constructor of EventHandler Class.
+     * \param[in] priority  Priority of the thread used for servicing the periodic module. This is optional 
+         parameter
+     * \param[in] u16StackSize  Size of the stack of the thread. 
+     * \return void
+     * \details This function shall be called on creation of EventHandler class object. On execution of this function
+         base constructor of CtrlThr is called.Create Mailbox to log the events, initialize subscriber list to NULL.
+     * Dependencies: NA
+     * Unusual Features of Implementation: NA
+     * Reasons why other choices have been avoided: NA
+     * Step-wise Breakdown of an Algorithm: 
+         - Pass parameters value to base class constructor.
+         - Create mutex control for Event Registration and unregistration.
+         - Create Mailbox of "MAX_QUEUE_SIZE" size to log the events.
+         - Create handler Manger Class object which shall be used to register and Unregister the subscribers.
+         - Initialize subscriber array list to NULL.
+ */
+ EventHandler :: EventHandler(osPriority Priority,u16 u16StackSize) : CtrlThr(Priority,u16StackSize) {
+     
+     m_EventMutex = osMutexCreate(osMutex(EVENT_REGISTER_UNREGISTER)); /* Create Mutex control */    
+     m_pHandleMngr = new HandleMngr(MAX_SUPPORTED_EVENTS*MAX_SUBSCRIBERS);
+     
+     memset( m_ArpSubscriberList,NULL,sizeof(m_ArpSubscriberList));
+     
+ }
+ /**
+     * \fn EventHandler::~EventHandler(void)
+     * \brief Destructor of EventHandler Class.
+     * \param - NA
+     * \return void
+     * \details This function shall be called on deletion of EventHandler class object. On execution of this function
+         base destructor of CtrlThr is called which deactivate the thread.Delete the memory created dynamically.
+     * Dependencies: NA
+     * Unusual Features of Implementation: NA
+     * Reasons why other choices have been avoided: NA
+     * Step-wise Breakdown of an Algorithm: 
+         - Deactivate CtrlThr.
+         - Delete Handle Manger object.
+         - Delete Mutex created to control Registration and unregistration.
+ */
+ EventHandler :: ~EventHandler(void) { 
+     /*Deactivate the thread before deleting the class instance*/
+     Deactivate();
+     /*Delete Handler manager instance*/
+     if(NULL != m_pHandleMngr) { 
+         delete m_pHandleMngr;
+         m_pHandleMngr = NULL;
+     }
+     /*Delete Mutex*/
+     if(NULL != m_EventMutex) {
+         osMutexDelete(m_EventMutex); 
+         m_EventMutex = NULL;
+     }  
+ }
+ /**
+     * \fn EventHandler::GetInstance(osPriority priority, u16 u16StackSize)
+     * \brief This function creates the Object of EventHandler Class and returns the pointer
+     * \param[in] priority  Priority of the thread used for servicing the periodic module. This is optional 
+         parameter, and the default value is "osPriorityHigh".
+     * \param[in] u16StackSize  Size of the stack of the thread. This is optional parameter, and default value is 0
+         meaning default stack size selected in the project settings will be taken.
+     * \return EventHandler* pointer to the object
+     * \details This function creates the Object of EventHandler Class and returns the pointer. If the Object is already 
+         created then returns the pointer to the previously created object.
+     * Dependencies: NA
+     * Unusual Features of Implementation: NA
+     * Reasons why other choices have been avoided: NA
+     * Step-wise Breakdown of an Algorithm: 
+         - Wait for control on static EventHandler Class Mutex
+         - Check if the EventHandler object e is already created or not
+         - If it is not created, create object
+         - if object is created successfully then call "Activate" function to activate the thread 
+             reading events logged in message queue.
+         - Check if thread is activated successfully or not. Validate all the member variables in 
+             order to ensure that object is created successfully.If invalid then delete the object. 
+         - Update the reference.
+         - Release control on static EventHandler Class Mutex
+         - Pass the reference of EventHandler object to the user
+ */
+ EventHandler* EventHandler :: GetInstance(osPriority Priority ,u16 u16StackSize) {
+     /* Check if ms_EventHandlerMutex is created */
+     if (NULL != ms_EventHandlerMutex) {
+         /* Wait for control on static EventHandler Class Mutex */
+         if (osOK == osMutexWait(ms_EventHandlerMutex,osWaitForever)){
+             /* Check if the EventHandler object is already created or not */
+             if (NULL == ms_pEventHandler) {
+                 /* Create EventHandler object and store the reference */
+                 ms_pEventHandler = new EventHandler(Priority, u16StackSize);
+                 /* Check if the object is created with valid values */
+                 if ( NULL != ms_pEventHandler) {
+                     /*Check if Thread which need to read the data logged in mail queue 
+                     is activated successfully or not and validate other parameters of class*/
+                     if (((NULL == ms_EventMailBox ) ||( NULL == ms_pEventHandler->m_pHandleMngr) 
+                         || (NULL == ms_pEventHandler->m_EventMutex)) || 
+                         (CTRL_THR_NO_THREAD == ms_pEventHandler->Activate()) ) {
+                         /* Delete the created object */
+                         delete ms_pEventHandler;
+                         /* Remove the reference of the object */
+                         ms_pEventHandler = NULL;
+                     }
+                 }
+             }
+             /* Release control on static EventHandler Class Mutex */
+             osMutexRelease(ms_EventHandlerMutex);
+         }
+     }
+     return ms_pEventHandler;
+ }
+ /**
+     * \fn EventHandler::DeleteInstance(void)
+     * \brief This function deletes the Object of EventHandler Class
+     * \param[in] NA
+     * \return bool returns true if successfully deleted else false
+     * \details This function deletes the Object of EventHandler Class.
+     * Dependencies: NA
+     * Unusual Features of Implementation: NA
+     * Reasons why other choices have been avoided: NA
+     * Step-wise Breakdown of an Algorithm: 
+         - Wait for control on static EventHandler Class Mutex
+         - Check if ms_pEventHandler is not NULL 
+         - Delete the EventHandler Object
+         - Release control on static EventHandler Class Mutex
+         - Return the result
+ */
+ bool EventHandler::DeleteInstance(void) {
+     bool Status = false;
+     
+     /* Wait for control on static EventHandler Class Mutex */
+     if (osOK == osMutexWait(ms_EventHandlerMutex,osWaitForever)) {
+         /* Check if the EventHandler object is created or not  */
+         if (NULL != ms_pEventHandler) {
+             delete ms_pEventHandler;
+             ms_pEventHandler = NULL;
+             Status = true;
+         }
+         /* Release control on static EventHandler Class Mutex */
+         osMutexRelease(ms_EventHandlerMutex);
+     }
+     return Status;
+ }
+ /**
+     * \fn EventHandler::Register(const EventSourceList Event,EventCbInfo&  rEventCbInfo)
+     * \brief This function is used by other components to register for particular event. 
+         If the registration is successful then only it will be get the intimation on occurrence of the event.
+     * \param[in] Event :- Event to be intimated.
+     * \param[in] rEventCbInfo :- reference to the "EventCbInfo" structure which contain pointer to callback function 
+         and pointer to get the data logged on occurrence of the event and pointer to callback Data. Logged Data and
+         CbData pointers may be NULL it is application responsibility to do null check before using the data.
+     * \return HANDLE :- handle to be used for unregistration.
+     * \details This function is used by other components to register for a particular set of events.
+         If the registration is successful,then the EventHandler will intimate the subscriber whenever 
+         any registered event occurs.Any events which occurred before registration of the event may be
+         given to the subscriber only if the read of the events after the registration is done.If the 
+         event handler reads the events before registration,then the event is removed from the event queue.
+     * Dependencies: NA
+     * Unusual Features of Implementation: NA
+     * Reasons why other choices have been avoided: NA
+     * Step-wise Breakdown of an Algorithm: 
+         - Wait for control on m_EventMutex Mutex to ensure that only one subscriber 
+             is doing registration at a given time.
+         - validate the event if valid event then only register.
+         - Check if the free space is there to register new subscriber or not.
+         - if Available then update subscriber list array and register the same to Handle manager.
+         - Release Mutex control.
+         - Return Handle.
+ */
+ HANDLE EventHandler::Register(const EventSourceList Event,EventCbInfo&  rEventCbInfo) {
+     HANDLE Handle = 0;
+     if( (INVALID_EVENT != Event) && (DEACTIVATE_EVENT_HANDLER != Event)&& 
+             ( MAX_SUPPORTED_EVENTS > Event)&& (NULL != rEventCbInfo.EventCbFunc) ) {
+         //ensure that there is free space for new 
+         if(osOK == osMutexWait(m_EventMutex,osWaitForever)) {
+             for(u8 u8Index = 0; u8Index < MAX_SUBSCRIBERS; u8Index++)  {
+                 if(NULL == m_ArpSubscriberList[Event][u8Index])  {
+                     if( NULL != m_pHandleMngr) {
+                         Handle = m_pHandleMngr->Register(&rEventCbInfo,
+                             (Event*MAX_SUBSCRIBERS + u8Index) );
+                         if( 0 != Handle) {
+                             m_ArpSubscriberList[Event][u8Index] = &rEventCbInfo;
+                         }
+                         break;
+                     }                        
+                 }           
+             }
+             osMutexRelease(m_EventMutex);
+         }
+     }
+     return Handle;
+ }
+ /**
+     * \fn EventHandler::Unregister(HANDLE Handle)
+     * \brief This function is used by subscriber to Unregister for particular event. 
+         If the unregistration is successful then subscriber will not get the intimation on occurrence of that event.
+     * \param[in] HANDLE :- Handle to be unregistered.
+     * \return EventHndlrStatus :-   
+         EVENT_HNDLR_OK - if unregistered successfully.
+         EVENT_HNDLR_INVALID_HANDLE :- if Handle is invalid.
+         EVENT_HNDLR_INVALID_MUTEX:- if the Mutex is not created properly.
+     * \details This function unregisters a particular subscriber. 
+         After Unregistering from the Eventhandler,No events will be sent to the unregistered subscriber.
+     * Dependencies: NA
+     * Unusual Features of Implementation: NA
+     * Reasons why other choices have been avoided: NA
+     * Step-wise Breakdown of an Algorithm: 
+         - Wait for control on m_EventMutex Mutex to ensure that only one subscriber 
+             is doing unregistration at a given time.
+         - Check if the free space is there to register new subscriber or not.
+         - if Available then update subscriber list array and register the same to Handle manager.
+         - Activate the Thread which is waiting on mailbox to read the event.
+         - Release Mutex control.
+         - Return Handle.
+ */
+ EventHndlrStatus EventHandler::Unregister(HANDLE Handle) {
+     u32 u32Index = 0;
+     u32 u32EventIndex = 0, u32SubscriberIndex = 0;
+     EventCbInfo *pEventCbInfo;
+     EventHndlrStatus Status = EVENT_HNDLR_INVALID_MUTEX;
+     //Wait for Mutex. 
+     if(osOK == osMutexWait(m_EventMutex,osWaitForever)) {
+         Status = EVENT_HNDLR_INVALID_HANDLE;
+    
+         /* read the value logged in Handler manager for given handle*/
+         if (( NULL != m_pHandleMngr) && (true == (m_pHandleMngr->GetValueTagRegForHandle(Handle,        \
+                     (void*&)pEventCbInfo, u32Index))) ) {
+             
+             u32EventIndex = u32Index / MAX_SUBSCRIBERS;
+             u32SubscriberIndex = u32Index % MAX_SUBSCRIBERS;
+             
+             /* Check if event is valid and Event Callback info of subscriber list matches with that is saved in Handle manager*/
+             if(( MAX_SUPPORTED_EVENTS > u32EventIndex) &&                                                              \
+                     (m_ArpSubscriberList[u32EventIndex][u32SubscriberIndex]->EventCbFunc ==                            \
+                     pEventCbInfo->EventCbFunc) )  {
+                 /* if all info is valid the Unregister the handle*/
+                 if(true == m_pHandleMngr->UnRegister(Handle)) {
+                     /*update subscriber list to Null after successful Unregister*/
+                     m_ArpSubscriberList[u32EventIndex][u32SubscriberIndex] = NULL;
+                     Status = EVENT_HNDLR_OK;
+                 }
+             }
+         }  
+         osMutexRelease(m_EventMutex);        
+     }
+     return Status;
+ }
+ /**
+     * \fn EventHandler::LogEvent(EventSourceList Source,EventData* Data)
+     * \brief This function shall be used by other class in order to log an event in the mailbox.
+     * \param[in] Source :- Source or Cause of Event
+     * \param[in] Data :- pointer to the Data related to that event.It can be null if no data is associated with the event.
+     * \return EventHndlrStatus :-   
+         EVENT_HNDLR_OK - if event is logged successfully.
+         EVENT_HNDLR_LOGGING_FAILED :- if Event logging failed.
+         EVENT_HNDLR_MAIL_BOX_ALLOC_FAIL:- if mail box creation failed.
+         EVENT_HNDLR_EVENT_NOT_SUPPORTED :- if Event Is invalid
+     * \details This function shall be used by other class in order to log an event in the mailbox.
+     * Dependencies: NA
+     * Unusual Features of Implementation: value of u32Timeout should be 0 if log event is being called in Isr.
+     * Reasons why other choices have been avoided: NA
+     * Step-wise Breakdown of an Algorithm: 
+         - Allocate memory for the mailbox.
+         - if Memory allocated successfully then log the data in allocated mailbox.
+ */
+ EventHndlrStatus EventHandler::LogEvent(EventSourceList Source,EventData Data) {
+     EventHndlrStatus Status = EVENT_HNDLR_EVENT_NOT_SUPPORTED;
+     
+     if( (INVALID_EVENT != Source) && ( MAX_SUPPORTED_EVENTS > Source)) {
+         Status = EVENT_HNDLR_MAIL_BOX_ALLOC_FAIL;
+         EventLog* pMailBox = (EventLog*)osMailAlloc(ms_EventMailBox, 0); // Allocate memory
+         if( NULL != pMailBox ) {
+             pMailBox->EventCode = Source;
+             pMailBox->Data = Data;
+             // Log Event and Data in MailBox
+             if(osOK == osMailPut(ms_EventMailBox, pMailBox))  {
+                 Status = EVENT_HNDLR_OK;
+             }
+             else {
+                 Status = EVENT_HNDLR_LOGGING_FAILED;
+             }
+         }
+     }
+     return Status;
+ }
+ /**
+     * \fn EventHandler::CtrlThread(void)
+     * \brief This is thread waiting on mailbox for an event.Whenever an event is logged in the mailbox, thread become active  and start reading the mailbox.    
+         It also checks for the subscriber list and and call the callback functions of all registered subscribers. After reading it frees the mailbox.
+     * \param[in] NA
+     * \return NA
+     * \details This is thread waiting on mailbox for an event.Whenever an event is logged in the mailbox, thread become active  and start reading the mailbox.    
+         It also checks for the subscriber list and and call the callback functions of all registered subscribers. After reading it frees the mailbox.
+     * Dependencies: CtrlThr
+     * Unusual Features of Implementation: NA
+     * Reasons why other choices have been avoided: NA
+     * Step-wise Breakdown of an Algorithm: 
+         - Wait in mailbox for an event to get logged.
+         - Check the subscriber list in order to check the registered subscriber and their callback function.
+         - Copy the Event data in subscriber Event Data structure if reference is provided during registration.
+         - Call Callback function of all the subscribers who have registered for that event.
+         - Free respective mail  box
+ */
+ void EventHandler :: CtrlThread(void) {
+     EventLog* pEventLog = NULL;
+     osEvent Event;
+     EventSourceList EventSource = INVALID_EVENT;
+     EventData Data = NULL;
+         
+     while(1)
+     {
+         Event = osMailGet(ms_EventMailBox,osWaitForever);
+         if( osEventMail == Event.status ) {
+             pEventLog = (EventLog*)Event.value.p; 
+             if( NULL != pEventLog ) {
+                 EventSource  = pEventLog->EventCode;
+                 Data = (pEventLog->Data);
+             }
+             if( (INVALID_EVENT != EventSource) && ( MAX_SUPPORTED_EVENTS > EventSource)) {
+                 if(osOK == osMutexWait(m_EventMutex,osWaitForever)) {
+                     for(u8 u8Index = 0; u8Index < MAX_SUBSCRIBERS; u8Index++)  {
+                         if( (NULL != m_ArpSubscriberList[EventSource][u8Index])  &&                 \
+                                 (NULL != (m_ArpSubscriberList[EventSource][u8Index])->EventCbFunc)) {
+                             if(NULL != Data)  {
+                                 m_ArpSubscriberList[EventSource][u8Index]->LoggedData = Data;
+                             }
+                             ((m_ArpSubscriberList[EventSource][u8Index])->EventCbFunc)   \
+                                     ((m_ArpSubscriberList[EventSource][u8Index]->CbData)); 
+                         }
+                     }
+                     osMutexRelease(m_EventMutex);   
+                 }                    
+             }
+             osMailFree(ms_EventMailBox,pEventLog); 
+         }
+         if(true == m_bStopThr) {
+            break;
+         }        
+     }
+ }
+ /**
+     * \fn EventHandler::Deactivate(void)
+     * \brief This function deactivates the CtrlThread which is being used to read the event if any logged in mail queue.
+     * \param[in] NA
+     * \return i32 :-
+         CTRL_THR_OPRN_SUCCESS - CtrlThr is successfully deactivated
+         CTRL_THR_NO_THREAD - Error in deactvating/stoping the CtrlThr thread.
+         LOG_EVENT_FAILED - if Event Logging failed.
+         MEMORY_ALLOC_FAIL_FOR_LOG_EVENT - if memory allocation failed while logging event.
+         LOG_EVENT_UNSUPPORTED - if event to be logged to trigger the thread is unsupported.
+     * \details This function deactivates the CtrlThread which is being used to read the event if any logged in mail queue.
+     * Dependencies: CtrlThr
+     * Unusual Features of Implementation: NA
+     * Reasons why other choices have been avoided: NA
+     * Step-wise Breakdown of an Algorithm: 
+         - Check if thread is active or not. if active then log the Deactivate event handler event in mail queue to trigger the thread.
+         - Call Deactivate function of CtrlThr class to deactivate the thread.
+ */   
+ i32 EventHandler :: Deactivate(void) {
+     EventHndlrStatus Status;
+     i32 iDeactivateStatus = CTRL_THR_NO_THREAD;
+     
+     /*Check if thread is active*/
+     if (true == m_bActive) {
+         m_bStopThr = true;
+         /*Trigger CtrlThread in order to log the Deactivate Event Handler event in mail box.*/
+         Status = LogEvent(DEACTIVATE_EVENT_HANDLER,NULL);
+         /* Deactivate CtrlThr also*/
+         if(Status == EVENT_HNDLR_OK) {
+             iDeactivateStatus = CtrlThr::Deactivate();
+         }
+         else if(Status == EVENT_HNDLR_LOGGING_FAILED) {
+             iDeactivateStatus = LOG_EVENT_FAILED;
+         }
+         else if(Status == EVENT_HNDLR_MAIL_BOX_ALLOC_FAIL) {
+             iDeactivateStatus = MEMORY_ALLOC_FAIL_FOR_LOG_EVENT;
+         }
+         else {
+             iDeactivateStatus = LOG_EVENT_UNSUPPORTED;
+         }
+     }
+     return iDeactivateStatus;
+ }
+ /**
+     * \fn EventHandler::Activate(void)
+     * \brief This function activates the CtrlThread which is being used to read the event if any logged in mail queue.
+     * \param[in] NA
+     * \return i32 
+          CTRL_THR_OPRN_SUCCESS   - CntrlThr is successfully activated
+          CTRL_THR_ALREADY_ACTIVE - CntrlThr is already active
+          CTRL_THR_NO_THREAD      - Error in activating/starting the CntrlThr thread
+     * \details This function activates the CtrlThread which is being used to read the event if any logged in mail queue.
+     * Dependencies: CtrlThr
+     * Unusual Features of Implementation: NA
+     * Reasons why other choices have been avoided: NA
+     * Step-wise Breakdown of an Algorithm: 
+         - Call activate function of CtrlThr class to activate the thread.
+ */   
+ i32 EventHandler ::Activate(void){
+     
+     return CtrlThr::Activate();
+ }
+ 
+ #include "SqdAlgo.h"
+ #include "stdio.h"
+ /**
+  * \brief  this method is the signal quality class constructor.  
+  
+  * \param[in] void
+  
+  * \return void
+  
+  * \details 
+  * Dependencies                                   : NA
+  * Unusual Features of Implementation             : os_clockrate is equal to OS_TICK (currently 1000us). this variable
+                                                     is used for time tracking in alarm_hyst function.
+  * Reasons why other choices have been avoided    : NA
+  * Step-wise Breakdown of an Algorithm            :
+  
+     -   Initialize the member variables AND call Init function. 
+  **/                    
+ SqdAlgo::SqdAlgo(void) :  
+ OS_TICKS_PER_SEC(1000000 / os_clockrate),
+ ONSET_PERIOD(SIXTY_SECONDS * OS_TICKS_PER_SEC),RECOVERY_PERIOD(SIXTY_SECONDS * OS_TICKS_PER_SEC),
+ FhrMode(IFhrAlgo::INOP) {
+     Init();
+ }
+ /**
+  * \brief  this method is the used to initialize member variables. Currently called in constructor and whenever
+            connector is disconnected.
+  
+  * \param[in] void
+  
+  * \return void
+  
+  * \details 
+  * Dependencies                                   : NA
+  * Unusual Features of Implementation             : NA
+  * Reasons why other choices have been avoided    : NA
+  * Step-wise Breakdown of an Algorithm            :
+  
+     -   Initialize the member variables 
+  **/    
+  
+ void SqdAlgo::Init(void) {
+     
+     sq_mode = ONE_MIN_SQ;
+     sq_hyst_cnt = 0; 
+     sq_hyst_tim = os_time; 
+     m_CurrTimeMilliSec = os_time;
+     sq=false;
+ 		m_SigQual = GREEN_SQ;
+       
+ }
+ /**
+  * \brief  this method is the main method for Signal quality algorithm.
+  
+  * \param[in] i16 - current_value  - current FHR value
+  
+  * \return eSignalQuality   -  returns signal loss level (RED, GREEN, YELLOW) .
+     
+  * \details 
+  * Dependencies                                   : NA
+  * Unusual Features of Implementation             : This function needs to run every 250ms.
+  * Reasons why other choices have been avoided    : NA
+  * Step-wise Breakdown of an Algorithm            :
+  
+     - Run alarm hysteresis algorithm initially when the transducer is connected. if signal is >30% in  first minute, 
+       change state to TWO_MIN_SQ
+     - in the second minute onwards, run sq_level function, which updates sq_hyst_cnt 
+  **/
+ ISqdAlgo::eSignalQuality SqdAlgo::fhr_sig_qual(i16 i16Fhr) {
+     
+     //eSignalQuality SigQual = RESERVED_SQ;
+    
+     if(IFhrAlgo::CONNECTED == FhrMode) {
+        switch (sq_mode) {
+        
+           case ONE_MIN_SQ: {                                            // > 70% PENLIFT FOR 1 MIN. MEANS NO // SIGNAL ACQUIRED 
+                                            
+              alarm_hyst(i16Fhr);
+                         
+              if (sq_hyst_cnt >= (SIXTY_SECONDS * OS_TICKS_PER_SEC * 3 / 10)){                // IF FHR non zero MORE THAN 30% of 60s i.e. 18s// OF TIME.
+                                             
+                 sq_mode = TWO_MIN_SQ;
+                 sq_hyst_cnt = 0;                                        // RESET HYSTERISIS COUNTER 
+                 sq_hyst_tim = 0; 
+                 m_CurrTimeMilliSec = os_time; 
+                 //m_SigQual = YELLOW_SQ;
+ 							 m_SigQual = GREEN_SQ;
+                 //sq = true;
+              }
+              else {
+                         //what should be the SQ now ?
+                         //currently returning RESERVED_SQ
+ 							 //m_SigQual = RED_SQ;
+              }
+             }
+             break;
+                 
+           case TWO_MIN_SQ: {
+           //case FIVE_MIN_SQ:                                           // 61-100% PENLIFT DATA FOR 30 min.-75 sec.- POOR SIGNAL 
+           
+             sq_level(i16Fhr);                                          // DETERMINE SQ LEVELS. 
+               
+             if (sq == false && sq_hyst_cnt >= SQ_PLIFT_MAX) {
+                 
+                 sq = true;
+                 //SigQual = GetSignalQuality();   //calculate signal quality once sq_hyst_cnt exceeds SQ_PLIFT_MAX
+ 				m_SigQual = RED_SQ;
+              }
+             else if(sq == true && sq_hyst_cnt <= SQ_PLIFT_MIN){
+                 
+                 sq = false;
+                 m_SigQual = GREEN_SQ;
+                 m_CurrTimeMilliSec = os_time; 
+              }
+ //            else {
+ //							 printf("%d %d\r\n",SQ_PLIFT_MAX, sq_hyst_cnt);
+ //						 }
+             
+             }
+             break;
+              
+           default :
+              //should never come here. Do some error handling.
+             break;
+        }
+     }
+     else if(IFhrAlgo::INOP == FhrMode) {
+     
+         Init();                                     //what should be the SQ now ?
+     }    
+     return m_SigQual;
+ }
+ /**
+  * \brief  this method is the signal quality quantifier function.  
+  
+  * \param[in] i16 - i16Fhr  - current FHR value
+  
+  * \return void
+  
+  * \details 
+  * Dependencies                                   : NA
+  * Unusual Features of Implementation             : NA
+  * Reasons why other choices have been avoided    : NA
+  * Step-wise Breakdown of an Algorithm            :
+  
+     -   increment sq_hyst_cnt by PLIFT_WGT if FHR value is 0 (PENLIFT) 
+     -   decrement sq_hyst_cnt by HR_WGT if FHR value is non zero 
+  **/
+  
+ void SqdAlgo::sq_level(i16 i16Fhr) {
+    
+        
+ //   sq_hyst_tim += ((os_time - m_CurrTimeMilliSec) * os_clockrate);  //in uS
+ //
+ //   m_CurrTimeMilliSec = os_time;
+ //
+ //   sq_hyst_tim /= 1000;     //convert from us to ms
+     
+    if ( 0 == i16Fhr ) {      //PENLIFT
+    
+       sq_hyst_cnt += PLIFT_WGT;
+       
+       if (sq_hyst_cnt >= SQ_PLIFT_MAX) {
+       
+         sq_hyst_cnt = SQ_PLIFT_MAX;              // CLAMP AT MAX 
+       }   
+    }
+    else {
+    
+       if (sq_hyst_cnt >= HR_WGT) {
+       
+          sq_hyst_cnt -= HR_WGT;
+       }
+    }
+ }
+ /**
+  * \brief  this method is the alarm hysterisis algorithm (although currently used only for SQD algorithm in Lotus FE).
+    Currently sq_hyst_cnt is incremented by the number of seconds that the HR increased above the upper limit (1) and decremented
+    by the number of seconds that the  HR falls below upper limit (1 . i,e, when it is INOP). 
+  
+  * \param[in] i16 - current_value  - current FHR value
+  
+  * \return void
+  
+  * \details 
+  * Dependencies                                   : NA
+  * Unusual Features of Implementation             : NA
+  * Reasons why other choices have been avoided    : NA
+  * Step-wise Breakdown of an Algorithm            :
+  
+     -   increment sq_hyst_cnt by the number of seconds that the HR increased above the upper limit (1) 
+     -   decrement sq_hyst_cnt by the number of seconds that the  HR falls below upper limit (1 . i,e, when it is INOP). 
+  **/
+ void SqdAlgo::alarm_hyst(const i16 current_value){
+    i32 localMilliSeconds = os_time;                                    // Read time once
+    /* This code is taken from Coro 250cx where this function is used for alarms as well as SQD algorithm. Since, in 
+       Lotus, this is required only for SQD (as alarms processing happens in BE), retaining only whats needed for SQD 
+       Algorithm. In this case, we are interesed in checking the percentage of time, valid HR was received, no need of
+       low HR detection as well as disabling of limit check 
+    */
+     
+    if ( true ) {
+    //if (   ( (current_value > u16HiLimit) /*&& (u16HiLimit != OFF)*/ )    // CHECK FOR OUT OF LIMITS CONDITION, MAKING SURE LIMIT ISN'T TURNED OFF
+      //  || ( (current_value < lo_limit) && (lo_limit != OFF) )
+       //) {
+       
+       if (sq_hyst_cnt == 0) {                                            // UPDATE THE HYSTERISYS UP/DOWN COUNTER ON A ONE SECOND BASIS 
+       
+          sq_hyst_tim = localMilliSeconds;
+          sq_hyst_cnt = 1;
+       }
+       else {
+           
+          sq_hyst_cnt += (localMilliSeconds - sq_hyst_tim);
+       }
+       
+       if (sq_hyst_cnt > ONSET_PERIOD) {                             // RANGE CHECK HYSTERISYS COUNTER 
+       
+          sq_hyst_cnt = ONSET_PERIOD;
+       }
+    }
+    else {
+    
+       sq_hyst_cnt -= (localMilliSeconds - sq_hyst_tim);
+      
+       if (sq_hyst_cnt < (ONSET_PERIOD - RECOVERY_PERIOD)) {         // RANGE CHECK HYSTERISYS COUNTER 
+       
+          sq_hyst_cnt = 0;
+       }   
+    }
+   
+    sq_hyst_tim = localMilliSeconds;                                      // RECORD THE CURRENT TIME AS THE HYSTERISYS TIME 
+ }
+ /**
+  * \brief  this method is used to set the FHR mode (to be used in SQD algorithm).
+  
+  * \param[in] IFhrAlgo::TransducerState - mode  transducer connection status (CONNECTED or INOP)
+  
+  * \return void
+  
+  * \details 
+  * Dependencies                                   : NA
+  * Unusual Features of Implementation             : NA
+  * Reasons why other choices have been avoided    : NA
+  * Step-wise Breakdown of an Algorithm            :
+  
+     -   Store the input parameter into member variable.
+  **/
+  
+  void SqdAlgo::SetMode(IFhrAlgo::TransducerState mode) {
+  
+      if((IFhrAlgo::INOP == mode) && (IFhrAlgo::INOP != FhrMode)) {
+          Init();
+      }
+     FhrMode = mode;
+  }
+  
+  /**
+  * \brief  this method is used to query the FHR mode (to be used in SQD algorithm).
+  
+  * \param[in] void
+  
+  * \return IFhrAlgo::TransducerState -  transducer connection status (CONNECTED or INOP)
+  
+  * \details 
+  * Dependencies                                   : NA
+  * Unusual Features of Implementation             : NA
+  * Reasons why other choices have been avoided    : NA
+  * Step-wise Breakdown of an Algorithm            :
+  
+     -   return the  member variable used to store the fhr mode.
+  **/
+  
+  IFhrAlgo::TransducerState SqdAlgo::GetMode(void){
+      
+      return FhrMode;
+  }
+ /**
+  * \brief  this method is used to calculate the signal loss level (RED, GREEN, YELLOW) depending on the signal loss.
+  
+  * \param[in] void  
+  
+  * \return eSignalQuality
+    returns signal loss level (RED, GREEN, YELLOW) .
+  
+  * \details 
+  * Dependencies                                   : NA
+  * Unusual Features of Implementation             : NA
+  * Reasons why other choices have been avoided    : NA
+  * Step-wise Breakdown of an Algorithm            :
+  
+     -   Calculate the signal loss if the FHR connector is connected else return RED_SQ
+     -   calculate the signal loss level dependingg on signal loss percentage. 
+     -   if signal loss >= 80%, return RED_SQ,
+         if signal loss > 60% and < 80%, return YELLOW_SQ, 
+         else return GREEN_SQ
+  **/ 
+  
+  ISqdAlgo::eSignalQuality SqdAlgo::GetSignalQuality(void) {
+  
+     eSignalQuality SigQual = RESERVED_SQ;
+     
+     if (IFhrAlgo::INOP == FhrMode) {
+     
+         SigQual = RED_SQ;
+     }
+     else if(IFhrAlgo::CONNECTED == FhrMode) {
+     
+         //u32 u32SignalLoss = CalculateSignalLoss();  //multiplied by 100 to in terms of percentage (from 1 to 100+%)
+         
+         //Though Coro 250cx has signal quality alarm, in HP protocol, they always send GREEN_SQ. So, there is no reference for defining 
+         //the signal loss to COLOR equation. May need discussion with relevant stakeholders to define this.
+         
+         if (sq_hyst_tim >= RED_SIGNAL_THRESHOLD) {                                                    // > 80%
+         
+             SigQual = RED_SQ;
+         }
+         else if((sq_hyst_tim > YELLOW_SIGNAL_THRESHOLD) && (sq_hyst_tim < RED_SIGNAL_THRESHOLD)) {  // 60 - 80%
+         
+              SigQual = YELLOW_SQ;
+         }
+         else if(sq_hyst_tim <= YELLOW_SIGNAL_THRESHOLD){                                             // < 60%
+         
+             SigQual = GREEN_SQ;
+         } 
+     }
+     
+     return SigQual;
+  }
+ /**
+  * \brief  this method is used to calculate the signal loss percentage (from 1 to 100%).
+  
+  * \param[in] void  
+  
+  * \return u32
+    returns percentage of signal loss.
+  
+  * \details 
+  * Dependencies                                   : NA
+  * Unusual Features of Implementation             : NA
+  * Reasons why other choices have been avoided    : NA
+  * Step-wise Breakdown of an Algorithm            :
+  
+     -   calculate the signal loss depending on the sq_hyst_cnt
+  **/ 
+ //u32 SqdAlgo::CalculateSignalLoss(void) {
+ //    u32 u32SignalLoss = 0;
+ //    //sq_hyst_cnt = < 300 => signal loss  > 100%
+ //    //sq_hyst_cnt = 300 => signal loss  = 100%
+ //    //sq_hyst_cnt = 12000 => signal loss  = 61%
+ //    //sq_hyst_cnt is capped at 12000 in sq_level function.
+ //    
+ ////    if(sq_hyst_cnt > 0) {
+ ////    
+ ////        u32SignalLoss = ((600 + 3 * sq_hyst_cnt) * 100 ) / (5 * sq_hyst_cnt );  //multiplied by 100 to in terms of percentage (from 1 to 100+%)
+ ////    }
+ //    
+ //   // sq_hyst_tim > 150000ms => signal loss of 80% and >= 80% implies SQ = RED_SQ
+ //   // sq_hyst_tim > 75000 ms => signal loss of 61% and >61% and < 80% implies SQ = YELLOW_SQ
+ //    
+ //    return u32SignalLoss;
+ //} 
+ void FhrAlgoThread::CtrlThread(void) {
+    u16 u16FhrAdcValue = 0;
+    i16 i16FhrValue = 0;
+     i16 i16HrFlag = 0;
+     u32 u32RetVal = 0;
+     IFhrAlgo::TransducerState mode = IFhrAlgo::INOP;
+     UsStatusType status = DISCONNECTED;
+     ISqdAlgo::eSignalQuality sigQual = ISqdAlgo::RESERVED_SQ;
+     u32 u32CurrTick = os_time; //variable to maintain periodicity of 250ms for SQD algorithm. After this, set every time after running the SQD algorithm
+     /* osKernelSysTick(void) also return a u32 value. The problem is that it overflows in ~25sec. Though this works in the situation of maintaining 
+             periodicity of SQD algorithm (250ms), wanted to maintain consistency across. Advantage of using OS ticks is that even if the US algorithm is changed to
+             run every ms or 0.5ms from 2ms currently, the code below still works. */
+      const u32 NUM_MICROSEC_IN_250MS = 1000*250;       
+      const u32 OS_TICKS_PER_250MS = (NUM_MICROSEC_IN_250MS) / os_clockrate;   //works as long as OS_TICK(i.e. os_clockrate) is less or equal to  than 250ms. Need to check on situation
+                                                                         //where the division does not result in a whole number. Since it is in our hands to change the tick frequency,
+                                                                         //we can manage now. Only thing is that we should not use tick frequency of 3ms , 9ms etc to avoid fractional
+                                                                         //values during division.
+     
+     while(1) {
+         
+         bool bStatusChanged = false, bSqdChanged = false;
+         
+         if( false == WaitForSignal(&u32RetVal,osWaitForever)) {
+             if( true == m_bStopThr ) {
+                 break;
+             }
+        }
+        u16FhrAdcValue = m_u16Sample;
+        if( status != m_TransducerStatus) {
+            bStatusChanged = true;
+            status = m_TransducerStatus;
+         }
+         mode = (( (INVALID == m_TransducerStatus) || (DISCONNECTED == m_TransducerStatus)) ? IFhrAlgo::INOP: IFhrAlgo::CONNECTED);
+         SetMode(mode);
+         bool bFhrCalculated = m_rIFhrAlgo.AdcSampleToFhr(u16FhrAdcValue, i16FhrValue, i16HrFlag);
+         if( true == bFhrCalculated) {
+             m_i16FhrForSqd = i16FhrValue;
+         }
+         if( (os_time - u32CurrTick) >= OS_TICKS_PER_250MS ) {              
+             
+             m_SigQual = m_rISqdAlgo.fhr_sig_qual(m_i16FhrForSqd);     //run the Sqd algorithm.
+             u32CurrTick = os_time;                                 //set the timer for next run.
+             
+             //check if there is a change in signal quality
+             if(sigQual != m_SigQual) { 
+                 
+                 bSqdChanged = true;
+                 sigQual = m_SigQual;
+             }
+         }
+         
+         
+         //  TODO: 05OCT2015 - Find out why we aren't sending out the FHR if is calculated and found to be 0
+         if( (( true == bFhrCalculated) && (0 != i16FhrValue)) || (true == bStatusChanged ) || (true == bSqdChanged)) { //heart rate changed
+             //  TODO: 12OCT2015 - UsDataType * FecgDataType define Fhr as u16, however algorithm gives data as i16
+             //  TODO: 12OCT2015- UsDataType & FecgDataType are the same. Get rid of 1
+             //printf("FHR=0x%4.4x HRFLAG=0x%4.4x\r\n",i16FhrValue, i16HrFlag);
+ 			printf("FHR=0x%4.4x SQL=0x%4.4x\r\n",i16FhrValue, sigQual);
+             //InformObservers(i16FhrValue, i16HrFlag, status, sigQual);
+ 			InformObservers((true == bSqdChanged)? m_i16FhrForSqd:i16FhrValue, i16HrFlag, status, sigQual);
+             i16HrFlag = 0;
+             i16FhrValue  = 0;
+         }
+     }
+}
+/**
+ * \brief
+ * \param[in] src - <description>
+ * \param[in] rIFhrAlgo - Reference to the Fhr algo to be used
+ * \return NA
+   <Additional Description>
+ * \details Constructors
+ * Dependencies:
+ * Unusual Features of Implementation:
+  * Reasons why other choices have been avoided:
+  * Step-wise Breakdown of an Algorithm:
+ **/
+ FhrAlgoThread::FhrAlgoThread( const IFhrValueObserver::FhrSource src, IFhrAlgo & rIFhrAlgo, ISqdAlgo & sqdAlgoObj ):
+         CtrlThrSig(0, osPriorityHigh), m_rIFhrAlgo(rIFhrAlgo), m_rISqdAlgo(sqdAlgoObj),m_u16Sample(0),
+ m_TransducerStatus(DISCONNECTED), m_SigQual(ISqdAlgo::RESERVED_SQ),m_pIFhrValueObserver(NULL),m_FhrSource( src), m_i16FhrForSqd(0) {
+     //  TODO: 13 OCT2015 - Decide the priority of the thread, instead of it always being high priority
+ }
+ /**
+  * \brief
+ * \param[in/out/in,out] mode - the transducer state associated with the FHR processing thread
+ * \return void
+   <Additional Description>
+ * \details Sets the transducer state to be associated with the FHR processing thread
+ * Dependencies:
+ * Unusual Features of Implementation:
+ * Reasons why other choices have been avoided:
+  * Step-wise Breakdown of an Algorithm:
+ **/
+ void FhrAlgoThread::SetMode( IFhrAlgo::TransducerState mode ) {
+     m_rIFhrAlgo.SetMode( mode );
+     m_rISqdAlgo.SetMode( mode );
+ }
+ /**
+  * \brief
+  * \return IFhrAlgo::TransducerState
+   <Additional Description>
+ * \details Returns the transducer state associated with the FHR processing thread
+ * Dependencies:
+ * Unusual Features of Implementation:
+ * Reasons why other choices have been avoided:
+ * Step-wise Breakdown of an Algorithm:
+**/
+IFhrAlgo::TransducerState FhrAlgoThread::GetMode(void)  {
+    return m_rIFhrAlgo.GetMode();
+}
+/**
+ * \brief
+ * \param[in] u16Sample - The raw fhr sample
+ * \param[in] mode - the mode of the transducer
+ * \return void
+   <Additional Description>
+ * \details Call back function that is called by the subject when a Raw Fhr value is available
+ * This signals the waiting thread to process the raw sample
+ * Dependencies:
+ * Unusual Features of Implementation:
+ * Reasons why other choices have been avoided:
+ * Step-wise Breakdown of an Algorithm:
+**/
+void FhrAlgoThread::OnFhrRawDataSampled( u16 u16Sample, UsStatusType status ) {
+    //  TODO: 10SEP2015 - Instead of directly storing values here, we can use a circular buffer
+    //  Decide based on performance analysis
+    //  TODO : 12OCT2015 - We should also be getting the info required for Signal origin in Transducer state
+    m_u16Sample = u16Sample;
+    //m_TransducerState = mode;
+    m_TransducerStatus = status;
+    //  TODO: 10SEP2015 - Get rid of the magic number
+    SignalThread( 1, SET);
+}
+/**
+ * \brief
+ * \param[in] pIFhrValueObserver - Observer to register
+ * \return <return type>
+   <Additional Description>
+ * \details Register an observer interested in Fhr values
+ * Dependencies:
+ * Unusual Features of Implementation:
+ * Reasons why other choices have been avoided:
+ * Step-wise Breakdown of an Algorithm:
+**/
+bool FhrAlgoThread::RegisterObserver( IFhrValueObserver *pIFhrValueObserver) {
+    bool bRetVal = false;
+    //  TODO: 09OCT2015 - Extract the condition into its own method, that explains the intention of the condition ?
+    if( (!IsActive()) && (NULL != pIFhrValueObserver) ) {
+        m_pIFhrValueObserver = pIFhrValueObserver;
+        bRetVal = true;
+    }
+    return bRetVal;
+}
+/**
+ * \brief
+ * \param[in] pIFhrValueObserver - Observer to unregister
+ * \return bool
+   Returns true if the observer is unregistered successfully, else false
+ * \details Unregister a previously registered observer that is interested in Fhr values
+ * Dependencies:
+ * Unusual Features of Implementation:
+ * Reasons why other choices have been avoided:
+ * Step-wise Breakdown of an Algorithm:
+**/
+bool FhrAlgoThread::UnRegisterObserver( IFhrValueObserver *pIFhrValueObserver) {
+    bool bRetVal = false;
+    //  TODO: 09OCT2015 - Extract the condition into its own method, that explains the intention of the condition ?
+    if( (!IsActive()) && (NULL != pIFhrValueObserver) && ( pIFhrValueObserver == m_pIFhrValueObserver) ) {
+        m_pIFhrValueObserver = NULL;
+        bRetVal = true;
+    }
+    return bRetVal;
+}
