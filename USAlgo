@@ -1,0 +1,1098 @@
+
+ //	Note: Legacy code inherited from the Coro 170 code base is exempt from Coding Guidelines 
+ //	Any code that is added will follow Coding guidelines
+ #include <string.h>		//	For memset()
+ #include "HandleMngr.h"
+ #include "UsAlgo.h"
+ #include "Pdm.h"
+ #include "EventHandler.h"
+ void UsFhrAlgo::CtrlThread(void)
+ {
+     u16 FhrAdcValue = 0;
+     i16 Fhr = 0;
+     u32 u32RetVal = 0;
+     
+     while(1){
+         
+       
+                 
+         if( false == WaitForSignal(&u32RetVal,osWaitForever)) {
+ 		
+            if( true == m_bStopThr ) {
+ 			
+ 				break;
+ 			}
+          } 
+          ((Pdm::Instance())->ClinicalParamUs()).GetRawData(handle,&FhrAdcValue);     
+          AddSample(FhrAdcValue);
+         
+         
+         usSigProc();
+         
+         if(GetFhrValue(&Fhr) && (Fhr != 0)) {	//heart rate changed
+             
+             u32 u32DataPut = 0;
+             UsDataType UsData = {Fhr,hrflag};
+             
+             u32DataPut = ((Pdm::Instance())->ClinicalParamUs()).PutData(m_u8Channel,&UsData);            
+             
+             EventHandler::GetInstance()->LogEvent(UsEvent);
+             
+ //            if(0 == m_i16Channel) {
+ //                EventHandler::GetInstance()->LogEvent(US1_FHR_CHANGED);
+ //            }
+ //            else if(1 == m_i16Channel) {
+ //                EventHandler::GetInstance()->LogEvent(US2_FHR_CHANGED);
+ //            }
+             
+             
+ //            if(1 == u32RetVal) { 
+ //                
+ //                u32DataPut = ((Pdm::Instance())->ClinicalParamUs()).PutData(0,&UsData);
+ //                EventHandler::GetInstance()->LogEvent(US1_FHR_CHANGED);
+ //            }
+ //            else if(2 == u32RetVal) { 
+ //             
+ //                u32DataPut = ((Pdm::Instance())->ClinicalParamUs()).PutData(1,&UsData);
+ //                EventHandler::GetInstance()->LogEvent(US2_FHR_CHANGED);
+ //            }
+             if(u32DataPut){
+                 
+                 printf("FHR%d = %d\n",u32RetVal,Fhr);
+             }
+             else
+                 {
+                     printf("error instering US%d data into PDM\n",u32RetVal);    
+                 }
+             
+             Fhr = 0;            
+          }
+          
+      }
+              
+ }
+ UsFhrAlgo::UsFhrAlgo( u8 u8Channel ):CtrlThrSig(0, osPriorityHigh),m_u8Channel(u8Channel)
+ {
+ 	InNdUS0 = 0;
+ 	OutNdUS0 = 0;
+ 	
+ 	memset( &usxprt, 0, sizeof(usxprt) );
+ 	memset( usSampBuf, 0, sizeof(usSampBuf) );
+ 	last_usmode = INOP;
+ 	memset( &usflt, 0, sizeof(usflt) );
+ 	memset( &pkctrl, 0, sizeof(pkctrl) );
+ 	memset( &pkdata, 0, sizeof(pkdata) );
+ 	memset( &editdat, 0, sizeof(editdat) );
+ 	memset( &pekdet, 0, sizeof(pekdet) );
+ 	memset( sdata, 0, sizeof(sdata) );
+ 	memset( sqrdt, 0, sizeof(sqrdt) );
+ 	//hrmode = 0;
+ 	hrrate = 0; 
+ 	hrflag = 0;
+ 	sum = 0;
+ 	all = 0;
+ 	dsqr = 0;
+ 	tsqr = 0;
+ 	old = 0;
+ 	New = 0;
+     di = 0;
+ 	ti = 0;
+ 	ix = 0;
+ 	st = 0;
+ 	ni = 0;
+ 	datapct = 0;
+ 	pkmux = 0;
+     ustmp0 = 0;
+     ustmp1 = 0;
+     ustmp2 = 0;
+     ustmp3 = 0;
+     uswrd0 = 0;
+     uswrd1 = 0;
+ 	usinit( (int) 0 );
+ 	usxprt.channel = 0;
+ 	usxprt.sample = 0;
+ 	usxprt.gain = 0;
+ 	usxprt.period = 0;
+ 	usxprt.rate = 0;
+ 	usxprt.post_flg = 0;
+ 	usxprt.pct = 0;
+ 	
+     handle = ((Pdm::Instance())->ClinicalParamUs()).RegisterForReadingRawData(u8Channel);
+     
+     m_CbFuncData.ptrThis = this;
+     m_CbFuncData.eEventOps = SET;
+     m_CbFuncData.u32EventFlag = u8Channel + 1;
+     m_ArEventCbInfo.EventCbFunc = SignalThread;
+     m_ArEventCbInfo.CbData = &m_CbFuncData;
+     if(0 == u8Channel){
+         
+         handle2 = EventHandler::GetInstance()->Register(US1_RAW_DATA_SAMPLED,m_ArEventCbInfo);
+         UsEvent = US1_FHR_CHANGED;
+     }
+     else {
+         
+         handle2 = EventHandler::GetInstance()->Register(US2_RAW_DATA_SAMPLED,m_ArEventCbInfo);
+         UsEvent = US2_FHR_CHANGED;
+     }
+ }
+ UsFhrAlgo::~UsFhrAlgo(void)
+ {
+     ((Pdm::Instance())->ClinicalParamUs()).UnregisterForReadingRawData(handle);
+     EventHandler::GetInstance()->Unregister(handle2);
+ }
+ void UsFhrAlgo::SetUsMode( FhrMode u8Mode ) { usmode = u8Mode; }	//	To be modified when algorithm is made channel independent
+ FhrMode UsFhrAlgo::GetUsMode(void)	{ return usmode;}
+ void UsFhrAlgo :: editini(editdata *edt)
+ {
+  edt->stated = 0;                                       /* reset editor state */
+  edt->editim = -1;                                      /* default output value */
+ }
+ unsigned short int UsFhrAlgo :: oneort( unsigned short int period )
+ {
+  if (period != 0) return(60000/period); else return(0);
+ }
+ void UsFhrAlgo :: edload(editdata *edt, short int dlt )
+ { 
+ 	//short int tmp;
+   edt->edprd0 = edt->perid0;
+   edt->edthr0 = edt->hrtpr0;
+   edt->dltahr = dlt;
+ }
+ /* ---------------------------------------------------------------------
+    update rate data
+    --------------------------------------------------------------------- */
+ void UsFhrAlgo :: edtupd( editdata *edt )
+ {
+   edt->edthr3 = edt->edthr2;            /* move edited rates down */
+   edt->edthr2 = edt->edthr1;            /* move edited rates down */
+   edt->edthr1 = edt->edthr0;            /* move edited rates down */
+   edt->edprd3 = edt->edprd2;            /* move edited periods down */
+   edt->edprd2 = edt->edprd1;            /* move edited periods down */
+   edt->edprd1 = edt->edprd0;            /* move edited periods down */
+   edt->avghr2 = edt->avghr1;            /* move average down one  */
+   edt->avghr1 = edt->avghr0;            /* move average down one  */
+ }
+ int absdif( unsigned short int a, unsigned short int b) { if (a > b) return (a-b); else return(b-a); }
+ /* --------------------------------------------------------------------
+    decrement beatsv, range limited between 0 and 7
+    -------------------------------------------------------------------- */
+ void UsFhrAlgo :: dcrbno(editdata *edt)
+  { if (edt->beatno > 7)         /* something is wrong */
+      edt->beatno = 1;           /* make it fail soon  */
+    else
+      if (edt->beatno > 0) edt->beatno--;
+ }
+ /* --------------------------------------------------------------------
+    increment beatsv , range limited by the rate being edited
+    -------------------------------------------------------------------- */
+ void UsFhrAlgo :: inrbno( editdata *edt)
+ {
+   ustmp0 = edt->avghr0>>5;              /* divide rate by 32 */
+   if (ustmp0 == 0) ustmp0 = 1;
+   if (ustmp0 > edt->beatno) edt->beatno++;
+   else                          edt->beatno = ustmp0;
+ }
+ long UsFhrAlgo :: sump90(short int *pi16Buf1,short int *pi16Buf2)
+ {
+ 	char cCnt = 90;
+ 	long lSump90 = 0;
+ 	do
+ 	{
+ 		int i32Mul = *pi16Buf1;
+ 		i32Mul *= *pi16Buf2;
+ 		lSump90 += i32Mul; 
+ 		++pi16Buf1;
+ 		++pi16Buf2;
+ 	}while( --cCnt != 0 );
+ 	return lSump90;
+ }
+ signed int UsFhrAlgo :: pctcor(long lNum1,long lNum2)
+ {
+ 		//	TODO: Port from assembly to C
+ 	//	R6 -> lNum1
+ 	//	R4 -> lNum2
+ 	int iRetVal = 0;
+ 	int iNeg = 0;
+ 	int iCnt = 10;
+ 	if( lNum2 <= 0 )
+ 	{
+ 		lNum2 = -lNum2;
+ 		iNeg = 1;
+ 	}
+ 	do
+ 	{
+ 		lNum2 *= 2;
+ 		lNum2 -= lNum1;
+ 		iRetVal <<= 1;
+ 		if( lNum2 >= 0 )
+ 		{
+ 			iRetVal += 1;
+ 		}
+ 		else
+ 		{
+ 			lNum2 += lNum1;
+ 		}
+ 	}while(--iCnt);
+ 	if( iNeg == 1 )
+ 		iRetVal = -iRetVal;
+ 	return iRetVal;
+ 	//return 0;
+ }
+ void UsFhrAlgo :: usSigProc(void)
+ {
+ 	//	Added by Will
+ 	m_bFhrCalculated = false;
+ /* check if ultrasound samples obtained and need processing,
+ note: must synchronize US channel which gets FM and
+ do processing as a pair. SELCH1FM routes the
+ CH1 audio to FM filter chain. SELCH2FM routes the
+ CH2 audio to FM filter chain. Telem routes the
+ Telemetry audio to FM filter chain. Don't know the
+ rules are yet.  Probably something like "if only one
+ channel, then FM is that channel else US1 is FM.
+ note that if telemetry, then all telemetry */
+ /*****************/
+ /*** US CHAN 0 ***/
+ /*****************/
+ if(OutNdUS0 != InNdUS0)
+ 	{
+ 		usxprt.channel = 0;        /* fill in us transport record */
+ 		usxprt.gain    = 128;
+ 		OutNdUS0 &= US_WRAP_VAL;    /* limit index before use */
+ 		usxprt.sample = usSampBuf[OutNdUS0++];
+ 		if (usmode == US0XDUCER)   /* us0 sig. process */
+ 		{
+ 			usfilter(&usxprt);       /* Don't process if no transducer */
+ 			usproc(&usxprt);         /* FECG may be connected instead  */
+ 		}
+ 		else if (usmode == INOP)   /* Update US0 display */
+ 		{
+ 			usfilter(&usxprt);       /* MMSmk28810 - Pass 0 data through US filter */
+ 			usproc(&usxprt);         /* MMSmk28810 - Pass 0 data through US processing */
+ 			usxprt.rate = 0;
+ 			if (last_usmode == US0XDUCER)
+ 				usxprt.post_flg = DISPLAY;     /* Update HR1 one last time */
+ 		}
+          /* post now */
+ 		if (((usmode == US0XDUCER) || (last_usmode == US0XDUCER)) && (usxprt.post_flg))
+ 			posthr( usxprt.rate, usxprt.post_flg );
+ 		
+ 		
+ 	}
+ 	last_usmode = usmode;
+ 	usxprt.post_flg = 0;
+ }/* usSigProc */
+ int UsFhrAlgo :: usfilter( us_coro_xport_rec *tptr )
+ { 
+ 	register filterdata *flt;
+ 	register long tmp;
+ 	register int *ftp;
+ 	register int input,i;
+ 	//register int j;
+  flt = &usfilt;
+ 	input = flt->tmp = flt->input = tptr->sample;
+ 	if (input > flt->pkhi) flt->pkhi = input;
+ 	if (input < flt->pklo) flt->pklo = input;
+ 	flt->pktim += 1;
+ 	if (flt->pktim >= 500)
+ 	{ 
+ 		flt->pktim = 0;
+ 		flt->inppix = (flt->inppix + 1) & 3;
+ 		flt->inppkv[flt->inppix] = flt->pkhi - flt->pklo;
+ 		flt->gainct = flt->inppkv[0] + flt->inppkv[1] + 
+ 		  flt->inppkv[2] + flt->inppkv[0]; 
+ 		flt->pkhi = flt->pklo = input;
+ 		/* debug_str("\n\r",2); debug_lhex(flt->gainct); */
+ 	} 
+ 	if ( input > 4090 ) 
+ 	{ 
+ 		if (flt->agc1 > 4) flt->agc1 -= 4; else flt->agc1 = 1; 
+ 	} 
+ 	if (input < (flt->bot>>2)) flt->bot = (input<<2);
+ 	else				   		flt->bot++;
+ 	input -= (flt->bot>>2);
+ 	tmp = input; 						/* gain of 3 */
+ 	tmp = tmp<<6;						/* gain of 64, 36 db */
+ 	tmp *= flt->agc1;					/* X 1 to 1024 */
+ 	tmp = tmp>>16; 					/* gain 1/65536 to 4096/65536  */
+ 	if (tmp > 4096) tmp = (tmp>>1) + 2048;
+ 	if ( tmp > 1500 ) 
+ 	{ 
+ 		i = (tmp - 1500)>>7; 
+ 		if ( flt->agc1 > i ) flt->agc1 -= i;
+ 		else 				 flt->agc1 = 1; 
+ 	} 
+ 	else
+ 	{ 
+ 		i = (1500 - tmp)>>8;  
+ 		if (flt->agc1 < (4096-i)) flt->agc1 += i;
+ 		else 					   flt->agc1 = 4096; 
+ 	}
+ 	tmp = tmp<<6;						/* gain of 64, 36 db */
+ 	tmp *= flt->agc2;					/* X 1 to 1024 */
+ 	tmp = tmp>>16; 					/* gain 1/65536 to 4096/65536  */
+ 	if (tmp > 4096) tmp = (tmp>>2) + 3072;
+ 	if ( (tmp > 2000) && (flt->agc2 > 16)) flt->agc2 -= 16; 
+ 	if ( tmp > 1000 ) 
+ 	{ 
+ 		if ( flt->agc2 > 16 ) flt->agc2 -= 16;
+ 		else				  flt->agc2 = 1;
+ 	} 
+ 	else
+ 	if ( tmp < 500 ) 
+ 	{
+ 		if (flt->agc2 < (4096-8)) flt->agc2 += 16;
+ 		else						 flt->agc2 = 4096;
+ 	}
+ 	flt->tmp = tmp;
+ 	flt->output = ushipass(flt,flt->tmp) + 96;
+ 	flt->inpinx = (flt->inpinx + 1) & 7;
+ 	ftp = &flt->inpavg[0];
+ 	flt->inpavg[flt->inpinx] = flt->output; 
+ 	tmp  = *ftp++; tmp += *ftp++; tmp += *ftp++; tmp += *ftp++;
+ 	tmp += *ftp++; tmp += *ftp++; tmp += *ftp++; tmp += *ftp;
+ 	tmp = tmp >> 4;
+ 	flt->output = tmp;
+ 	return(flt->output);
+ }
+ int UsFhrAlgo :: usproc( us_coro_xport_rec *tptr )
+ { 
+ //	signed int i;
+ 	short int data;
+ 	trsprt  = tptr;			/* save pointer to transport record */
+ 	data    =  tptr->sample;
+ 	tptr->rate     = 0;
+ 	tptr->post_flg = 0;
+ 	usflt  = &usfilt;
+ 	pkctl  = &pkctrl;
+ 	pkdat  = &pkdata;
+ 	edtdat = &editdat;
+ 	pkdet  = &pekdet;
+ 	psdata  = &sdata[0][0];
+ 	data = usflt->output;
+ /* proc. corpt() uses global pkctl,pkdat,edtdat */
+ 	corpt(data);
+ 	return(0);
+ }
+ void UsFhrAlgo :: posthr( int rate, int flag )
+ {
+ 	hrrate = rate;
+ 	hrflag = flag;
+ 	m_i16FhrValue = hrrate;
+ 	m_bFhrCalculated = true;
+ }
+ int UsFhrAlgo :: ushipass( filterdata *xxx, int sample )
+ {
+ //	TODO	- > Make this function platform independent
+ register filterdata *flt;
+ register int iTreg;
+ register int iPreg;
+ register int iACC; 
+ register int itmp; 
+   flt = xxx;
+   iTreg = sample + sample;
+   if (flt->dither >= 0)	flt->dither =  -4096;
+   else					flt->dither =      0;
+   iTreg += flt->dither;
+ 	iPreg = B0 * iTreg;		/* Preg = B0 * Treg					*/
+ 	iACC	  = flt->Zreg;
+ 	iPreg += iPreg;			/* do SPM 1 shift left on output	*/
+ 	iACC	  += iPreg;
+ 	iPreg = B1 * iTreg;		/* P = B1 * INPUT part of MPYA		*/
+ 	itmp = (iTreg = iACC>>16);
+ 	iPreg = iPreg<<1;			/* LTP part 2 ; take care of SPM	*/
+ 	iACC	 = iPreg;			/* LTP part 2 ; ACC = Preg			*/
+ 	iPreg =  A1 * iTreg;		/* P = A1 * sample					*/
+ 	iPreg = iPreg<<1;			/* APAC take care of SPM			*/
+ 	iACC += iPreg;			/* ACC += PREG						*/
+ 	flt->Zreg = iACC;		/* Zreg = ACC						*/
+ 	return (itmp);
+ }
+ signed long UsFhrAlgo :: corpt(int indata )
+ { 
+ 	short int i,j;
+   short int time;
+   register peakctl *pk;
+   register peakdet *pd;
+   pk = pkctl;
+   /* ---------------------------------------------------------------------
+      update data pointers and save new sample
+      --------------------------------------------------------------------- */
+   pk->ni = (pk->ni - 1) & (NBUFFER-1);
+   if ( 0 == pk->ni )
+      pk->st = (pk->st - 1) & (NBUFLEN-1);
+  
+ 	 dp = &sdata[pk->ni][pk->st];
+ 	 sdata[pk->ni][pk->st] = indata;
+ 	 if (pk->st < (NBUFLEN/2))
+        sdata[pk->ni][pk->st+NBUFLEN] = indata;
+   	 old = sdata[pk->ni][pk->st+NPOINTS];
+   pk->dp = dp;
+   New = indata;
+   dsqr = pk->sqrdp[pk->ni];
+   dsqr = dsqr + ((New + old) * (New - old));
+   pk->sqrdp[pk->ni] = dsqr;
+   sqrdt[pk->ni][pk->st] = dsqr;
+ 	
+   /* --------------------------------------------------------------------
+ 	 Reset for next peak if at beginning of the cycle
+ 	 -------------------------------------------------------------------- */
+   pd = pkdet;
+   i = usflt->top>>3;
+   if (i > pd->maxgain) pd->maxgain = i;
+   if (i < pd->mingain) pd->mingain = i;
+   if (pk->state == 0)
+ 	{
+ 	  i = usedit(edtdat);
+ 	  if ( i > 0 )				/* <= 0 is timeout, reject or hold */
+ 		{
+ 	      trsprt->rate = i;
+ 		  if (edtdat->stated >= 4)
+ 		    { trsprt->post_flg = (DISPLAY+HRPLOT+HRFLASH); }
+ 		  else
+ 		    { trsprt->post_flg = (DISPLAY+PENLIFT); }
+ 		}
+ 	  else
+ 	    { trsprt->rate = 0;	trsprt->post_flg = (DISPLAY+PENLIFT); }
+ 			tsqr = pk->sqrtp;
+       tp = dp = pk->tp  = pk->dp; 	/* where the data just went in */
+ 	  pk->tni = pk->ni;				/* indexed point			   */
+ 	  pk->tst = pk->st;
+ 	}
+   /* --------------------------------------------------------------------
+ 	 Refresh running sum for first 8 cycles
+ 	 -------------------------------------------------------------------- */
+   if (pk->state < 8)
+     {
+ 				dp = &sdata[pk->ni][pk->st];
+ 	   
+ 	 sum = sump90(dp,dp);
+ 	 pk->sqrdp[pk->ni] = sum;
+      if (pk->state == 0) pk->sqrtp = sum;
+ 	 if (pk->state == 1)
+ 	   {
+ 	  	peak_init();				/* reset for next	    */
+ 	 	histini(pkdat);				/* reset for next	    */
+ 	   }
+ 	 if (pk->state == 7)
+ 	   {
+ 	 	pd->presentix = ADVANCE;
+ 	 	if (edtdat->stated >= 4) pd->futureix = pd->presentix+PEKHOT;
+ 		else				   	 pd->futureix = pd->presentix+STRHOT;
+ 	   }
+ 	 pk->state++;
+ 	 return(0);
+ 	}
+   /* ----------------------------------------------------------------
+ 	 do autocorolation part A - future peaks
+ 	 ---------------------------------------------------------------- */
+ 	if ( (pk->state++ & 1) == 0)			/* do part A */
+ 	{
+ 	 pd = pkdet;
+ 	 if ( ((time = pd->futureix) < TIMOUT) )
+ 	   {
+ 		 ni = pk->tni; st = pk->tst;
+ 		 pix_2_past(&ni,&st,time);
+ 		dp = &sdata[ni][st]; dsqr = sqrdt[ni][st]; 
+ 		 tsqr = pk->sqrtp;
+ 		 all = (tsqr + dsqr) >> 1;
+ 		 tp = pk->tp;
+ 		 sum = sump90(tp,dp);
+      datapct = pctcor(all,sum);
+   		 trsprt->pct = datapct;
+ 		 i = pd->futureix;
+ 		 if (pd->peakpct > pd->futmaxpct) j = pd->peakpct;
+ 		 else							  j = pd->futmaxpct;
+ 		 if ( ( datapct < 100 ) || ( datapct < (j>>1) ) )
+ 		   pd->futureix += 10;
+ 		 else
+ 		   if ( ( datapct < 400 ) || ( datapct < ((3*j)>>2) ) )
+ 			 pd->futureix += 7;
+ 		   else
+ 			 pd->futureix += 4;
+ 		 i += i;							/* convert ix to ms */
+ 		 if (datapct > pd->futmaxpct) 		/* save biggest peak */
+ 		   { pd->futmaxpct = datapct;		/* save peak value  */
+ 			 pd->futmaxtim = i; }			/* save peak period */
+ 		 if (datapct > pd->futurepct) 		/* save biggest peak */
+ 		   { pd->futurepct = datapct;		/* save peak value  */
+ 			 pd->futuretim = i; }			/* save peak period */
+ 		 else
+ 		   { j = pd->futuretim;
+ 		     if ( (j != 0) && ( (datapct < 0) || (i - j) > PEKHOT )  )
+ 			 {
+ 		 	  j = edtdat->editim;			/* where the editor is */
+ 			  if (i > j) j = i - j;			/* time to editor per  */
+ 			  else 		 j = j - i;
+ 			  if ( j < pd->nearedelt )
+ 				{
+ 				 pd->nearedelt = j;
+ 				 pd->nearedpct = pd->futurepct;
+ 				 pd->nearedtim = pd->futuretim;
+ 				}
+ 			  pd->futuretim = 0;
+ 			  pd->futurepct = 0;
+ 			 }
+ 		   }
+ 	   }
+ 	   datapct = pd->lastpct;	/* keep peak detector alive */
+ 	   time = pd->presentix + 1;
+ 	}
+   else
+ 	/* ------------------------------------------------------------------
+ 	   present peak / missing peak autocorolation
+ 	   ------------------------------------------------------------------ */
+ 	{
+ 	  pkmux = 0;
+ 	  pd = pkdet;
+ 	  time = pd->presentix;
+ 	  pd->presentix += 2;
+ 	  /* ------------------------------------------------------
+ 	     if peak detector close to expiring , do missing points
+ 	     also check for near edit peaks which may be missed
+ 	     ------------------------------------------------------ */
+ 	  if ( ( pd->peakhot > (PEKHOT/4) ) &&
+ 		 ( (3 * pd->peakpct) > (4 * pd->lastpct) ) )
+ 	    {
+ 		   if (pd->peakprx == 0)
+ 			 {
+ 			  /* check current peak  for close to edit peak */
+ 			  time = pd->peaktim + pd->peaktim;	/* convert to ms */
+ 			  if (time > edtdat->editim) time = time - edtdat->editim;
+ 			  else						 time = edtdat->editim - time;
+ 			  if (time < pd->nearedelt)
+ 				{
+ 				  pd->nearedelt = time;
+ 				  pd->nearedpct = pd->peakpct;
+ 				  pd->nearedtim = pd->peaktim+pd->peaktim;
+ 				}
+ 			  pkmux = 1; time = pd->peaktim - 1;
+ 			 }
+ 		   else
+ 		     if (pd->peakpsx == 0)
+ 			   { pkmux = 2; time = pd->peaktim + 1; }
+ 		}
+     /* ------------------------------------------------------
+ 	   calculate indexes and normalization values
+        ------------------------------------------------------ */
+ 	  ni = pk->tni; st = pk->tst;
+ 	  pix_2_past(&ni,&st,time);
+ 		dp = &sdata[ni][st]; dsqr = sqrdt[ni][st]; 
+ 	  tsqr = pk->sqrtp;
+ 	  all = (tsqr + dsqr) >> 1;
+ 	  tp = pk->tp;
+ 	  sum = sump90(tp,dp);
+ 	  datapct = pctcor(all,sum);
+ 	  trsprt->pct = datapct; 
+ 	/* ------------------------------------------------------
+ 	   if missing points done, replace data point with last
+ 	   ------------------------------------------------------ */
+ 	  if (pkmux != 0)
+ 		{
+ 		  if (pkmux == 1)		/* did skipped point before peak */
+ 			  { if (datapct > 0) pd->peakprx = datapct;
+ 				else			 pd->peakprx = 1;
+ 			  }
+ 		  if (pkmux == 2)		/* did skipped point after peak	*/
+ 			  { if (datapct > 0) pd->peakpsx = datapct;
+ 			    else			 pd->peakpsx = 1;
+ 			    adjustpeak(pd);
+ 			  }
+ 		   datapct = pd->lastpct;	/* keep peak detector alive */
+ 	  	   time = pd->presentix - 2;
+ 		}
+ 	}
+     /* ------------------------------------------------------
+ 	   process startup or run mode
+        ------------------------------------------------------ */
+     { register int pkLoadFlag=0; /* 1=new peak data loaded/set into editor variables*/
+       #define ED_HUNTING (edtdat->stated < 4) /* editor is hunting for beat-to-beat. */
+       #define LD_NEXT_PK (ED_HUNTING ? startest(pkdat,pd,time) : editpick(pkdat,pd))
+       if ( peakdetector(pd,time,datapct) )
+       {
+         histupd(pd,pkdat);
+         peakreset(pd);
+         pkLoadFlag = LD_NEXT_PK;
+       }
+       else if ( time > TIMOUT )
+         pkLoadFlag = LD_NEXT_PK;
+       if ( pkLoadFlag ) pk->state=0; /* restart on editor peak var.s' touched */
+     }
+ 	/* watch dog on process, something should have happened by now */
+ 	if  ( pk->state > 2000 )
+ 	  {
+ 	    pk->state = 0;
+    		trsprt->rate = 0;
+ 		trsprt->post_flg = (DISPLAY+PENLIFT);
+ 		edtdat->stated = 0;		/* restart editor */
+ 		edtdat->reject = 69;	/* reject on call */
+ 	  }
+   return(0);
+ }
+ void UsFhrAlgo :: peak_init()
+ { 
+ 	//short int i;
+   register peakdet *pd;
+   pd = pkdet;
+   pd->state = 0;
+   pd->peakpct = 0;
+   pd->lastpct = 0;
+   pd->peakflg = 0;
+   pd->skipflg = 0;
+   pd->peakhot = -1;
+   pd->peakprx = 0;
+   pd->peakpsx = 0;
+   pd->futurepct = 0;
+   pd->futuretim = 0;
+   pd->futurepct = 0;
+   pd->futmaxpct = 0;
+   pd->futmaxtim = 0;
+   pd->nearedpct = 0;
+   pd->nearedtim = 0;
+   pd->nearedelt = 2*MAXTIM;
+ }
+ void UsFhrAlgo :: histini( peakdata *pkd )
+ {
+   pkd->thisinx  = 0;
+   pkd->thistdlt = 0;
+ }
+ void UsFhrAlgo :: pix_2_past( short int *xini, short int *xist, short int n )
+ { register short int tmp;
+   if (n > 0)
+ 	{
+ 	  tmp  = (*xist * NBUFFER)+n;
+       switch( *xini ) 	/* assumed to be range 0 - (NBUFFER-1) */
+ 		{ case 0: if ((n & (NBUFFER-1)) == 0) break;
+ 				  tmp += NBUFFER; break;
+ 		  case 1: break;
+ 		  case 2: if ((n & (NBUFFER-1)) < 7) break;
+ 				  tmp += NBUFFER; break;
+ 		  case 3: if ((n & (NBUFFER-1)) < 6) break;
+ 				  tmp += NBUFFER; break;
+ 		  case 4: if ((n & (NBUFFER-1)) < 5) break;
+ 				  tmp += NBUFFER; break;
+ 		  case 5: if ((n & (NBUFFER-1)) < 4) break;
+ 				  tmp += NBUFFER; break;
+ 		  case 6: if ((n & (NBUFFER-1)) < 3) break;
+ 				  tmp += NBUFFER; break;
+ 		  case 7: if ((n & (NBUFFER-1)) < 2) break;
+ 				  tmp += NBUFFER; break;
+ 		  default: break;
+ 		}
+ 	  *xist = (tmp >> 3) & (NBUFLEN-1);		/* like above , no divide */
+ 	  *xini = (*xini + n) & (NBUFFER-1);
+ 	}
+ }
+ void UsFhrAlgo :: adjustpeak( peakdet *xxx )
+ { register peakdet *pd;
+   pd = xxx;
+   if (pd->peakpsx > pd->peakprx)
+ 	{ if (pd->peakpsx > pd->peakpct)
+ 		{ pd->peakpre = pd->peakpct; pd->peakpct = pd->peakpsx;
+ 		  pd->peaktim += 1;			 pd->peakhot -= 1; }
+ 	  else
+ 		{ pd->peakpre = pd->peakprx;
+ 		  pd->peakpst = pd->peakpsx; }
+ 	}
+   else
+ 	{ if (pd->peakprx > pd->peakpct)
+ 		{ pd->peakpst = pd->peakpct; pd->peakpct = pd->peakprx;
+ 		  pd->peaktim -= 1;			 pd->peakhot += 1; }
+ 	  else
+ 		{ pd->peakpre = pd->peakprx;
+ 		  pd->peakpst = pd->peakpsx; }
+ 	}
+ }
+ int UsFhrAlgo :: peakdetector( peakdet *xxx, short int time, short int  pkpct )
+ { //short int ix,period,tmp;
+   register peakdet *pd;
+   pd = xxx;
+   if ( (pkpct > pd->peakpct) && (pkpct > pd->peakflg) )
+  	{
+ 	 pd->peakpre = pd->peakpct;		/* peakpre might be 0! */
+ 	 pd->peakpct = pkpct;			/* new peak value 	   */
+ 	 pd->peaktim = time;			/* present period 	   */
+ 	 pd->peakhot = 0;
+ 	 pd->peakprx = 0;
+ 	 pd->peakpsx = 0;
+     }
+   else
+ 	{
+ 	 if (pd->peakhot >= 0)
+ 	   {
+ 		/* save value past peak & prevent retriggering on downside */
+ 	 	if (pd->peakhot == 0)
+ 		  pd->peakflg = pd->peakpst = pkpct;	 /* point past peak */
+ 		else
+ 	 	  if (pkpct < 0) pd->peakflg = 0;		 /* trigger ok now	*/
+ 		if (edtdat->stated < 4)
+ 		  { if ( (pd->peakhot++) > (STRHOT-1) ) return(1); }
+ 		else
+ 		  { if ( (pd->peakhot++) > (PEKHOT-1) ) return(1); }
+ 	   }
+ 	}
+   pd->lastpct = pkpct;
+   return(0);
+ }
+ void UsFhrAlgo :: histupd( peakdet *xxx, peakdata *yyy )
+ { short int ix,period;
+   register peakdet *pd;
+   register peakdata *pkd;
+   pd = xxx; pkd = yyy;
+   ix = pkd->thisinx;
+   if (ix < 7) pkd->thisinx++;
+   pkd->thispct[ix] = pd->peakpct;
+   period = pd->peaktim;
+   period += period;
+   if (pd->peakpre != pd->peakpst)
+ 	 { if (pd->peakpre == pd->peakpct) period -= 1; }
+   else
+ 	 { if (pd->peakpst == pd->peakpct) period += 1; }
+   pkd->thistim[ix] = period;
+   pkd->thisgdlt[ix] = pd->maxgain - pd->mingain;
+   /* pkd->thistdlt += pkd->thisgdlt[ix]; */
+   pkd->thistdlt = pkd->thisgdlt[ix];
+ }
+ void UsFhrAlgo :: peakreset( peakdet *xxx )
+ { register peakdet *pd;
+   unsigned short int tmp;
+   pd = xxx;
+   pd->peakpct = 0;
+   pd->peakprx = 0;
+   pd->peakpsx = 0;
+   pd->peakhot = -1;
+   tmp = pd->mingain;
+   pd->mingain = pd->maxgain;
+   pd->maxgain = tmp;
+ }
+ int UsFhrAlgo :: startest( peakdata *xxx, peakdet *yyy, short int time )
+ { short int pk1,pk2,pr1,pr2,ix,tmp,tmp2,reject;
+   register peakdata *pkd;
+   register peakdet *pd;
+   pkd = xxx;
+   pd = yyy;
+   /* Don't start if data is too small, Note: limit emperically derived
+      may need to be readjusted when real front end available for testing */
+   if ( usflt->gainct < GAINCTHI )
+   {
+     if ( time > (TIMOUT-STRHOT) )
+     { trsprt->rate = 0;
+       trsprt->post_flg = (DISPLAY+PENLIFT);
+     }
+     /* bug fix, GLA-199910.07: return 0 if editor variables NOT touched */
+     return(0);
+   }/* if */
+   ix = pkd->thisinx - 1;
+   pk1 = pkd->thispct[ix];					/* pick up latest */
+   pr1 = pkd->thistim[ix];					/* pick up latest */
+   if (ix == 0)
+ 	{ pkd->startpct = pk1; pkd->startime = pr1; }
+   else
+ 	{
+ 	 pk2 = pkd->startpct;					/* pick up oldest best */
+ 	 pr2 = pkd->startime;					/* pick up oldest best */
+ 	 tmp2 = pr1 - pr2;						/* time between peaks  */
+ 	 if ( tmp2 < 300 )
+ 	   { if ( pk1 > pk2 ) { pkd->startpct = pk1; pkd->startime = pr1; } }
+ 	 else
+ 	   {
+ 		 tmp = pd->futmaxpct;
+ 		 if (pk1 > tmp) tmp = pk1;
+ 		 if (pk2 > tmp) tmp = pk2;
+ 		 tmp = (tmp>>7) + 4;		/* 1024->8, 512->4, 256->2 */
+ 		 tmp2 = tmp2>>6;			/* 256 -> 4,  512 -> 8		*/
+ 		 if (tmp2 < 4) tmp2 = 4;
+ 		 if (tmp2 > 8) tmp2 = 8;
+ 		 tmp2 = 6 - tmp2;			/* up if close, down if far */
+ 		 tmp += tmp2;
+ 		 tmp2 =  pr2 + pr2;					/* time between peaks  */
+ 		 if (tmp2 > pr1) tmp2 = tmp2 - pr1;
+ 		 else			 tmp2 = pr1 - tmp2;
+ 		 if (tmp2 > 32) tmp2 = 32;
+ 		 tmp2 = tmp2>>3;					/* 32 -> 4 */
+ 		 tmp2 = tmp2 - 2;
+ 	 	 if ( (tmp*pk1) > (16*pk2) )
+ 		   { pkd->startpct = pk1; pkd->startime = pr1; }
+ 	   }
+ 	}
+ /* startest */
+   if ( (( time > (TIMOUT/3) ) && ((4 * pkd->startpct) > (3 * pd->futmaxpct)))
+ 	 || ( ix >= 7 ) || (time > TIMOUT) )
+     {
+ 	 reject = 0;
+    	 pk1 = pkd->startpct;
+    	 pr1 = pkd->startime;
+ 	edtdat->peak0  = pk1; 				/* load edit main peak */
+ 	edtdat->time0  = pr1; 				/* load edit main period */
+ 	edtdat->peak1  = pk1; 				/* load edit alt peak */
+ 	edtdat->time1  = pr1; 				/* load edit alt period */
+ 	edtdat->gaindlt = pkd->thistdlt;	/* load gain dlt over time */
+ 	edtdat->reject = reject;			/* load reject reason	*/
+ 	return(1);
+   }
+ else
+   return(0);		/* wait for next one */
+ }
+ int UsFhrAlgo :: editpick( peakdata *xxx, peakdet *yyy )
+ { short int eper,cper,mper,pk,mpk,ix,cdelta,tmp;
+   register peakdata *pkd;
+   register peakdet *pd;
+   /* if signal drops below reasonable level, stop counting */
+   pkd = xxx;
+   pd  = yyy;
+   if ( ( usflt->gainct < GAINCTLO ) || ( pd->futmaxpct < 100 ) )
+     {
+       trsprt->rate = 0;
+ 	  trsprt->post_flg = (DISPLAY+PENLIFT);
+ 	  edtdat->stated = 0;
+ 	  edtdat->reject = 68;
+ 	  return(1);
+     }
+   ix = pkd->thisinx - 1;
+   pk = pkd->thispct[ix];
+   cper = pkd->thistim[ix];			/* note: time in MS here */
+   eper = edtdat->editim;			/* where editor is at */
+   /* note that future peakdet is in advance of normal peakdet and will
+ 	 not pick off the early peaks. Situation corrected here			*/
+   if (pk >= pd->futmaxpct) { pd->futmaxpct = pk; pd->futmaxtim = cper; }
+   /* calculate how close this peak is to edit peak */
+   if (cper > eper) cdelta = cper - eper;		/* proximity to edit */
+   else			   cdelta = eper - cper;
+   if ( (cdelta > pd->nearedelt) && ( pk < pd->nearedpct ) && (cper < eper) )
+     {
+ 	  tmp = pd->nearedtim;
+ 	  if (tmp > cper) tmp = tmp - cper;
+ 	  else			  tmp = cper - tmp;
+ 	  if (tmp > (PEKHOT/2))			/* not same peak */
+ 		{
+ 				return(0);		/* future peak closer	*/
+ 		}
+    }
+   /* special check for period < 285 , rate > 210 , expect to have
+ 	 three to four other large peaks at high rates */
+   if ( (cper < 284) && (eper > 400) )
+     {
+ 	  tmp = cper + cper;			/* period for 1/2 count */
+ 	  if (tmp > eper) tmp = tmp - eper;	/* where edit is */
+ 	  else			  tmp = eper - tmp;
+ 	  if (tmp > (cper>>2))				/* not half counting, wait */
+ 		{
+    		  return(0);		/* future peak closer	*/
+ 		}
+     }
+   /*
+ 	 this peak is a candidate for the editor.  if the peak is the
+ 	 biggest, it will be passed as the main peak
+   */
+   tmp = (pd->futmaxpct>>7) + 5;			/* 1024->8, 512->4, 256->2 */
+   if ( (16 * pk) > (tmp * pd->futmaxpct) )
+ 	{ mpk = pk; mper = cper;
+ 	}
+   else
+ 	{ mpk = pd->futmaxpct; mper = pd->futmaxtim;
+ 	}
+   tmp = pd->futmaxtim;
+   if (tmp > eper) tmp = tmp - eper;
+   else			  tmp = eper - tmp;
+   if ( cdelta < tmp+10 )
+ 	{
+   	  if ( ( cdelta > pd->nearedelt+10 ) && ( pd->nearedpct > (pk>>1) ) )
+ 		{
+ 		 pk   = pd->nearedpct;
+ 		 cper = pd->nearedtim;
+ 		}
+ 	}
+   else
+   	if ( ( tmp > pd->nearedelt+10 ) && ( pd->nearedpct > (pk>>1) ) )
+ 	  {
+ 	     pk   = pd->nearedpct;
+ 	     cper = pd->nearedtim;
+ 	  }
+ 	else
+ 	  {
+ 		pk   = pd->futmaxpct;
+ 		cper = pd->futmaxtim;
+ 	  }
+ 	edtdat->peak0  = mpk; 				/* load edit main peak */
+ 	edtdat->time0  = mper; 				/* load edit main period */
+ 	edtdat->peak1  = pk; 				/* load edit alt peak */
+ 	edtdat->time1  = cper; 				/* load edit alt period */
+ 	edtdat->gaindlt = pkd->thistdlt;	/* load gain dlt over time */
+ 	edtdat->reject = 0;					/* load reject reason	*/
+   return(1);
+ }
+ int UsFhrAlgo :: usedit( editdata *xxx )
+ { register editdata *edt;
+   unsigned short int dlt;
+   edt = xxx;
+   if ( (edt->stated < 4) && (edt->reject != 0) )
+     { return(-1); }                     /* reject value */
+   edt->perid0 = edt->time0;                                     /* 1ms intervals */
+   edt->altprd = edt->time1;                                     /* 1ms intervals */
+   edt->hrtpr0 = oneort(edt->perid0);
+   edt->althrt = oneort(edt->altprd);
+   /* tighten constraints if main peak is small */
+   dlt = 35-(edt->gaindlt>>5);                           /* 255->8,  32 -> 1             */
+   if (edt->peak0 < 500)
+         dlt -= ((500 - edt->peak0)>>4);                 /* 500->0 , 100->25             */
+   edload(edt,dlt);                                                      /* move in the data             */
+   edt->edtout = -1;                                                     /* default output value */
+   switch(edt->stated)
+    {
+      case 0:  goto rate_0;                      /* synchronize peak det */
+      case 1:  goto rate_1;
+      case 2:  goto rate_2;
+      case 3:  goto rate_3;
+      case 4:  goto rate_n;
+      default: goto rate_0;
+    }
+    /*-------------------------------------------------------------------*/
+    /* state n is looking for the n th rate of n rates which are close   */
+    /* the rate will be followed until peak sizes demonstrate indicate   */
+    /* half or double counting is occuring.                              */
+    /*-------------------------------------------------------------------*/
+    rate_n:;
+         ustmp0 = absdif(edt->edthr0,edt->edthr1);
+         ustmp1 = absdif(edt->althrt,edt->edthr1);
+         if (edt->edthr0 > edt->althrt)
+           { ustmp2 = edt->althrt<<1; ustmp3 = edt->edthr0; }
+         else
+           { ustmp2 = edt->edthr0<<1; ustmp3 = edt->althrt; }
+         ustmp2 = absdif(ustmp2,ustmp3);
+     if ( (ustmp0 > ustmp1) && (ustmp0 > 35) &&
+                  ( (ustmp2 > 7) || (edt->althrt > edt->edthr0) ) )
+           {
+                 if ( edt->altcnt < 4 )
+                   {
+                         edt->hrtpr0=edt->althrt;
+                         edt->perid0=edt->altprd;
+                         edload(edt,dlt);
+                     edt->altcnt += 1;
+                         edt->dltahr -= 10; }
+           }
+         else
+          if ( edt->altcnt > 0 ) edt->altcnt -= 1;
+         edt->diedit = 0x40;
+         uswrd0 = (edt->edprd2+edt->edprd3)/2;           /* average 2 per */
+         uswrd1 = (edt->edprd0+edt->edprd1)/2;           /* average 2 per */
+         uswrd0 = (uswrd0+uswrd1)/2;                                     /* average 4 per */
+         edt->avghr0 = oneort(uswrd0);                           /* average rate  */
+         /*------------------------------------------------------*/
+         /* adjust delta beat - beat based on sig and peak size  */
+         /*------------------------------------------------------*/
+         if (absdif(edt->edthr0,edt->edthr1) >= edt->dltahr) edt->diedit += 1;
+         ustmp0 = edt->dltahr - 10;
+     if (absdif(edt->edthr0,edt->avghr1) >= ustmp0 ) edt->diedit += 2;
+     if (absdif(edt->avghr0,edt->avghr1) >= ustmp0 ) edt->diedit += 4;
+     if (edt->diedit == 0x40)
+       {
+          inrbno(edt);                   /* advance hold counter */
+                  /* edt->edtout = edt->avghr0; */
+                  edt->edtout = (edt->edthr2 + (edt->edthr1<<1) + edt->edthr0)>>2;
+                  edt->editim = uswrd0;
+                  edtupd(edt);                   /* update the data */
+                  edt->edtsav = edt->edtout;
+              return(edt->edtout);
+       }
+         /*-------------------------------------------------*/
+         /* otherwise the rate did not pass muster, skip it */
+         /*-------------------------------------------------*/
+         dcrbno(edt);
+     if (edt->beatno <= 0) goto rate_2e; /* run out of hold ?    */
+         edt->edtout = 0;                                        /* hold last value      */
+         return(edt->edtsav);                            /* no update, bad data  */
+    /*-------------------------------------------------------------------*/
+    /* state 3 is looking for the third rate of n rates which are close  */
+    /* state 2 is looking for the second rate of n rates which are close */
+    /*-------------------------------------------------------------------*/
+    rate_2:  edt->stated = 2; edt->diedit = 0x20; goto rate_23;
+    rate_3:  edt->stated = 3; edt->diedit = 0x30; goto rate_23;
+    rate_23:
+         edt->editim = -1;                                       /* default edit period  */
+         ustmp0 = edt->dltahr - 10;                 /* lower for start up        */
+         if ( (absdif(edt->edthr0,edt->edthr1)) < ustmp0 )
+       { edt->stated++;                  /* advance  2 -> 3 or 3 -> 4    */
+                 edt->beatno = 1;
+             edt->edprd2 = (edt->edprd0+edt->edprd1)/2; /* fake oldest period */
+                 edt->editim = edt->edprd2;                      /* edit period     */
+             edt->edthr2 = oneort(edt->edprd2);     /* fake out oldest rate       */
+             edt->edthr2 = (edt->edthr0+edt->edthr1)/2; /* fake oldest rate      */
+         edt->avghr0 = edt->edthr2;                      /* first average                */
+             edt->edtout = edt->edthr2;                  /* value for display            */
+                 edtupd(edt);                                            /* update the data */
+       }
+     else
+       { edt->diedit += 1;
+             edt->stated = 2;                                    /* wait in state 2 for start    */
+             edt->edtout = edt->edthr1;                  /* value for display            */
+                 edtupd(edt);                                            /* update the data */
+       }
+     edt->altcnt = 3;                                            /* pre-load altcnt */
+     return(edt->edtout);
+    /*-------------------------------------------------------------------*/
+    /* state 1 is looking for the first rate of n rates which are close  */
+    /*-------------------------------------------------------------------*/
+    rate_1:;
+         edt->diedit = 0x10;
+    rate_2e:
+     edt->stated = 2;                    /* move into next state         */
+         edtupd(edt);                            /* update the data */
+         edt->editim = -1;                       /* default output value */
+         edt->edtout = -1;                       /* penlift for now */
+         return(edt->edtout);
+    /*-------------------------------------------------------------------*/
+    /* state 0 was used by the peak detector to re synchronize the auto- */
+    /* correlation for a restart, not needed in SH3 system                               */
+    /*-------------------------------------------------------------------*/
+    rate_0:
+         goto rate_1;
+ }
+ void UsFhrAlgo :: usinit( int channel )
+ {
+  di = ti = ni = st = 0;
+  usflt  = &usfilt;
+  pkctl  = &pkctrl;
+  pkdat  = &pkdata;
+  edtdat = &editdat;
+  pkdet  = &pekdet;
+  psdata  = &sdata[0][0];
+  psqrdt	= &sqrdt[0][0];
+  usfiltini(usflt);
+  corinit(pkctl);
+  editini(edtdat);
+  dataini(psdata,psqrdt);
+  histini(pkdat);
+ }
+ void UsFhrAlgo :: usfiltini( filterdata *xxx )
+ { register filterdata *flt;
+   int i;
+   flt = xxx;
+   flt->Zreg = 0; 
+   flt->top = flt->bot = 800;
+   flt->agc1 = 255;
+   flt->agc2 = 8;
+   flt->pkhi = 0;
+   flt->pklo = 16000;
+   flt->pktim = 0;
+   flt->inppix = 0;		//Vas
+  
+   flt->dither = 0;
+   flt->inpinx = 0;
+   flt->gainct = 63;
+   for (i = 0; i < 15; i++) { flt->inpavg[i] = 0;  flt->inppkv[i] = 0; } 
+ }
+ void UsFhrAlgo :: corinit( peakctl  *pk )
+ { 
+ 	short int i;
+   pk->state = 0;
+   pk->ni = pk->tni = 0;
+   pk->st = pk->tst = 0;
+   pk->tp = pk->dp = psdata;				/* &sdata[0][0] */
+   for (i = 0; i < 8; i++) pk->sqrdp[i] = 90;
+ }
+ void UsFhrAlgo :: dataini(short int *dptr, long int *lptr )
+ { short int i;
+   for (i = 0; i < NELMENT; i++) *dptr++ = 1;
+   for (i = 0; i < (NBUFFER*NBUFLEN); i++) *lptr++ = 90;
+ }
+ bool UsFhrAlgo ::GetFhrValue( i16* i16FhrValue) { *i16FhrValue = m_i16FhrValue ; return m_bFhrCalculated ; }
