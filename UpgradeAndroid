@@ -1,0 +1,13 @@
+(!less_than_int(1529493113, getprop("ro.build.date.utc"))) || abort("Can't install this package (Wed Jun 20 16:41:53 IST 2018) over newer build (" + getprop("ro.build.date") + ").");
+getprop("ro.product.device") == "lotus" || abort("This package is for \"lotus\" devices; this is a \"" + getprop("ro.product.device") + "\".");
+ui_print("Writing boot image...");
+package_extract_file("boot.img", "/dev/block/mmcblk1p1");
+show_progress(0.200000, 2);
+ui_print("Writing recovery image...");
+package_extract_file("recovery.img", "/dev/block/mmcblk1p2");
+show_progress(0.200000, 2);
+ui_print("Extracting system image...");
+package_extract_file("system.img", "/tmp/system.img");
+ui_print("Writing system image...");
+run_program("/sbin/simg2img_sbin", "/tmp/system.img", "/dev/block/mmcblk1p4");
+set_progress(1.000000);
