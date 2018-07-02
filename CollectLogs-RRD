@@ -1,0 +1,201 @@
+Cross compiling collectd-5.8.0 and installing it on Lotus target board running Oreo.
+
+Cross compiling collectd and rrdtool
+Pre-requisistes
+1.	Ubuntu 14.04 or later
+2.	Toolchain ‘toolchain_latest_PPD.tar’ from https://ge.ent.box.com/folder/48341112802
+3.	collectd-5.8.0.tar.bz2 source code from https://collectd.org/
+4.	rrdtool-1.5.6.tar.gz source code from https://oss.oetiker.ch/rrdtool/pub/?M=D
+
+Cross compiling steps: Collectd
+1.	cd /home/gdcuser/pratheesh/collectdport/crossbuild/
+2.	Copy collectd-5.8.0.tar.bz2 to this folder.
+3.	Unzip collectd-5.8.0.tar.bz2 (tar xjvf collectd-5.8.0.tar.bz2)
+4.	cd /home/gdcuser/pratheesh/collectdport/toolchain
+5.	Copy toolchain_latest_PPD.tar to this folder
+6.	Unzip toolchain_latest_PPD.tar (tar xvf toolchain_latest_PPD.tar)
+7.	Export below environment variables.
+•	export SYSROOT=/home/gdcuser/pratheesh/collectdport/toolchain/sysroots/csmon
+•	export CC="/home/gdcuser/pratheesh/collectdport/toolchain/sysroots/x86_64-linux/usr/bin/arm-helix-linux-gnueabi/arm-helix-linux-gnueabi-gcc-6.2.0 -march=armv7-a -mfloat-abi=hard --sysroot=$SYSROOT"
+•	export CXX="/home/gdcuser/pratheesh/collectdport/toolchain/sysroots/x86_64-linux/usr/bin/arm-helix-linux-gnueabi/arm-helix-linux-gnueabi-g++ -march=armv7-a -mfloat-abi=hard --sysroot=$SYSROOT"
+•	export CFLAGS="--sysroot=$SYSROOT"
+•	export LDFLAGS="-L/home/gdcuser/pratheesh/collectdport/toolchain/sysroots/csmon/usr/lib --sysroot=$SYSROOT"
+•	export CPPFLAGS="-I/home/gdcuser/pratheesh/collectdport/toolchain/sysroots/csmon/usr/include"
+•	export PATH=/home/gdcuser/pratheesh/collectdport/toolchain/sysroots/x86_64-linux/usr/bin/arm-helix-linux-gnueabi/:$PATH
+8.	./configure --host=arm-helix-linux-gnueabi --with-fp-layout=nothing --prefix=/home/gdcuser/pratheesh/collectdport/crossbuild/install_dir
+9.	make 
+10.	make install
+Errors:
+1.	Below error message displayed when executing “./configure --host=arm-helix-linux-gnueabi --prefix=/home/gdcuser/pratheesh/collectdport/crossbuild/install_dir”
+Error message:
+checking if doubles are stored in x86 representation... configure: error: in `/home/gdcuser/pratheesh/collectdport/crossbuild/collectd-5.8.0': configure: error: cannot run test program while cross compiling.
+Solution: 
+Add the option --with-fp-layout=nothing.
+2.	Below error message displayed when executing “make”.
+Error message:
+CCLD     libcollectdclient.la
+libtool: link: warning: library `/home/gdcuser/pratheesh/collectdport/toolchain/sysroots/csmon/usr/lib/libgcrypt.la' was moved.
+/home/gdcuser/pratheesh/collectdport/toolchain/sysroots/x86_64-linux/usr/bin/arm-helix-linux-gnueabi/../../libexec/arm-helix-linux-gnueabi/gcc/arm-helix-linux-gnueabi/6.2.0/ld: warning: library search path "/lib/x86_64-linux-gnu" is unsafe for cross-compilation
+/bin/sed: can't read /usr/lib/libgpg-error.la: No such file or directory
+libtool: link: `=/usr/lib/libgpg-error.la' is not a valid libtool archive
+Solution: The dependency_libs will be hard coded as /usr/lib/ for libgpg-error.la in /home/gdcuser/pratheesh/collectdport/toolchain/sysroots/csmon/usr/lib/libgcrypt.la. Replace it with the path, /home/gdcuser/pratheesh/collectdport/toolchain/sysroots/csmon/usr/lib.
+3.	Below error message displayed when executing “make”.
+Error message:
+/usr/lib/librrd.so: file not recognized: File format not recognized
+collect2: error: ld returned 1 exit status
+make[1]: *** [rrdcached.la] Error 1
+Solution:
+Replace /usr/lib' in /home/gdcuser/pratheesh/collectdport/toolchain/sysroots/csmon/usr/lib/librrd.la
+# Directory that this library needs to be installed in: 
+#libdir='/usr/lib'
+libdir='/home/gdcuser/pratheesh/collectdport/toolchain/sysroots/csmon/usr/lib'
+4.	Below error message displayed when executing “make”.
+Error message:
+CCLD     rrdcached.la
+libtool: link: warning: library `/home/gdcuser/pratheesh/collectd/toolchain/sysroots/csmon/usr/lib/librrd.la' was moved.
+/bin/sed: can't read /usr/lib/libpng.la: No such file or directory
+libtool: link: `=/usr/lib/libpng.la' is not a valid libtool archive
+make[1]: *** [rrdcached.la] Error 1
+make[1]: Leaving directory `/home/gdcuser/pratheesh/collectd/cross-build/may_30/collectd-5.8.0'
+make: *** [all] Error 2
+Solution: The dependency_libs will be hard coded as /usr/lib/ for all *.la files in /home/gdcuser/pratheesh/collectdport/toolchain/sysroots/csmon/usr/lib/librrd.la. Replace it with the path, /home/gdcuser/pratheesh/collectdport/toolchain/sysroots/csmon/usr/lib.
+ 
+Cross compiling steps: rrdtool
+1.	cd /home/gdcuser/pratheesh/collectdport/crossbuild/
+2.	Copy rrdtool-1.5.6.tar.gz to this folder.
+3.	Unzip rrdtool-1.5.6.tar.gz (tar xzvf rrdtool-1.5.6.tar.gz)
+4.	cd /home/gdcuser/pratheesh/collectdport/toolchain/
+5.	Copy toolchain_latest_PPD.tar to this folder
+6.	Unzip toolchain_latest_PPD.tar (tar xvf toolchain_latest_PPD.tar)
+7.	Export below environment variables.
+•	export SYSROOT=/home/gdcuser/pratheesh/collectdport/toolchain/sysroots/csmon
+•	export CC="/home/gdcuser/pratheesh/collectdport/toolchain/sysroots/x86_64-linux/usr/bin/arm-helix-linux-gnueabi/arm-helix-linux-gnueabi-gcc-6.2.0 -march=armv7-a -mfloat-abi=hard --sysroot=$SYSROOT"
+•	export CXX="/home/gdcuser/pratheesh/collectdport/toolchain/sysroots/x86_64-linux/usr/bin/arm-helix-linux-gnueabi/arm-helix-linux-gnueabi-g++ -march=armv7-a -mfloat-abi=hard --sysroot=$SYSROOT"
+•	export CFLAGS="--sysroot=$SYSROOT"
+•	export LDFLAGS="-L/home/gdcuser/pratheesh/collectdport/toolchain/sysroots/csmon/usr/lib --sysroot=$SYSROOT"
+•	export CPPFLAGS="-I/home/gdcuser/pratheesh/collectdport/toolchain/sysroots/csmon/usr/include"
+•	export PATH=/home/gdcuser/pratheesh/collectdport/toolchain/sysroots/x86_64-linux/usr/bin/arm-helix-linux-gnueabi/:$PATH 
+8.	cd /home/gdcuser/pratheesh/collectdport/crossbuild/rrdtool-1.5.6
+9.	./configure --host=arm-helix-linux-gnueabi --prefix=/home/gdcuser/pratheesh/collectdport/crossbuild/rrdtool_install_dir
+10.	Make
+11.	make install
+
+Errors:
+1.	Below error message displayed when executing “make”.
+Error message:
+libtool: link: warning: library `/home/gdcuser/pratheesh/collectdport/toolchain/sysroots/csmon/usr/lib/libglib-2.0.la' was moved.
+arm-helix-linux-gnueabi-ar: `u' modifier ignored since `D' is the default (see `U')
+CCLD     librrd.la
+libtool: link: warning: library `/home/gdcuser/pratheesh/collectdport/toolchain/sysroots/csmon/usr/lib/libpcre.la' was moved.
+libtool: link: warning: library `/home/gdcuser/pratheesh/collectdport/toolchain/sysroots/csmon/usr/lib/libpng.la' was moved.
+libtool: link: warning: library `/home/gdcuser/pratheesh/collectdport/toolchain/sysroots/csmon/usr/lib/libpangocairo-1.0.la' was moved.
+libtool: link: warning: library `/home/gdcuser/pratheesh/collectdport/toolchain/sysroots/csmon/usr/lib/libpango-1.0.la' was moved.
+libtool: link: warning: library `/home/gdcuser/pratheesh/collectdport/toolchain/sysroots/csmon/usr/lib/libcairo.la' was moved.
+libtool: link: warning: library `/home/gdcuser/pratheesh/collectdport/toolchain/sysroots/csmon/usr/lib/libgobject-2.0.la' was moved.
+libtool: link: warning: library `/home/gdcuser/pratheesh/collectdport/toolchain/sysroots/csmon/usr/lib/libglib-2.0.la' was moved.
+libtool: link: warning: library `/home/gdcuser/pratheesh/collectdport/toolchain/sysroots/csmon/usr/lib/libxml2.la' was moved.
+Solution: The dependency_libs will be hard coded as /usr/lib/ for all *.la files in /home/gdcuser/pratheesh/collectdport/toolchain/sysroots/csmon/usr/lib/libglib-2.0.la. Replace it with the path, /home/gdcuser/pratheesh/collectdport/toolchain/sysroots/csmon/usr/lib/.
+Do the same for libpangocairo-1.0.la, libpango-1.0.la, libcairo.la, libgobject-2.0.la.
+ 
+Running collectd and rrdtool on Lotus board.
+
+Pre-requisites:
+1.	Lotus board running Oreo + libc libraries.
+
+Installation steps:
+1.	Set date and timezone
+•	date -D SET 070210302018.00 (MMDDHHMMYYYY.SS)
+2.	Run collectd daemon with the configuration file provided from GEHC.
+•	/lib/ld-linux-armhf.so.3 --library-path /lib /bin/collectd -C /etc/lotus/collectd/collectd_from_GE.conf
+3.	Below logs shall be displayed on the Terminal and in syslog.
+•	plugin_load: plugin "syslog" successfully loaded.
+•	plugin_load: plugin "rrdtool" successfully loaded.
+•	plugin_load: plugin "cpu" successfully loaded.
+•	plugin_load: plugin "load" successfully loaded.
+•	plugin_load: plugin "memory" successfully loaded.
+•	pugin_load: plugin "processes" successfully loaded.
+•	plugin_load: plugin "uptime" successfully loaded.
+•	Initialization complete, entering read-loop.
+4.	The RRD files shall be generated in /data/local/collectd folder.
+5.	Step to convert RRD file in Lotus board to XML file
+•	/lib/ld-linux-armhf.so.3 --library-path /lib /bin/rrdtool dump /data/local/collectd/localhost/memory/memory-buffered.rrd > memory-buffered.xml  
+Installation steps of Grafana and dependent packages
+
+Pre-requisites:
+1.	Ubuntu 14.04 or later
+2.	grafana_5.1.3_amd64.deb from http://docs.grafana.org/installation/debian/
+3.	go1.10.3.linux-amd64.tar.gz from https://golang.org/dl/
+4.	librrd-dev (rrdtool)
+5.	grafana-rrd-server_linux_amd64.gz from https://github.com/doublemarket/grafana-rrd-server/releases/tag/v0.0.5
+6.	simple-json-datasource from https://github.com/grafana/simple-json-datasource
+
+Installation steps:
+1.	Download grafana_5.1.3_amd64.deb from http://docs.grafana.org/installation/debian/ and follow the installation steps from this folder to install grafana.
+2.	Download go1.10.3.linux-amd64.tar.gz from https://golang.org/dl/
+3.	Extract go1.10.3.linux-amd64.tar.gz (tar xzvf go1.10.3.linux-amd64.tar.gz)
+4.	Export GOROOT=<path to go1.10.3.linux>
+5.	Export PATH=$PATH:$GOROOT/bin
+6.	sudo apt-get install librrd-dev
+7.	cd /usr/lib/
+8.	Create a symlink between librrd.so.* & librrd.so.8 (sudo ln -s librrd.so.4.2.0 librrd.so.8)
+9.	cd ~
+10.	Download grafana-rrd-server_linux_amd64.gz from https://github.com/doublemarket/grafana-rrd-server/releases/tag/v0.0.5
+11.	Extract grafana-rrd-server_linux_amd64.gz (tar xvf grafana-rrd-server_linux_amd64.gz)
+12.	git clone https://github.com/grafana/simple-json-datasource
+13.	cp -r simple-json-datasource/dist /usr/share/grafana/public/app/plugins/datasource
+14.	cd /usr/local/share/grafana/public/app/plugins/datasource
+15.	mv dist grafana-simple-json-datasource
+
+Steps for running grafana and plotting graph of RRD files
+1.	In target board convert all the RRD files to XML format
+•	/lib/ld-linux-armhf.so.3 --library-path /lib /bin/rrdtool dump filename.rrd > filename.xml
+2.	Copy all these xml files to /data/local/collectd/xml_files/
+3.	Copy all the xml files from the target board to Linux PC using adb pull command.
+•	adb pull /data/local/collectd/xml_files/ /home/gdcuser/pratheesh/collectdport/rrd_files/
+4.	cd /home/gdcuser/pratheesh/collectdport/rrd_files
+5.	Convert the all XML files back to RRD files (in order to solve the architecture specific dependency).
+•	rrdtool restore –f filename.xml filename.rrd
+6.	Run grafana and grafana-rrd-server
+•	sudo service grafana-server start
+•	./grafana-rrd-server_linux_amd64 –p 9000 –i “127.0.0.1” –r “/home/gdcuser/pratheesh/collectdport/rrd_files”
+7.	Open garfana web application by typing http://127.0.0.1:3000 in a web browser
+8.	Username: admin Password: admin
+9.	Create a new data source with SimpleJason. (refer http://docs.grafana.org/features/datasources/)
+•	Give the name as collectd-ds
+•	Select the type as SimpleJason
+•	Give the url as http://127.0.0.1:9000
+10.	Save this data source
+11.	Create a new dashboard for plotting the graph of RRD files of cpu, memory, load, etc. (Refer http://docs.grafana.org/guides/getting_started/). In metrics tab,
+•	Select the data source collectd-ds
+•	Using ‘add query’ add the required RRD files to be plotted.
+12.	Save all these dash boards
+13.	The graph of all the RRD files can be viewed by clicking the dashboards and selecting the time frame and refreshing it. The graph can be plotted w.r.to. time, histogram, bars etc.
+
+
+References:
+1.	https://collectd.org/
+2.	https://grafana.com/
+3.	http://docs.grafana.org/guides/getting_started/
+4.	https://github.com/doublemarket/grafana-rrd-server
+5.	https://qiita.com/atfujiwara/items/58cda0dbe44b1e03ac7f
+6.	https://golang.org/doc/install
+7.	https://www.safaribooksonline.com/library/view/learning-apache-apex/9781788296403/e3c0e200-393a-4bc5-a8bf-8cbc20bf81de.xhtml
+8.	https://github.com/doublemarket/grafana-rrd-server/issues/44
+
+
+
+
+
+1.	Step to run collectd on Lotus board
+a.	Set the date (date -D SET MMDDHHMMYYYY.SS) and timezone.
+b.	/lib/ld-linux-armhf.so.3 --library-path /lib /bin/collectd -C /etc/lotus/collectd/collectd_from_GE.conf
+2.	Step to convert RRD file in Lotus board to XML file (to be executed on Lotus board)
+a.	/data/local/tmp/rrdtool dump filename.rrd > filename.xml
+b.	eg: /lib/ld-linux-armhf.so.3 --library-path /lib /bin/rrdtool dump /data/local/collectd/localhost/memory/memory-buffered.rrd > memory-buffered.xml
+3.	Step to restore the RRD file (to be executed on x86 PC)
+a.	rrdtool restore –f filename.xml filename.rrd
+
+
+
+
+ /lib/ld-linux-armhf.so.3 --library-path /lib /bin/collectd -C /etc/lotus/collectd/collectd_from_GE.conf 
