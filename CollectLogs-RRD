@@ -102,6 +102,9 @@ Running collectd and rrdtool on Lotus board.
 Pre-requisites:
 1.	Lotus board running Oreo + libc libraries.
 
+/data/local/collectd/localhost/cpu-0/ 
+/data/local/collectd/localhost/cpu-1/ 
+
 Installation steps:
 1.	Set date and timezone
 •	date -D SET 070210302018.00 (MMDDHHMMYYYY.SS)
