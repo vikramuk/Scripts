@@ -1,0 +1,1023 @@
+login as: ubuntu
+ubuntu@10.177.219.151's password:
+Welcome to Ubuntu 14.04.5 LTS (GNU/Linux 4.2.0-27-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com/
+
+
+WARNING: Security updates for your current Hardware Enablement Stack
+ended on 2016-08-04:
+ * http://wiki.ubuntu.com/1404_HWE_EOL
+
+There is a graphics stack installed on this system. An upgrade to a
+configuration supported for the full lifetime of the LTS will become
+available on 2016-07-21 and can be installed by running 'update-manager'
+in the Dash.
+
+Last login: Mon Jul  2 17:25:47 2018 from 3.204.22.170
+ubuntu@ubuntu-virtual-machine:~$ date
+Tue Jul  3 09:40:43 IST 2018
+ubuntu@ubuntu-virtual-machine:~$ date
+Tue Jul  3 09:59:50 IST 2018
+ubuntu@ubuntu-virtual-machine:~$ history
+ 1001  git checkout -b lotus-8.0.0
+ 1002  git branch
+ 1003  git push timesys-proprietary lotus-8.0.0
+ 1004  cd ../..
+ 1005  cd system/core
+ 1006  git log
+ 1007  git branch
+ 1008  git status
+ 1009  git diff rootdir/init.rc
+ 1010  vim init.rc
+ 1011  git status
+ 1012  git log
+ 1013  git branch
+ 1014  git log
+ 1015  cd rootdir
+ 1016  git checkout init.rc
+ 1017  vim init.rc
+ 1018  git diff
+ 1019  git status
+ 1020  git add init.rc
+ 1021  git commit -m "removed launching of pdm"
+ 1022  git log
+ 1023  git push
+ 1024  cd TIMESYS_OREO/
+ 1025  ls
+ 1026  cd device/ge
+ 1027  ls
+ 1028  cd lotus/
+ 1029  cd tools/
+ 1030  ls
+ 1031  cd ../../../
+ 1032  cd ..
+ 1033  cd vendor/nxp
+ 1034  ls
+ 1035  cd fsl-codec/
+ 1036  cd ghdr/
+ 1037  ls
+ 1038  cd common/
+ 1039  ls
+ 1040  cd ../../
+ 1041  ls
+ 1042  ls -a
+ 1043  cd ..
+ 1044  ls -a
+ 1045  cd ..
+ 1046  ls -a
+ 1047  cd -
+ 1048  ls
+ 1049  git status
+ 1050  cd fsl-codec/
+ 1051  git status
+ 1052  ls
+ 1053  cd ..
+ 1054  ls
+ 1055  cd ..
+ 1056  cd .repo
+ 1057  ls
+ 1058  vim manifest.xml
+ 1059  cd TIMESYS_OREO/
+ 1060  ls
+ 1061  cd vendor/
+ 1062  ls
+ 1063  cd nxp
+ 1064  ls
+ 1065  vi ../../.repo/manifest.xml
+ 1066  ls
+ 1067  cd ~/.ssh/
+ 1068  vim config
+ 1069  cd TIMESYS_OREO/
+ 1070  cat buildscript.sh
+ 1071  export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+ 1072  export PATH=$JAVA_HOME/bin:$PATH
+ 1073  . build/envsetup.sh
+ 1074  lunch 36
+ 1075  make PROPRIETARY=TRUE -j8 2>&1 | tee build_log.txt
+ 1076  cd TIMESYS_OREO/
+ 1077  ls
+ 1078  cd system/core/rootdir/
+ 1079  ls
+ 1080  vim init.rc
+ 1081  cd TIMESYS_OREO/
+ 1082  ls
+ 1083  cd vendor/
+ 1084  ls
+ 1085  cd ge
+ 1086  ls
+ 1087  cd proprietary/
+ 1088  ls
+ 1089  vim proprietary_config.mk
+ 1090  cd ../..
+ 1091  cd ..
+ 1092  ./buildscript.sh
+ 1093  history|grep "repo init"
+ 1094  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1095  ssh-add -l
+ 1096  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1097  git add ~/.ssh/gitswarm.git
+ 1098  ssh-add ~/.ssh/gitswarm.git
+ 1099  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1100  cd ~/.ssh/
+ 1101  ll
+ 1102  chmod 600 gitswarm.git sriram_oreo_id_rsa.git
+ 1103  ll
+ 1104  chmod 600 gitswarm.git
+ 1105  ll
+ 1106  cd -
+ 1107  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1108  ls -l ~/.ssh/
+ 1109  ls ~|grep ssh
+ 1110  ls -a ~|grep ssh
+ 1111  ls -la ~|grep ssh
+ 1112  vi ~/.ssh/config
+ 1113  ll  ~/.ssh/gitswarm.git
+ 1114  vi ~/.ssh/config
+ 1115  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1116  vi ~/.ssh/config
+ 1117  repo init -u ssh://git@10.229.164.227/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1118  ssh-add -l
+ 1119  vi ~/.bashrc
+ 1120  ssh-add -D
+ 1121  ssh-add -l
+ 1122  vim ~/.bashrc
+ 1123  vim ~/.ssh/config
+ 1124  ps -ef|grep ssh-agent
+ 1125  ps -ef|grep ssh-agent|grep ubuntu
+ 1126  ps -ef|grep ssh-agent|grep ubuntu|tr -s " " " " |cut -d" " -f2
+ 1127  sudo ps -ef|grep ssh-agent|grep ubuntu|tr -s " " " " |cut -d" " -f2|xargs kill -9
+ 1128  ssh-add -l
+ 1129  ps -ef|grep ssh-agent
+ 1130  ssh-add -k
+ 1131  ssh-add -K
+ 1132  ssh-add -l
+ 1133  ssh-add -e pkcs11
+ 1134  ls
+ 1135  sudo kill -9
+ 1136  sudo kill -9 17288
+ 1137  ps -ef|grep ssh-agent
+ 1138  ssh-add -
+ 1139  ssh-add -l
+ 1140  ssh-add -L
+ 1141  ssh-add -X
+ 1142  eval `ssh-agent -s`
+ 1143  ssh-add ~/.ssh/gitswarm.git~
+ 1144  ssh-add ~/.ssh/gitswarm.git
+ 1145  repo init -u ssh://git@10.229.164.227/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1146  cd ~/.ssh/
+ 1147  ssh-keygen -t rsa
+ 1148  ls
+ 1149  ll
+ 1150  vi config
+ 1151  ls
+ 1152  cd ~/GITSWARM_OREO/
+ 1153  ssh-add ~/.ssh/gitswarm
+ 1154  repo init -u ssh://git@10.229.164.227/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1155  cd ~/.ssh/
+ 1156  ls -al
+ 1157  su
+ 1158  ls -l /home/|grep ubuntu
+ 1159  groups
+ 1160  ls -a ..|grep ssh
+ 1161  ls -l -a ..|grep ssh
+ 1162  ll
+ 1163  ssh -l
+ 1164  ssh-add -l
+ 1165  ssh-add -L
+ 1166  chmod 700 /home/ubuntu/
+ 1167  cd -
+ 1168  repo init -u ssh://git@10.229.164.227/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1169  ssh-add -d /home/ubuntu/.ssh/gitswarm.git
+ 1170  ssh-add -l
+ 1171  repo init -u ssh://git@10.229.164.227/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1172  ls -l ~/.ssh/
+ 1173  vi ~/.ssh/config
+ 1174  repo init -u ssh://git@10.229.164.227/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1175  vi ~/.ssh/config
+ 1176  repo init -u ssh://git@10.229.164.227/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1177  vi ~/.ssh/config
+ 1178  sudo reboot
+ 1179  cd GITSWARM_OREO/
+ 1180  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1181  eval 'ssh-agent -s'
+ 1182  ssh-add ~/.ssh/gitswarm.git
+ 1183  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1184  vim ~/.ssh/config
+ 1185  ssh-add ~/.ssh/gitswarm.git
+ 1186  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1187  vim ~/.gitconfig
+ 1188  vim ~/.ssh/config
+ 1189  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1190  eval 'ssh-agent -s'
+ 1191  ssh-add ~/.ssh/gitswarm.git
+ 1192  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1193  vim ~/.ssh/config
+ 1194  vim ~/.gitconfig
+ 1195  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1196  rm -rf .repo/
+ 1197  sudo vi /etc/ssh/sshd_config
+ 1198  su
+ 1199  su -
+ 1200  sudo vi /etc/ssh/sshd_config
+ 1201  ssh -i ~/.ssh/gitswarm.git root@localhost
+ 1202  ps -ef|grep sshd
+ 1203  id
+ 1204  sudo vi /etc/ssh/sshd_config
+ 1205  ssh -i ~/.ssh/gitswarm.git root@localhost
+ 1206  sudo vi /etc/ssh/sshd_config
+ 1207  ssh -i ~/.ssh/gitswarm.git root@localhost
+ 1208  ssh-add -l
+ 1209  ps -ef|grep ssh-agent
+ 1210  ps -ef|grep sshd
+ 1211  ls
+ 1212  ls -a
+ 1213  pwd
+ 1214  ls
+ 1215  ps -ef|grep sshd
+ 1216  ps -ef|grep sshd|grep ubuntu
+ 1217  groups
+ 1218  sudo vi /etc/ssh/sshd_config
+ 1219  sudo /etc/init.d/sshd restart
+ 1220  which sshd
+ 1221  sudo systemctl reload sshd.service
+ 1222  sudo service ssh restart
+ 1223  ps -ef|grep sshd
+ 1224  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1225  ps -ef|grep sshd|grep ubuntu
+ 1226  ps -ef|grep sshd|grep ubuntu|tr -s " " ""
+ 1227  ps -ef|grep sshd|grep ubuntu|tr -s " " " "
+ 1228  ps -ef|grep sshd|grep ubuntu|tr -s " " " " |cut -d -f2
+ 1229  ps -ef|grep sshd|grep ubuntu|tr -s " " " " |cut -d" "  -f2
+ 1230  sudo ps -ef|grep sshd|grep ubuntu|tr -s " " " " |cut -d" "  -f2|xargs kill -9
+ 1231  ps -ef|grep sshd|grep ubuntu|tr -s " " " " |cut -d" "  -f2
+ 1232  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1233  ssh-add -l
+ 1234  ssh-add -d 7b:30:f9:7d:10:1f:8a:99:93:b8:3b:ca:bd:61:73:09
+ 1235  ssh-add -l
+ 1236  ssh-add -d sunil.michael@ge.com
+ 1237  ssh-add -d /home/ubuntu/.ssh/gitswarm_oreo_rsa.git
+ 1238  ssh-add -l
+ 1239  ssh-add -D /home/ubuntu/.ssh/gitswarm_oreo_rsa.git
+ 1240  ssh-add -l
+ 1241  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1242  cd ~/.ssh/
+ 1243  ls
+ 1244  cat config |grep .ssh
+ 1245  rm id_rsa*
+ 1246  rm id_rsa_ge
+ 1247  rm id_rsa_ge*
+ 1248  rm gitswarm_oreo_rsa.git
+ 1249  rm gitswarm_oreo_rsa.git.pub
+ 1250  ls
+ 1251  cd -
+ 1252  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1253  ssh-add ~/.ssh/gitswarm.git
+ 1254  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1255  vi ~/.ssh/config
+ 1256  ssh-add -l
+ 1257  vi ~/.ssh/config
+ 1258  ls ~/.ssh/
+ 1259  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1260  ssh-add -d /home/ubuntu/.ssh/gitswarm.git
+ 1261  eval `ssh-agent -s`
+ 1262  ssh-add ~/.ssh/gitswarm.git
+ 1263  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1264  vi ~/.ssh/config
+ 1265  vi ~/.gitconfig
+ 1266  ls
+ 1267  mkdir GITSWARM_OREO
+ 1268  cd GITSWARM_OREO/
+ 1269  ssh-keygen -t rsa -b 2048 -C 'Git Access' -f ~/.ssh/gitswarm_oreo_rsa.git
+ 1270  vim ~/.ssh/config
+ 1271  eval 'ssh-agent -s'
+ 1272  ssh-add ~/.ssh/gitswarm_oreo_rsa.git
+ 1273  vim ~/.gitconfig
+ 1274  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1275  vim ~/.ssh/config
+ 1276  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1277  vim ~/.ssh/config
+ 1278  cat ~/.ssh/config
+ 1279  ssh-add ~/.ssh/gitswarm_oreo_rsa.git
+ 1280  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1281  ssh-add -l
+ 1282  ls
+ 1283  rm -rf .repo/
+ 1284  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1285  vi ~/.ssh/config
+ 1286  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1287  repo init -u ssh://git@10.229.164.227/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1288  ls
+ 1289  cd .repo/.ssh
+ 1290  cd ~/.ssh
+ 1291  ls
+ 1292  cat sriram_oreo_id_rsa.git.pub
+ 1293  ssh-keygen -t gitswarm
+ 1294  ssh-keygen -t rsa gitswarm
+ 1295  ls
+ 1296  ssh-keygen -t rsa -f gitswarm.git
+ 1297  ls
+ 1298  cd ../GITSWARM_OREO/
+ 1299  repo init -u ssh://git@10.229.164.227/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1300  eval 'ssh-agent -s'
+ 1301  ssh-add ~/.ssh/gitswarm.git
+ 1302  repo init -u ssh://git@10.229.164.227/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1303  vim ~/.ssh/config
+ 1304  repo init -u ssh://git@10.229.164.227/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1305  vim ~/.ssh/config
+ 1306  repo init -u ssh://git@10.229.164.227/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1307  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1308  cd  GITSWARM_OREO/
+ 1309  ls
+ 1310  ssh-add -l
+ 1311  ssh-add -L
+ 1312  ssh-add ~/.ssh/gitswarm
+ 1313  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1314  ls ~/.ssh/
+ 1315  ssh-add ~/.ssh/sriram_oreo_id_rsa.git
+ 1316  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1317  cd .repo/
+ 1318  git config -l
+ 1319  cd manifests.git/
+ 1320  git config -l
+ 1321  cd
+ 1322  git clone ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest
+ 1323  ps -ef|grep ssh-agent
+ 1324  ssh-add -l
+ 1325  sudo reboot
+ 1326  cd GITSWARM_OREO/
+ 1327  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1328  cd ~/.ssh/
+ 1329  ls
+ 1330  rm gitswarm*
+ 1331  ls
+ 1332  ssh-keygen -t rsa -b 2048 -C 'Git swarm' -f ~/.ssh/gitswarm
+ 1333  ls
+ 1334  eval 'ssh-agent -s'
+ 1335  ssh-add ~/.ssh/gitswarm
+ 1336  vim ~/.ssh/config
+ 1337  cd ../GITSWARM_OREO/
+ 1338  ssh-add ~/.ssh/gitswarm
+ 1339  sudo eval 'ssh-agent'
+ 1340  eval 'ssh-agent'
+ 1341  ssh-add ~/.ssh/gitswarm
+ 1342  exec ssh-agent bash
+ 1343  ssh-add ~/.ssh/gitswarm
+ 1344  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1345  rm -rf .repo/
+ 1346  repo init -u ssh://git@gitswarm-gxp.cloud.health.ge.com/CCSMICLOTUS/lotus-oreo-manifest -b LOTUS_MAIN_DEV -m lotus-o8.0.0_1.0.0_ga.xml
+ 1347  repo sync -c -q -j8
+ 1348  vim ~/.ssh/config
+ 1349  ssh-add ~/.ssh/gitswarm
+ 1350  clear
+ 1351  repo sync
+ 1352  vim ~/.ssh/config
+ 1353  ssh-add ~/.ssh/gitswarm
+ 1354  repo sync
+ 1355  vim ~/.ssh/config
+ 1356  cd ../TIMESYS_OREO/
+ 1357  repo sync
+ 1358  Fetching project platform/prebuilts/deqp
+ 1359  clear
+ 1360  repo sync
+ 1361  vi .repo/manifests/aosp-O8.0.0-1.0.0.xml
+ 1362  repo sync "external/giflib"
+ 1363  cd ../GITSWARM_OREO/
+ 1364  repo sync
+ 1365  repo sync -c -q -j8
+ 1366  cd TIMESYS_OREO/
+ 1367  ls
+ 1368  cd device/ge
+ 1369  ls
+ 1370  dc lotus
+ 1371  cd lotus
+ 1372  ls
+ 1373  vi BoardConfig.mk
+ 1374  cd ..
+ 1375  ./buildscript.sh
+ 1376  cd TIMESYS_OREO/
+ 1377  cd device/ge
+ 1378  ls
+ 1379  git status
+ 1380  git diff
+ 1381  cd ../..
+ 1382  repo sync -c -q -j8
+ 1383  cd system/core
+ 1384  git status
+ 1385  cd rootdir/init.rc
+ 1386  git diff rootdir/init.rc
+ 1387  cd ../..
+ 1388  source buildscript.sh
+ 1389  cd ..
+ 1390  cd GITSWARM_OREO/
+ 1391  repo sync -c -q -j8
+ 1392  eval 'ssh-agent -s'
+ 1393  cat ~/.ssh/config
+ 1394  ssh-add ~/.ssh/gitswarm
+ 1395  ssh-add ~/.ssh/sriram_oreo_id_rsa.git
+ 1396  vi ~/.gitconfig
+ 1397  repo sync -c -q -j8
+ 1398  cd external/
+ 1399  ls
+ 1400  cd pdm
+ 1401  ls
+ 1402  cd ..
+ 1403  cd .repo/
+ 1404  vi manifest.xml
+ 1405  cd ../../TIMESYS_OREO/
+ 1406  ls
+ 1407  cd frameworks/base/
+ 1408  cd GITSWARM_OREO/
+ 1409  cd vendor/ge
+ 1410  git remote -v
+ 1411  cd proprietary/
+ 1412  git remote -v
+ 1413  ls
+ 1414  cd pdm
+ 1415  ls
+ 1416  git log
+ 1417  git status
+ 1418  git branch
+ 1419  git checkout LOTUS_MAIN_DEV
+ 1420  git branch
+ 1421  git status
+ 1422  git add emerald_acq
+ 1423  git commit -m "Replaced emerald_acq. The new binary picks its dependencies from the new path"
+ 1424  git remote -v
+ 1425  git push GEHCGit LOTUS_MAIN_DEV
+ 1426  eval 'ssh-agent -s'
+ 1427  ssh-add ~/.ssh/gitswarm
+ 1428  vi ~/.gitconfig
+ 1429  ssh-add ~/.ssh/gitswarm
+ 1430  vi ~/.ssh/config
+ 1431  vi ~/.gitconfig
+ 1432  ssh-add ~/.ssh/gitswarm
+ 1433  eval 'ssh-add'
+ 1434  eval 'ssh-agent'
+ 1435  ssh-add ~/.ssh/gitswarm
+ 1436  ssh-add ~/.ssh/sriram_oreo_id_rsa.git
+ 1437  git log
+ 1438  git remote -v
+ 1439  git branch
+ 1440  git checkout -b pathchanged
+ 1441  git push GEHCGit pathchanged:LOTUS_MAIN_DEV
+ 1442  ps |grep ssh-agent
+ 1443  eval 'ssh-agent -s'
+ 1444  ssh-add ~/.ssh/gitswarm
+ 1445  ls -al
+ 1446  cd ~/.ssh/
+ 1447  ls -al
+ 1448  chmod 660 *
+ 1449  ls -al
+ 1450  git remote -v
+ 1451  cd -
+ 1452  git remote -v
+ 1453  ping 10.229.164.227
+ 1454  vi ~/.ssh/config
+ 1455  ping 10.229.164.227
+ 1456  git remote -v
+ 1457  eval 'ssh-agent -s'
+ 1458  ssh-add -l
+ 1459  eval `ssh-agent -s`
+ 1460  ssh-add -l
+ 1461  ssh-add ~/.ssh/gitswarm
+ 1462  git push GEHCGit pathchanged:LOTUS_MAIN_DEV
+ 1463  git remote -v
+ 1464  ping 10.229.164.227
+ 1465  cd ../../..
+ 1466  cd ..
+ 1467  cd .repo/
+ 1468  git log
+ 1469  ls
+ 1470  cd manifests
+ 1471  git log
+ 1472  git remote -v
+ 1473  cd ../..
+ 1474  cd vendor/ge/proprietary/
+ 1475  git remote -v
+ 1476  cd ../../..
+ 1477  eval `ssh-agent -s`
+ 1478  ssh-add ~/.ssh/gitswarm
+ 1479  cd ~/.ssh/
+ 1480  ls
+ 1481  ls -al
+ 1482  chmod 600 *
+ 1483  ssh-add gitswarm
+ 1484  cd ..
+ 1485  cd GITSWARM_OREO/vendor/ge/proprietary/
+ 1486  git remote -v
+ 1487  ping 10.229.164.227
+ 1488  git branch
+ 1489  git push GEHCGit pathchanged:LOTUS_MAIN_DEV
+ 1490  git format-patch -1
+ 1491  cp 0001-Replaced-emerald_acq.-The-new-binary-picks-its-depen.patch ../../../../
+ 1492  cd ../..
+ 1493  cd ge/proprietary/
+ 1494  git pull
+ 1495  git pull GEHCGit
+ 1496  git pull GEHCGit LOTUS_MAIN_DEV
+ 1497  git branch
+ 1498  git log -2
+ 1499  git checkout d3b9566be945ad03a28a6aff0d0a95e63df7a04c
+ 1500  cd ..
+ 1501  rm -rf proprietary
+ 1502  repo sync proprietary
+ 1503  cd proprietary/
+ 1504  git log
+ 1505  git branch
+ 1506  git checkout LOTUS_MAIN_DEV
+ 1507  git am ../../../../0001-Replaced-emerald_acq.-The-new-binary-picks-its-depen.patch
+ 1508  cd pdm/
+ 1509  ls
+ 1510  cd ..
+ 1511  git am --skip
+ 1512  cd pdm
+ 1513  rm emerald_acq
+ 1514  git status
+ 1515  git add emerald_acq
+ 1516  git commit -m "Replace the binary with updated dependencies path"
+ 1517  git push GEHCGit LOTUS_MAIN_DEV:LOTUS_MAIN_DEV
+ 1518  cd ../../..
+ 1519  dc ..
+ 1520  cd ..
+ 1521  cd .repo/
+ 1522  cd manifests
+ 1523  git log
+ 1524  cd ..
+ 1525  repo sync -c -q -j8
+ 1526  eval `ssh-agent -s`
+ 1527  ssh-add ~/.ssh/gitswarm
+ 1528  repo sync -c -q -j8
+ 1529  repo sync -c -q -j8; ./buildscript.sh
+ 1530  cd TIMESYS_OREO/frameworks/base
+ 1531  git status
+ 1532  cd TIMESYS_OREO/
+ 1533  cd system/core
+ 1534  git status
+ 1535  cd logcat/
+ 1536  git log
+ 1537  ls
+ 1538  vi logcat.cpp
+ 1539  cd GITSWARM_OREO/
+ 1540  cd frameworks/base/core/java/android/os/
+ 1541  git status
+ 1542  git checkout storage/StorageManager.java
+ 1543  git status
+ 1544  git checkout storage/StorageManager.java LOTUS_MAIN_DEV
+ 1545  git checkout LOTUS_MAIN_DEV
+ 1546  git status
+ 1547  cd TIMESYS_OREO/
+ 1548  ls
+ 1549  cd frameworks/base/
+ 1550  ls
+ 1551  cd core/java/android/os/storage/
+ 1552  vi StorageManager.java
+ 1553  git status
+ 1554  git diff
+ 1555  cd ../../../
+ 1556  cd ../../../..
+ 1557  source buildscript.sh
+ 1558  make update-api
+ 1559  source buildscript.sh
+ 1560  ls
+ 1561  mkdir PDM_WORKSPACE
+ 1562  cd PDM_WORKSPACE/
+ 1563  git clone git@gitswarm-gxp.cloud.health.ge.com:CCSMICLOTUS/lotus_liblog.git
+ 1564  ls
+ 1565  cd lotus_liblog/
+ 1566  ls
+ 1567  cd ../..
+ 1568  ls lotusliblog/
+ 1569  rm -rf lotusliblog/
+ 1570  sudo rm -rf lotusliblog/
+ 1571  ls -al
+ 1572  cp lotusliblog/* PDM_WORKSPACE/lotus_liblog/
+ 1573  cd PDM_WORKSPACE/lotus_liblog/
+ 1574  ls
+ 1575  cd -
+ 1576  sudo rm -rf lotusliblog/
+ 1577  ls lotuslogger/
+ 1578  ls lotuslogger/lotuslogger/
+ 1579  ls lotuslogger/lotuslogger/tests/
+ 1580  cd PDM_WORKSPACE/lotus_liblog/
+ 1581  ls
+ 1582  mv buildscript.sh ../
+ 1583  mv cleanscript.sh ../
+ 1584  ls -al
+ 1585  git remote -v
+ 1586  git branch LOTUS_MAIN_DEV
+ 1587  ls
+ 1588  ls -al
+ 1589  git add *
+ 1590  git status
+ 1591  git commit -m "Adding lotus liblog source"
+ 1592  git status
+ 1593  git remote -v
+ 1594  git branch
+ 1595  git branch -b LOTUS_MAIN_DEV_V1.0
+ 1596  git checkout -b LOTUS_MAIN_DEV_V1.0
+ 1597  git branch
+ 1598  git push origin LOTUS_MAIN_DEV_V1.0
+ 1599  git log
+ 1600  ls
+ 1601  cd ../..
+ 1602  cd TIMESYS_OREO/
+ 1603  cd system/core
+ 1604  cd ../..
+ 1605  cd frameworks/base
+ 1606  git status
+ 1607  git diff
+ 1608  cd ../..
+ 1609  cat buildscript.sh
+ 1610  export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+ 1611  export PATH=$JAVA_HOME/bin:$PATH
+ 1612  . build/envsetup.sh
+ 1613  lunch sdk-eng
+ 1614  make sdk -j16
+ 1615  cat buildscript.sh
+ 1616  export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+ 1617  export PATH=$JAVA_HOME/bin:$PATH
+ 1618  . build/envsetup.sh
+ 1619  lunch 36
+ 1620  make sdk - j16
+ 1621  make sdk -j16
+ 1622  make sdk
+ 1623  cd frameworks/base
+ 1624  git status
+ 1625  git diff
+ 1626  git status
+ 1627  git add api/current.txt
+ 1628  git add api/system-current.txt
+ 1629  git add api/test-current.txt
+ 1630  git core/java/android/os/storage/StorageManager
+ 1631  git add core/java/android/os/storage/StorageManager
+ 1632  git status
+ 1633  git add core/java/android/os/storage/StorageManager.java
+ 1634  git status
+ 1635  git commit -m "added unmountUsbDisk()"
+ 1636  git remote -v
+ 1637  git branch
+ 1638  git push timesys-proprietary lotus-8.0.0
+ 1639  cd TIMESYS_OREO/
+ 1640  git status
+ 1641  cd system/core
+ 1642  ls
+ 1643  cd ../../
+ 1644  cd ubuntu/
+ 1645  cd TIMESYS_OREO/system/core
+ 1646  git status
+ 1647  git diff liblog/include/log/logprint.h
+ 1648  git diff liblog/logprint.c
+ 1649  git diff logcat/logcat.cpp
+ 1650  git status
+ 1651  git diff logcat/logcat_main.cpp
+ 1652  git status
+ 1653  git diff logd/LogBuffer
+ 1654  git diff logd/LogBuffer.cpp
+ 1655  cd TIMESYS_OREO/
+ 1656  source buildscript.sh
+ 1657  vi build_log.txt
+ 1658  source buildscript.sh
+ 1659  cat build_log.txt
+ 1660  vi build_log.txt
+ 1661  source buildscript.sh
+ 1662  vi build_log.txt
+ 1663  source buildscript.sh
+ 1664  vi build_log.txt
+ 1665  source buildscript.sh
+ 1666  vi build_log.txt
+ 1667  source buildscript.sh
+ 1668  cat build_log.txt
+ 1669  vi build_log.txt
+ 1670  source buildscript.sh
+ 1671  vi build_log.txt
+ 1672  source buildscript.sh
+ 1673  cat build_log.txt
+ 1674  vi build_log.txt
+ 1675  source buildscript.sh
+ 1676  cd GITSWARM_OREO/
+ 1677  ls
+ 1678  cd ..
+ 1679  ls
+ 1680  cd GITSWARM_OREO/
+ 1681  cd ..
+ 1682  mkdir GITSWARM_VENDOR
+ 1683  cd GITSWARM_
+ 1684  cd GITSWARM_VENDOR/
+ 1685  ls
+ 1686  git clone git@gitswarm-gxp.cloud.health.ge.com:CCSMICLOTUS/oreo_vendor_ge_proprietary.git
+ 1687  ls
+ 1688  cd oreo_vendor_ge_proprietary/
+ 1689  ls
+ 1690  cd pdm
+ 1691  cd ls
+ 1692  ls
+ 1693  cd ..
+ 1694  git checkout LOTUS_MAIN_DEV
+ 1695  ls
+ 1696  vi proprietary_config.mk
+ 1697  ls
+ 1698  cd pdm/
+ 1699  ls
+ 1700  vi Android.mk
+ 1701  ls
+ 1702  git rm liblotusliblog.so
+ 1703  cd ..
+ 1704  git status
+ 1705  git diff
+ 1706  git status
+ 1707  git add pdm/Android.mk
+ 1708  git add proprietary_config.mk
+ 1709  git status
+ 1710  git commit -m "removed locally built liblotusliblog.so and modified make files to use CI built liblotuslog.so"
+ 1711  git push origin LOTUS_MAIN_DEV
+ 1712  cd GITSWARM_OREO/
+ 1713  ls
+ 1714  repo sync -c -q -j8
+ 1715  cd frameworks/base
+ 1716  cd ../..
+ 1717  cd device/ge
+ 1718  ls
+ 1719  cd lotus/
+ 1720  l
+ 1721  cd ../../..
+ 1722  cd vendor/ge/
+ 1723  ls
+ 1724  cd ../..
+ 1725  repo sync --force-sync packages/inputmethods/LatinIME
+ 1726  repo sync -c -q -j8
+ 1727  repo sync --force-sync libcore
+ 1728  repo sync -c -q -j8
+ 1729  cd TIMESYS_OREO/
+ 1730  repo sync -c -j8 -q
+ 1731  repo sync --force-sync packages/inputmethods/LatinIME
+ 1732  repo sync -c -j8 -q
+ 1733  repo sync --force-sync libcore
+ 1734  source buildscript.sh
+ 1735  cd TIMESYS_OREO/
+ 1736  ls
+ 1737  cd system/core/logcat/
+ 1738  git status
+ 1739  git diff ../rootdir/init.rc
+ 1740  cd ~/.ssh
+ 1741  ls
+ 1742  vi config
+ 1743  cd ..
+ 1744  cd GITSWARM_OREO/
+ 1745  repo sync -c -q -j8
+ 1746  cd system/core/logcat/
+ 1747  git status
+ 1748  cd ..
+ 1749  ls
+ 1750  cd logcat/
+ 1751  ls
+ 1752  vi logcat.cpp
+ 1753  cd ../..
+ 1754  cd ..
+ 1755  ls
+ 1756  repo sync -c -q -j8 --force-sync
+ 1757  vi ~/.ssh/config
+ 1758  repo sync -c -q -j8 --force-sync
+ 1759  eval `ssh-agent -s`
+ 1760  ssh-add ~/.ssh/gitswarm
+ 1761  repo sync -c -q -j8 --force-sync
+ 1762  ls
+ 1763  source buildscript.sh
+ 1764  cd TIMESYS_OREO/
+ 1765  ls
+ 1766  cd frameworks/base/
+ 1767  git status
+ 1768  cd ../..
+ 1769  repo sync -c -q -j8
+ 1770  repo sync -c -q -j8 --force-sync
+ 1771  cd system/core
+ 1772  git status
+ 1773  git diff
+ 1774  ls
+ 1775  git status
+ 1776  cd ../..
+ 1777  cd system/core
+ 1778  cd ../..
+ 1779  cd ..
+ 1780  mkdir buffering
+ 1781  cp -rf TIMESYS_OREO/system/core/liblog/include/log/logprint.h buffering/
+ 1782  cd buffering/
+ 1783  cp -rf ../TIMESYS_OREO/system/core/liblog/logprint.c .
+ 1784  cp -rf ../TIMESYS_OREO/system/core/logcat/logcat.cpp .
+ 1785  cp -rf ../TIMESYS_OREO/system/core/logcat/logcat_main.cpp .
+ 1786  cp -rf ../TIMESYS_OREO/system/core/logd/LogBuffer.cpp .
+ 1787  cp -rf ../TIMESYS_OREO/system/core/rootdir/init.rc .
+ 1788  mkdir liblog
+ 1789  mkdir logcat
+ 1790  mkdir logd
+ 1791  mkdir rootdir
+ 1792  mv logprint.c liblog/
+ 1793  mv logprint.h liblog/
+ 1794  mv logcat.cpp logcat/
+ 1795  mv logcat_main.cpp  logcat/
+ 1796  mv LogBuffer.cpp logd/
+ 1797  mv init.rc rootdir/
+ 1798  ls
+ 1799  cd ..
+ 1800  cd TIMESYS_OREO/
+ 1801  repo sync -c -q -j8 --force-sync
+ 1802  cd device/ge
+ 1803  git checkout lotus-8.0.0
+ 1804  git checkout lotus/BoardConfig.mk
+ 1805  cd ../../system/core/
+ 1806  git checkout lotus-8.0.0
+ 1807  git checkout liblog/include/log/logprint.h
+ 1808  git checkout liblog/logprint.c
+ 1809  git checkout logcat/logcat.cpp
+ 1810  git checkout logcat/logcat_main.cpp
+ 1811  git checkout logd/LogBuffer.cpp
+ 1812  git checkout rootdir/init.rc
+ 1813  cd ../..
+ 1814  repo sync -c -q -j8 --force-sync
+ 1815  cd system/core/
+ 1816  mv ../../../buffering/liblog/logprint.c liblog/logprint.c
+ 1817  mv ../../../buffering/liblog/logprint.h liblog/include/log/logprint.h
+ 1818  mv ../../../buffering/logcat/logcat.cpp logcat/logcat.cpp
+ 1819  mv ../../../buffering/logcat/logcat_main.cpp logcat/logcat_main.cpp
+ 1820  mv ../../../buffering/logd/LogBuffer.cpp logd/LogBuffer.cpp
+ 1821  cd ../..
+ 1822  cd -
+ 1823  git status
+ 1824  cd ../..
+ 1825  cd frameworks/base/
+ 1826  git status
+ 1827  git diff
+ 1828  cd ../..
+ 1829  source buildscript.sh; make update-api; source buildscript.sh
+ 1830  vi build_log.txt
+ 1831  source buildscript.sh; make update-api; source buildscript.sh
+ 1832  cd TIMESYS_OREO/
+ 1833  source buildscript.sh
+ 1834  vi build_log.txt
+ 1835  cd system/core/
+ 1836  git status
+ 1837  cd ..
+ 1838  source buildscript.sh
+ 1839  vi build_log.txt
+ 1840  source buildscript.sh
+ 1841  vi build_log.txt
+ 1842  cd systm/core/liblog
+ 1843  cd system/core/liblog/
+ 1844  ls
+ 1845  mm -B
+ 1846  cd ../
+ 1847  cd logcat/
+ 1848  mm -B
+ 1849  cd ../..
+ 1850  cd ..
+ 1851  source buildscript.sh
+ 1852  vi build_log.txt
+ 1853  cd system/core/logcat/
+ 1854  ls
+ 1855  vi Android.mk
+ 1856  mm -B
+ 1857  cd ../liblog/
+ 1858  mm -B
+ 1859  cd ../logcat/
+ 1860  mm -B -v
+ 1861  mm -B
+ 1862  mm -v
+ 1863  mm -B
+ 1864  cd ../..
+ 1865  cd ..
+ 1866  source buildscript.sh
+ 1867  cat buildscript.sh
+ 1868  . build/envsetup.sh
+ 1869  lunch
+ 1870  cat buildscript.sh
+ 1871  make sdk -j16 2>&1 | tee sdk_build_log.txt
+ 1872  cd TIMESYS_OREO/
+ 1873  ls
+ 1874  cd vendor/
+ 1875  cd ge
+ 1876  ls
+ 1877  cp -rf ../../../../sriram/WORKING_DIRECTORY/system/core/shutdownscript .
+ 1878  ls
+ 1879  cd shutdownscript/
+ 1880  ls
+ 1881  vi Android.mk
+ 1882  vi shutdownscript.c
+ 1883  mm -B
+ 1884  cd ../../..
+ 1885  cat buildscript.sh
+ 1886  export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+ 1887  export PATH=$JAVA_HOME/bin:$PATH
+ 1888  . build/envsetup.sh
+ 1889  lunch 36
+ 1890  cd vendor/ge/shutdownscript/
+ 1891  mm -B
+ 1892  ls
+ 1893  vi Android.mk
+ 1894  cd ..
+ 1895  ls
+ 1896  cd opensource/
+ 1897  ls
+ 1898  vi opensource_config.mk
+ 1899  cd ../shutdownscript/
+ 1900  git remote -v
+ 1901  cd ..
+ 1902  ls
+ 1903  git remote -v
+ 1904  cd ../../..
+ 1905  cd GITSWARM_
+ 1906  cd GITSWARM_OREO/
+ 1907  ls
+ 1908  cd vendor/
+ 1909  git remote -v
+ 1910  ls
+ 1911  cd ge
+ 1912  ls
+ 1913  git remote -v
+ 1914  cd apps/
+ 1915  git remote -v
+ 1916  cd ..
+ 1917  cd opensource/
+ 1918  ls
+ 1919  git remote -v
+ 1920  ls
+ 1921  cd ../../..
+ 1922  cd ../
+ 1923  cd TIMESYS_OREO/
+ 1924  ls
+ 1925  cd vendor/
+ 1926  cd ge/shutdownscript/
+ 1927  ls
+ 1928  mm -B
+ 1929  cd ../../
+ 1930  cd ..
+ 1931  cd device/ge
+ 1932  ls
+ 1933  cd lotus/
+ 1934  ls
+ 1935  vi lotus.mk
+ 1936  cd ../..
+ 1937  cd ..
+ 1938  source buildscript.sh
+ 1939  cd vendor/ge/shutdownscript/
+ 1940  ls
+ 1941  cat Android.mk
+ 1942  cd ../../..
+ 1943  source buildscript.sh
+ 1944  cat vendor/ge/shutdownscript/Android.mk
+ 1945  source buildscript.sh
+ 1946  cat buildscript.sh
+ 1947  . build/envsetup.sh
+ 1948  lunch 36
+ 1949  cd vendor/ge/shutdownscript/
+ 1950  mm -B
+ 1951  cd ../
+ 1952  ls
+ 1953  cd opensource/
+ 1954  ls
+ 1955  cat opensource_config.mk
+ 1956  cd ..
+ 1957  ls
+ 1958  cd shutdownscript/
+ 1959  ls
+ 1960  mm -B
+ 1961  cat Android.mk
+ 1962  vi Android.mk
+ 1963  mm -B
+ 1964  cd ../../..
+ 1965  source buildscript.sh
+ 1966  echo $TARGET_OUT_VENDOR_EXECUTABLE
+ 1967  echo $TARGET_OUT_VENDOR_EXECUTABLES
+ 1968  export
+ 1969  cd vendor/ge/shutdownscript/
+ 1970  mm -B
+ 1971  cd ..
+ 1972  cd shutdownscript/
+ 1973  cd ../../..
+ 1974  source buildscript.sh
+ 1975  make showcommands
+ 1976  cd vendor/ge/
+ 1977  ls
+ 1978  cd shutdownscript/
+ 1979  mm -B
+ 1980  cd ../../.
+ 1981  cd ..
+ 1982  source buildscript.sh
+ 1983  cd vendor/ge/shutdownscript/
+ 1984  mm -B
+ 1985  ls
+ 1986  cp shutdownscript.c shutdownscript
+ 1987  ls
+ 1988  rm shutdownscript.c
+ 1989  ls
+ 1990  mv Android.mk shutdownscript/
+ 1991  vi shutdownscript.mk
+ 1992  mm -B
+ 1993  ls
+ 1994  cd shutdownscript/
+ 1995  mm -B
+ 1996  cd ../../../..
+ 1997  source buildscript.sh
+ 1998  history
+ 1999  date
+ 2000  history
+ubuntu@ubuntu-virtual-machine:~$
