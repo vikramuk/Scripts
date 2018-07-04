@@ -202,3 +202,96 @@ a.	rrdtool restore –f filename.xml filename.rrd
 
 
  /lib/ld-linux-armhf.so.3 --library-path /lib /bin/collectd -C /etc/lotus/collectd/collectd_from_GE.conf 
+
+
+#
+# Config file for collectd(1).
+# Please read collectd.conf(5) for a list of options.
+# http://collectd.org/
+#
+
+##############################################################################
+# Global                                                                     #
+#----------------------------------------------------------------------------#
+# Global settings for the daemon.                                            #
+##############################################################################
+
+Hostname    "localhost"
+FQDNLookup   false
+BaseDir     "/data/local/collectd"
+PIDFile     "/data/local/collectd/collectd.pid"
+PluginDir   "/vendor/bin/pdm/lib"
+TypesDB     "/etc/lotus/collectd/types.db"
+
+##############################################################################
+# Logging                                                                    #
+#----------------------------------------------------------------------------#
+# Plugins which provide logging functions should be loaded first, so log     #
+# messages generated when loading or configuring other plugins can be        #
+# accessed.                                                                  #
+##############################################################################
+
+LoadPlugin syslog
+
+##############################################################################
+# LoadPlugin section                                                         #
+#----------------------------------------------------------------------------#
+# Lines beginning with a single `#' belong to plugins which have been built  #
+# but are disabled by default.                                               #
+#                                                                            #
+# Lines begnning with `##' belong to plugins which have not been built due   #
+# to missing dependencies or because they have been deactivated explicitly.  #
+##############################################################################
+
+# Write statistics to RRD files.
+LoadPlugin rrdtool
+
+#
+# Intervals are as follows:
+#
+#  20s - for faster changing/important info where we want to map so
+#        a small time window
+#
+#  600s - generally for incrementing counts or 'infrequent' events
+#        so that we don't oversample.
+#
+<LoadPlugin cpu>
+  Interval 20
+</LoadPlugin>
+
+<LoadPlugin load>
+  Interval 20
+</LoadPlugin>
+
+<LoadPlugin memory>
+  Interval 600
+</LoadPlugin>
+
+<LoadPlugin processes>
+  Interval 20
+</LoadPlugin>
+
+<LoadPlugin uptime>
+  Interval 600
+</LoadPlugin>
+
+## Plugin configuration
+
+<Plugin cpu>
+  ReportByState = true
+  ReportByCpu = true
+  ValuesPercentage = true
+</Plugin>
+
+<Plugin "rrdtool">
+  CacheTimeout 1200
+  CacheFlush   1200
+</Plugin>
+
+<Plugin "processes">
+  Process "emerald_acq" # PPD only
+  Process "esp"
+  Process "pulseaudio"
+  Process "weston"
+  Process "Xwayland"
+</Plugin>
