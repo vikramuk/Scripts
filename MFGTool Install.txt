@@ -1,0 +1,1584 @@
+:r:hal_sensors_default:s0 tclass=file permissive=1
+type=1400 audit(1530723062.328:14456): avc: denied { read } for pid=11725 comm="top" name="stat" dev=ss=file permissive=1
+ |grep com.ge
+package:/system/app/launcherapp/launcherapp.apk=com.ge.med.mic.launcher
+package:/data/app/com.ge.ppd-2ypCl0ucc2m8NAjYw6Ki8A==/base.apk=com.ge.ppd
+package:/system/app/serviceapp/serviceapp.apk=com.ge.med.mic.service
+package:/system/app/monitoringapp/monitoringapp.apk=com.ge.med.mic.monitoring
+type=1400 audit(1530723066.418:14478): avc: denied { search } for pid=11762 comm="top" name="980" dev8 tclass=dir permissive=1
+lotus:/vendor # type=1400 audit(1530723069.908:14479): avc: denied { getattr } for pid=11794 comm="tol_configstore_default:s0 tclass=dir permissive=1
+type=1400 audit(1530723069.908:14479): avc: denied { getattr } for pid=11794 comm="top" path="/proc/2fault:s0 tclass=dir permissive=1
+type=1400 audit(1530723069.938:14480): avc: denied { search } for pid=11794 comm="top" name="257" dev0 tclass=dir permissive=1
+type=1400 audit(1530723069.938:14480): avc: denied { search } for pid=11794 comm="top" name="257" dev0 tclass=dir permissive=1
+type=1400 audit(1530723069.938:14481): avc: denied { read } for pid=11794 comm="top" name="stat" dev=s=file permissive=1
+type=1400 audit(1530723069.938:14481): avc: denied { read } for pid=11794 comm="top" name="stat" dev=s=file permissive=1
+type=1400 audit(1530723069.938:14482): avc: denied { open } for pid=11794 comm="top" path="/proc/259/t:s0 tclass=file permissive=1
+type=1400 audit(1530723069.938:14482): avc: denied { open } for pid=11794 comm="top" path="/proc/259/t:s0 tclass=file permissive=1
+type=1400 audit(1530723070.118:14483): avc: denied { call } for pid=496 comm="hci_thread" scontext=u:
+type=1400 audit(1530723070.118:14483): avc: denied { call } for pid=496 comm="hci_thread" scontext=u:
+type=1400 audit(1530723082.578:14484): avc: denied { getattr } for pid=11933 comm="top" path="/proc/2ss=dir permissive=1
+type=1400 audit(1530723082.578:14484): avc: denied { getattr } for pid=11933 comm="top" path="/proc/2ss=dir permissive=1
+type=1400 audit(1530723082.598:14485): avc: denied { search } for pid=11933 comm="top" name="256" devpermissive=1
+type=1400 audit(1530723082.598:14485): avc: denied { search } for pid=11933 comm="top" name="256" devpermissive=1
+type=1400 audit(1530723082.598:14486): avc: denied { read } for pid=11933 comm="top" name="stat" dev= tclass=file permissive=1
+type=1400 audit(1530723082.598:14486): avc: denied { read } for pid=11933 comm="top" name="stat" dev= tclass=file permissive=1
+type=1400 audit(1530723082.598:14487): avc: denied { open } for pid=11933 comm="top" path="/proc/257/default:s0 tclass=file permissive=1
+type=1400 audit(1530723082.598:14487): avc: denied { open } for pid=11933 comm="top" path="/proc/257/default:s0 tclass=file permissive=1
+type=1400 audit(1530723082.618:14488): avc: denied { read } for pid=11933 comm="top" name="stat" dev=ssive=1
+audit: audit_lost=6589 audit_rate_limit=20 audit_backlog_limit=64
+audit: rate limit exceeded
+type=1400 audit(1530723087.018:14586): avc: denied { open } for pid=11981 comm="top" path="/proc/279/ile permissive=1
+type=1400 audit(1530723102.388:14587): avc: denied { getattr } for pid=12133 comm="top" path="/proc/2class=dir permissive=1
+type=1400 audit(1530723102.388:14587): avc: denied { getattr } for pid=12133 comm="top" path="/proc/2class=dir permissive=1
+type=1400 audit(1530723102.388:14588): avc: denied { search } for pid=12133 comm="top" name="233" devir permissive=1
+type=1400 audit(1530723102.388:14588): avc: denied { search } for pid=12133 comm="top" name="233" devir permissive=1
+type=1400 audit(1530723102.388:14589): avc: denied { read } for pid=12133 comm="top" name="stat" dev==file permissive=1
+type=1400 audit(1530723102.388:14589): avc: denied { read } for pid=12133 comm="top" name="stat" dev==file permissive=1
+type=1400 audit(1530723102.388:14590): avc: denied { open } for pid=12133 comm="top" path="/proc/234/:s0 tclass=file permissive=1
+type=1400 audit(1530723102.388:14590): avc: denied { open } for pid=12133 comm="top" path="/proc/234/:s0 tclass=file permissive=1
+type=1400 audit(1530723102.388:14591): avc: denied { read } for pid=12133 comm="top" name="stat" dev=s=file permissive=1
+type=1400 audit(1530723102.408:14596): avc: denied { open } for pid=12133 comm="top" path="/proc/284/tclass=file permissive=1
+audit: audit_lost=6654 audit_rate_limit=20 audit_backlog_limit=64
+audit: rate limit exceeded
+type=1400 audit(1530723115.808:14597): avc: denied { search } for pid=1278 comm="_ServicePT" name="23missive=1
+type=1400 audit(1530723115.808:14597): avc: denied { search } for pid=1278 comm="_ServicePT" name="23missive=1
+type=1400 audit(1530723115.838:14598): avc: denied { read } for pid=1278 comm="_ServicePT" name="statpermissive=1
+type=1400 audit(1530723115.838:14598): avc: denied { read } for pid=1278 comm="_ServicePT" name="statpermissive=1
+type=1400 audit(1530723115.838:14599): avc: denied { open } for pid=1278 comm="_ServicePT" path="/prolass=file permissive=1
+type=1400 audit(1530723115.838:14599): avc: denied { open } for pid=1278 comm="_ServicePT" path="/prolass=file permissive=1
+type=1400 audit(1530723115.838:14600): avc: denied { search } for pid=1278 comm="_ServicePT" name="23permissive=1
+type=1400 audit(1530723115.838:14600): avc: denied { search } for pid=1278 comm="_ServicePT" name="23permissive=1
+type=1400 audit(1530723115.838:14601): avc: denied { read } for pid=1278 comm="_ServicePT" name="stat permissive=1
+type=1400 audit(1530723120.158:14646): avc: denied { open } for pid=12313 comm="top" path="/proc/232/ile permissive=1
+type=1400 audit(1530723122.378:14647): avc: denied { getattr } for pid=12335 comm="top" path="/proc/2permissive=1
+type=1400 audit(1530723122.378:14647): avc: denied { getattr } for pid=12335 comm="top" path="/proc/2permissive=1
+type=1400 audit(1530723122.408:14648): avc: denied { search } for pid=12335 comm="top" name="232" devive=1
+type=1400 audit(1530723122.408:14648): avc: denied { search } for pid=12335 comm="top" name="232" devive=1
+type=1400 audit(1530723145.718:14649): avc: denied { search } for pid=1278 comm="_ServicePT" name="1"
+type=1400 audit(1530723145.718:14649): avc: denied { search } for pid=1278 comm="_ServicePT" name="1"
+type=1400 audit(1530723145.748:14650): avc: denied { read } for pid=1278 comm="_ServicePT" name="stat
+type=1400 audit(1530723145.748:14650): avc: denied { read } for pid=1278 comm="_ServicePT" name="stat
+type=1400 audit(1530723145.748:14651): avc: denied { open } for pid=1278 comm="_ServicePT" path="/proissive=1
+type=1400 audit(1530723145.748:14651): avc: denied { open } for pid=1278 comm="_ServicePT" path="/proissive=1
+type=1400 audit(1530723145.768:14652): avc: denied { search } for pid=1278 comm="_ServicePT" name="21ve=1
+type=1400 audit(1530723145.768:14652): avc: denied { search } for pid=1278 comm="_ServicePT" name="21ve=1
+type=1400 audit(1530723145.778:14653): avc: denied { read } for pid=1278 comm="_ServicePT" name="stative=1
+type=1400 audit(1530723145.968:14665): avc: denied { open } for pid=12565 comm="top" path="/proc/210/ass=file permissive=1
+type=1400 audit(1530723158.068:14666): avc: denied { getattr } for pid=12691 comm="top" path="/proc/3ss=dir permissive=1
+type=1400 audit(1530723158.068:14666): avc: denied { getattr } for pid=12691 comm="top" path="/proc/3ss=dir permissive=1
+type=1400 audit(1530723158.068:14667): avc: denied { search } for pid=12691 comm="top" name="312" devpermissive=1
+type=1400 audit(1530723158.068:14667): avc: denied { search } for pid=12691 comm="top" name="312" devpermissive=1
+type=1400 audit(1530723158.068:14668): avc: denied { read } for pid=12691 comm="top" name="stat" dev=permissive=1
+type=1400 audit(1530723158.068:14668): avc: denied { read } for pid=12691 comm="top" name="stat" dev=permissive=1
+type=1400 audit(1530723158.068:14669): avc: denied { open } for pid=12691 comm="top" path="/proc/312/lass=file permissive=1
+type=1400 audit(1530723158.068:14669): avc: denied { open } for pid=12691 comm="top" path="/proc/312/lass=file permissive=1
+type=1400 audit(1530723158.498:14670): avc: denied { getattr } for pid=12691 comm="top" path="/proc/3ss=dir permissive=1
+type=1400 audit(1530723158.498:14671): avc: denied { search } for pid=12691 comm="top" name="304" devpermissive=1
+type=1400 audit(1530723175.928:14672): avc: denied { search } for pid=1278 comm="_ServicePT" name="30
+type=1400 audit(1530723175.928:14672): avc: denied { search } for pid=1278 comm="_ServicePT" name="30
+type=1400 audit(1530723175.968:14673): avc: denied { read } for pid=1278 comm="_ServicePT" name="statssive=1
+type=1400 audit(1530723175.968:14673): avc: denied { read } for pid=1278 comm="_ServicePT" name="statssive=1
+type=1400 audit(1530723175.968:14674): avc: denied { open } for pid=1278 comm="_ServicePT" path="/profile permissive=1
+type=1400 audit(1530723175.968:14674): avc: denied { open } for pid=1278 comm="_ServicePT" path="/profile permissive=1
+type=1400 audit(1530723175.968:14675): avc: denied { search } for pid=1278 comm="_ServicePT" name="31sive=1
+type=1400 audit(1530723175.968:14675): avc: denied { search } for pid=1278 comm="_ServicePT" name="31sive=1
+type=1400 audit(1530723175.968:14676): avc: denied { read } for pid=1278 comm="_ServicePT" name="statsive=1
+type=1400 audit(1530723176.368:14683): avc: denied { open } for pid=12876 comm="top" path="/proc/310/class=file permissive=1
+type=1400 audit(1530723185.948:14684): avc: denied { getattr } for pid=12977 comm="top" path="/proc/2permissive=1
+type=1400 audit(1530723185.948:14684): avc: denied { getattr } for pid=12977 comm="top" path="/proc/2permissive=1
+type=1400 audit(1530723185.968:14685): avc: denied { search } for pid=12977 comm="top" name="244" devive=1
+type=1400 audit(1530723185.968:14685): avc: denied { search } for pid=12977 comm="top" name="244" devive=1
+type=1400 audit(1530723185.978:14686): avc: denied { getattr } for pid=12977 comm="top" path="/proc/2ss=dir permissive=1
+type=1400 audit(1530723185.978:14686): avc: denied { getattr } for pid=12977 comm="top" path="/proc/2ss=dir permissive=1
+type=1400 audit(1530723185.978:14687): avc: denied { search } for pid=12977 comm="top" name="296" devpermissive=1
+type=1400 audit(1530723185.978:14687): avc: denied { search } for pid=12977 comm="top" name="296" devpermissive=1
+type=1400 audit(1530723185.978:14688): avc: denied { read } for pid=12977 comm="top" name="stat" dev=rmissive=1
+type=1400 audit(1530723185.988:14693): avc: denied { search } for pid=12977 comm="top" name="310" dev permissive=1
+type=1400 audit(1530723191.628:14694): avc: denied { read write } for pid=1278 comm="_USBProcess" namass=chr_file permissive=1
+type=1400 audit(1530723191.628:14694): avc: denied { read write } for pid=1278 comm="_USBProcess" namass=chr_file permissive=1
+type=1400 audit(1530723191.628:14695): avc: denied { open } for pid=1278 comm="_USBProcess" path="/dess=chr_file permissive=1
+type=1400 audit(1530723191.628:14695): avc: denied { open } for pid=1278 comm="_USBProcess" path="/dess=chr_file permissive=1
+type=1400 audit(1530723191.628:14696): avc: denied { ioctl } for pid=1278 comm="_USBProcess" path="/d_r:device:s0 tclass=chr_file permissive=1
+type=1400 audit(1530723191.628:14696): avc: denied { ioctl } for pid=1278 comm="_USBProcess" path="/d_r:device:s0 tclass=chr_file permissive=1
+type=1400 audit(1530723194.908:14697): avc: denied { read } for pid=13068 comm="top" name="stat" dev=sive=1
+type=1400 audit(1530723194.908:14697): avc: denied { read } for pid=13068 comm="top" name="stat" dev=sive=1
+type=1400 audit(1530723194.958:14698): avc: denied { open } for pid=13068 comm="top" path="/proc/244/ile permissive=1
+type=1400 audit(1530723195.638:14714): avc: denied { open } for pid=13076 comm="top" path="/proc/299/ss=file permissive=1
+type=1400 audit(1530723205.738:14715): avc: denied { search } for pid=1278 comm="_ServicePT" name="24
+type=1400 audit(1530723205.738:14715): avc: denied { search } for pid=1278 comm="_ServicePT" name="24
+type=1400 audit(1530723205.768:14716): avc: denied { read } for pid=1278 comm="_ServicePT" name="stat
+type=1400 audit(1530723205.768:14716): avc: denied { read } for pid=1278 comm="_ServicePT" name="stat
+type=1400 audit(1530723205.768:14717): avc: denied { open } for pid=1278 comm="_ServicePT" path="/prormissive=1
+type=1400 audit(1530723205.768:14717): avc: denied { open } for pid=1278 comm="_ServicePT" path="/prormissive=1
+type=1400 audit(1530723205.768:14718): avc: denied { search } for pid=1278 comm="_ServicePT" name="29e=1
+type=1400 audit(1530723205.768:14718): avc: denied { search } for pid=1278 comm="_ServicePT" name="29e=1
+type=1400 audit(1530723205.768:14719): avc: denied { search } for pid=1278 comm="_ServicePT" name="29rmissive=1
+audit: audit_lost=6674 audit_rate_limit=20 audit_backlog_limit=64
+audit: rate limit exceeded
+type=1400 audit(1530723206.018:14742): avc: denied { open } for pid=13178 comm="top" path="/proc/250/ile permissive=1
+type=1400 audit(1530723218.998:14753): avc: denied { call } for pid=256 comm="bluetooth@1.0-s" sconte
+type=1400 audit(1530723218.998:14753): avc: denied { call } for pid=256 comm="bluetooth@1.0-s" sconte
+type=1400 audit(1530723219.268:14754): avc: denied { getattr } for pid=13313 comm="top" path="/proc/2permissive=1
+type=1400 audit(1530723219.268:14754): avc: denied { getattr } for pid=13313 comm="top" path="/proc/2permissive=1
+type=1400 audit(1530723219.288:14755): avc: denied { search } for pid=13313 comm="top" name="250" devive=1
+type=1400 audit(1530723219.288:14755): avc: denied { search } for pid=13313 comm="top" name="250" devive=1
+type=1400 audit(1530723219.288:14756): avc: denied { read } for pid=13313 comm="top" name="stat" dev=issive=1
+type=1400 audit(1530723219.288:14756): avc: denied { read } for pid=13313 comm="top" name="stat" dev=issive=1
+type=1400 audit(1530723219.288:14757): avc: denied { open } for pid=13313 comm="top" path="/proc/251/=file permissive=1
+type=1400 audit(1530723222.758:14773): avc: denied { getattr } for pid=13347 comm="top" path="/proc/4s=dir permissive=1
+type=1400 audit(1530723235.738:14774): avc: denied { search } for pid=1278 comm="_ServicePT" name="20=1
+type=1400 audit(1530723235.738:14774): avc: denied { search } for pid=1278 comm="_ServicePT" name="20=1
+type=1400 audit(1530723235.738:14775): avc: denied { search } for pid=1278 comm="_ServicePT" name="25
+type=1400 audit(1530723235.738:14775): avc: denied { search } for pid=1278 comm="_ServicePT" name="25
+type=1400 audit(1530723235.738:14776): avc: denied { read } for pid=1278 comm="_ServicePT" name="stat
+type=1400 audit(1530723235.738:14776): avc: denied { read } for pid=1278 comm="_ServicePT" name="stat
+type=1400 audit(1530723235.738:14777): avc: denied { open } for pid=1278 comm="_ServicePT" path="/prormissive=1
+type=1400 audit(1530723235.738:14777): avc: denied { open } for pid=1278 comm="_ServicePT" path="/prormissive=1
+type=1400 audit(1530723235.738:14778): avc: denied { search } for pid=1278 comm="_ServicePT" name="251
+type=1400 audit(1530723237.098:14802): avc: denied { getattr } for pid=256 comm="bluetooth@1.0-s" pattclass=chr_file permissive=1
+type=1400 audit(1530723242.378:14803): avc: denied { getattr } for pid=13544 comm="top" path="/proc/2ir permissive=1
+type=1400 audit(1530723242.378:14803): avc: denied { getattr } for pid=13544 comm="top" path="/proc/2ir permissive=1
+type=1400 audit(1530723242.378:14804): avc: denied { search } for pid=13544 comm="top" name="265" devissive=1
+type=1400 audit(1530723242.378:14804): avc: denied { search } for pid=13544 comm="top" name="265" devissive=1
+type=1400 audit(1530723242.378:14805): avc: denied { read } for pid=13544 comm="top" name="stat" dev=ile permissive=1
+type=1400 audit(1530723242.378:14805): avc: denied { read } for pid=13544 comm="top" name="stat" dev=ile permissive=1
+type=1400 audit(1530723242.378:14806): avc: denied { open } for pid=13544 comm="top" path="/proc/268/0 tclass=file permissive=1
+type=1400 audit(1530723242.378:14806): avc: denied { open } for pid=13544 comm="top" path="/proc/268/0 tclass=file permissive=1
+type=1400 audit(1530723242.398:14807): avc: denied { getattr } for pid=13544 comm="top" path="/proc/1lass=dir permissive=1
+type=1400 audit(1530723242.408:14810): avc: denied { open } for pid=13544 comm="top" path="/proc/1386le permissive=1
+type=1400 audit(1530723257.468:14811): avc: denied { getattr } for pid=13699 comm="top" path="/proc/2ss=dir permissive=1
+audit: audit_lost=6684 audit_rate_limit=20 audit_backlog_limit=64
+audit: rate limit exceeded
+type=1400 audit(1530723257.468:14811): avc: denied { getattr } for pid=13699 comm="top" path="/proc/2ss=dir permissive=1
+type=1400 audit(1530723257.488:14812): avc: denied { search } for pid=13699 comm="top" name="256" devpermissive=1
+type=1400 audit(1530723257.488:14812): avc: denied { search } for pid=13699 comm="top" name="256" devpermissive=1
+type=1400 audit(1530723257.488:14813): avc: denied { read } for pid=13699 comm="top" name="stat" dev=permissive=1
+type=1400 audit(1530723257.488:14813): avc: denied { read } for pid=13699 comm="top" name="stat" dev=permissive=1
+type=1400 audit(1530723257.488:14814): avc: denied { open } for pid=13699 comm="top" path="/proc/256/lass=file permissive=1
+type=1400 audit(1530723257.488:14814): avc: denied { open } for pid=13699 comm="top" path="/proc/256/lass=file permissive=1
+type=1400 audit(1530723257.488:14815): avc: denied { getattr } for pid=13699 comm="top" path="/proc/2fault:s0 tclass=dir permissive=1
+type=1400 audit(1530723262.258:14889): avc: denied { open } for pid=13748 comm="top" path="/proc/285/ass=file permissive=1
+type=1400 audit(1530723262.658:14890): avc: denied { getattr } for pid=13748 comm="top" path="/proc/2class=dir permissive=1
+audit: audit_lost=6735 audit_rate_limit=20 audit_backlog_limit=64
+audit: rate limit exceeded
+type=1400 audit(1530723262.658:14890): avc: denied { getattr } for pid=13748 comm="top" path="/proc/2class=dir permissive=1
+type=1400 audit(1530723262.658:14891): avc: denied { search } for pid=13748 comm="top" name="233" devir permissive=1
+type=1400 audit(1530723262.658:14891): avc: denied { search } for pid=13748 comm="top" name="233" devir permissive=1
+type=1400 audit(1530723262.658:14892): avc: denied { read } for pid=13748 comm="top" name="stat" dev==file permissive=1
+type=1400 audit(1530723262.658:14892): avc: denied { read } for pid=13748 comm="top" name="stat" dev==file permissive=1
+type=1400 audit(1530723262.658:14893): avc: denied { open } for pid=13748 comm="top" path="/proc/234/:s0 tclass=file permissive=1
+type=1400 audit(1530723262.658:14893): avc: denied { open } for pid=13748 comm="top" path="/proc/234/:s0 tclass=file permissive=1
+type=1400 audit(1530723262.658:14894): avc: denied { read } for pid=13748 comm="top" name="stat" dev=ssive=1
+audit: audit_lost=6744 audit_rate_limit=20 audit_backlog_limit=64
+audit: rate limit exceeded
+type=1400 audit(1530723265.728:14932): avc: denied { search } for pid=1278 comm="_ServicePT" name="25permissive=1
+type=1400 audit(1530723280.068:15039): avc: denied { read } for pid=13927 comm="top" name="stat" dev=permissive=1
+type=1400 audit(1530723280.068:15039): avc: denied { read } for pid=13927 comm="top" name="stat" dev=permissive=1
+type=1400 audit(1530723280.068:15040): avc: denied { open } for pid=13927 comm="top" path="/proc/304/lass=file permissive=1
+type=1400 audit(1530723280.068:15040): avc: denied { open } for pid=13927 comm="top" path="/proc/304/lass=file permissive=1
+type=1400 audit(1530723280.668:15041): avc: denied { getattr } for pid=13936 comm="top" path="/proc/2permissive=1
+type=1400 audit(1530723280.668:15041): avc: denied { getattr } for pid=13936 comm="top" path="/proc/2permissive=1
+type=1400 audit(1530723280.668:15042): avc: denied { search } for pid=13936 comm="top" name="244" devive=1
+type=1400 audit(1530723280.668:15042): avc: denied { search } for pid=13936 comm="top" name="244" devive=1
+type=1400 audit(1530723280.668:15043): avc: denied { getattr } for pid=13936 comm="top" path="/proc/2ss=dir permissive=1
+audit: audit_lost=6850 audit_rate_limit=20 audit_backlog_limit=64
+audit: rate limit exceeded
+type=1400 audit(1530723284.618:15103): avc: denied { open } for pid=13974 comm="top" path="/proc/1386le permissive=1
+type=1400 audit(1530723293.178:15104): avc: denied { read } for pid=14065 comm="top" name="stat" dev==file permissive=1
+type=1400 audit(1530723293.178:15104): avc: denied { read } for pid=14065 comm="top" name="stat" dev==file permissive=1
+type=1400 audit(1530723293.218:15105): avc: denied { open } for pid=14065 comm="top" path="/proc/264/:s0 tclass=file permissive=1
+type=1400 audit(1530723293.218:15105): avc: denied { open } for pid=14065 comm="top" path="/proc/264/:s0 tclass=file permissive=1
+type=1400 audit(1530723293.218:15106): avc: denied { read } for pid=14065 comm="top" name="stat" dev=missive=1
+type=1400 audit(1530723293.218:15106): avc: denied { read } for pid=14065 comm="top" name="stat" dev=missive=1
+type=1400 audit(1530723293.218:15107): avc: denied { open } for pid=14065 comm="top" path="/proc/265/s=file permissive=1
+type=1400 audit(1530723293.218:15107): avc: denied { open } for pid=14065 comm="top" path="/proc/265/s=file permissive=1
+type=1400 audit(1530723293.218:15108): avc: denied { getattr } for pid=14065 comm="top" path="/proc/2permissive=1
+audit: audit_lost=6869 audit_rate_limit=20 audit_backlog_limit=64
+audit: rate limit exceeded
+type=1400 audit(1530723297.718:15292): avc: denied { write } for pid=1278 comm="_CommUpt1SPT" laddr=1d_acq:s0 tclass=tcp_socket permissive=1
+type=1400 audit(1530723300.508:15293): avc: denied { read } for pid=14147 comm="top" name="stat" dev=ssive=1
+type=1400 audit(1530723300.508:15293): avc: denied { read } for pid=14147 comm="top" name="stat" dev=ssive=1
+type=1400 audit(1530723300.528:15294): avc: denied { open } for pid=14147 comm="top" path="/proc/278/file permissive=1
+type=1400 audit(1530723300.528:15294): avc: denied { open } for pid=14147 comm="top" path="/proc/278/file permissive=1
+type=1400 audit(1530723300.528:15295): avc: denied { read } for pid=14147 comm="top" name="stat" dev=sive=1
+type=1400 audit(1530723300.528:15295): avc: denied { read } for pid=14147 comm="top" name="stat" dev=sive=1
+type=1400 audit(1530723300.528:15296): avc: denied { open } for pid=14147 comm="top" path="/proc/279/ile permissive=1
+type=1400 audit(1530723300.528:15296): avc: denied { open } for pid=14147 comm="top" path="/proc/279/ile permissive=1
+type=1400 audit(1530723300.528:15297): avc: denied { getattr } for pid=14147 comm="top" path="/proc/2=dir permissive=1
+type=1400 audit(1530723302.618:15324): avc: denied { open } for pid=14172 comm="top" path="/proc/232/ile permissive=1
+type=1400 audit(1530723322.418:15325): avc: denied { getattr } for pid=14370 comm="top" path="/proc/2=dir permissive=1
+type=1400 audit(1530723322.418:15325): avc: denied { getattr } for pid=14370 comm="top" path="/proc/2=dir permissive=1
+type=1400 audit(1530723322.438:15326): avc: denied { search } for pid=14370 comm="top" name="210" devrmissive=1
+type=1400 audit(1530723322.438:15326): avc: denied { search } for pid=14370 comm="top" name="210" devrmissive=1
+type=1400 audit(1530723323.028:15327): avc: denied { read } for pid=14376 comm="top" name="stat" dev=ermissive=1
+type=1400 audit(1530723323.028:15327): avc: denied { read } for pid=14376 comm="top" name="stat" dev=ermissive=1
+type=1400 audit(1530723323.028:15328): avc: denied { open } for pid=14376 comm="top" path="/proc/210/ass=file permissive=1
+type=1400 audit(1530723323.028:15328): avc: denied { open } for pid=14376 comm="top" path="/proc/210/ass=file permissive=1
+type=1400 audit(1530723323.048:15329): avc: denied { getattr } for pid=14376 comm="top" path="/proc/3ss=dir permissive=1
+audit: audit_lost=6999 audit_rate_limit=20 audit_backlog_limit=64
+audit: rate limit exceeded
+type=1400 audit(1530723325.788:15367): avc: denied { read } for pid=1278 comm="_ServicePT" name="stat1
+type=1400 audit(1530723341.968:15405): avc: denied { getattr } for pid=14578 comm="top" path="/proc/2permissive=1
+type=1400 audit(1530723341.968:15405): avc: denied { getattr } for pid=14578 comm="top" path="/proc/2permissive=1
+type=1400 audit(1530723341.988:15406): avc: denied { search } for pid=14578 comm="top" name="244" devive=1
+type=1400 audit(1530723341.988:15406): avc: denied { search } for pid=14578 comm="top" name="244" devive=1
+type=1400 audit(1530723341.988:15407): avc: denied { getattr } for pid=14578 comm="top" path="/proc/2ss=dir permissive=1
+type=1400 audit(1530723341.988:15407): avc: denied { getattr } for pid=14578 comm="top" path="/proc/2ss=dir permissive=1
+type=1400 audit(1530723341.988:15408): avc: denied { search } for pid=14578 comm="top" name="296" devpermissive=1
+type=1400 audit(1530723341.988:15408): avc: denied { search } for pid=14578 comm="top" name="296" devpermissive=1
+type=1400 audit(1530723341.988:15409): avc: denied { read } for pid=14578 comm="top" name="stat" dev= permissive=1
+type=1400 audit(1530723346.748:15442): avc: denied { open } for pid=14626 comm="top" path="/proc/523/s=file permissive=1
+type=1400 audit(1530723348.508:15443): avc: denied { getattr } for pid=14648 comm="top" path="/proc/2permissive=1
+type=1400 audit(1530723348.508:15443): avc: denied { getattr } for pid=14648 comm="top" path="/proc/2permissive=1
+type=1400 audit(1530723348.538:15444): avc: denied { search } for pid=14648 comm="top" name="250" devive=1
+type=1400 audit(1530723348.538:15444): avc: denied { search } for pid=14648 comm="top" name="250" devive=1
+type=1400 audit(1530723348.538:15445): avc: denied { read } for pid=14648 comm="top" name="stat" dev=issive=1
+type=1400 audit(1530723348.538:15445): avc: denied { read } for pid=14648 comm="top" name="stat" dev=issive=1
+type=1400 audit(1530723348.538:15446): avc: denied { open } for pid=14648 comm="top" path="/proc/251/=file permissive=1
+type=1400 audit(1530723348.538:15446): avc: denied { open } for pid=14648 comm="top" path="/proc/251/=file permissive=1
+type=1400 audit(1530723348.568:15447): avc: denied { read } for pid=14648 comm="top" name="stat" dev=le permissive=1
+type=1400 audit(1530723348.578:15450): avc: denied { open } for pid=14648 comm="top" path="/proc/513/:s0:c512,c768 tclass=file permissive=1
+audit: audit_lost=7036 audit_rate_limit=20 audit_backlog_limit=64
+audit: rate limit exceeded
+type=1400 audit(1530723355.738:15451): avc: denied { read } for pid=1278 comm="_ServicePT" name="stat
+type=1400 audit(1530723355.738:15451): avc: denied { read } for pid=1278 comm="_ServicePT" name="stat
+type=1400 audit(1530723355.758:15452): avc: denied { open } for pid=1278 comm="_ServicePT" path="/prormissive=1
+type=1400 audit(1530723355.758:15452): avc: denied { open } for pid=1278 comm="_ServicePT" path="/prormissive=1
+type=1400 audit(1530723355.758:15453): avc: denied { read } for pid=1278 comm="_ServicePT" name="stat
+type=1400 audit(1530723355.758:15453): avc: denied { read } for pid=1278 comm="_ServicePT" name="stat
+type=1400 audit(1530723355.758:15454): avc: denied { open } for pid=1278 comm="_ServicePT" path="/prormissive=1
+type=1400 audit(1530723355.758:15454): avc: denied { open } for pid=1278 comm="_ServicePT" path="/prormissive=1
+type=1400 audit(1530723355.758:15455): avc: denied { search } for pid=1278 comm="_ServicePT" name="251
+type=1400 audit(1530723360.198:15502): avc: denied { open } for pid=14778 comm="top" path="/proc/206/s=file permissive=1
+type=1400 audit(1530723362.228:15503): avc: denied { getattr } for pid=14803 comm="top" path="/proc/20 tclass=dir permissive=1
+type=1400 audit(1530723362.228:15503): avc: denied { getattr } for pid=14803 comm="top" path="/proc/20 tclass=dir permissive=1
+type=1400 audit(1530723362.228:15504): avc: denied { search } for pid=14803 comm="top" name="264" devs=dir permissive=1
+type=1400 audit(1530723362.228:15504): avc: denied { search } for pid=14803 comm="top" name="264" devs=dir permissive=1
+type=1400 audit(1530723362.228:15505): avc: denied { read } for pid=14803 comm="top" name="stat" dev=sive=1
+type=1400 audit(1530723362.228:15505): avc: denied { read } for pid=14803 comm="top" name="stat" dev=sive=1
+type=1400 audit(1530723362.228:15506): avc: denied { open } for pid=14803 comm="top" path="/proc/267/ile permissive=1
+type=1400 audit(1530723362.228:15506): avc: denied { open } for pid=14803 comm="top" path="/proc/267/ile permissive=1
+type=1400 audit(1530723362.608:15507): avc: denied { getattr } for pid=14803 comm="top" path="/proc/2ir permissive=1
+type=1400 audit(1530723362.808:15518): avc: denied { search } for pid=14808 comm="top" name="267" devive=1
+type=1400 audit(1530723373.018:15519): avc: denied { read } for pid=14913 comm="top" name="stat" dev=missive=1
+type=1400 audit(1530723373.018:15519): avc: denied { read } for pid=14913 comm="top" name="stat" dev=missive=1
+type=1400 audit(1530723373.018:15520): avc: denied { open } for pid=14913 comm="top" path="/proc/265/s=file permissive=1
+type=1400 audit(1530723373.018:15520): avc: denied { open } for pid=14913 comm="top" path="/proc/265/s=file permissive=1
+type=1400 audit(1530723373.018:15521): avc: denied { getattr } for pid=14913 comm="top" path="/proc/2class=dir permissive=1
+type=1400 audit(1530723373.018:15521): avc: denied { getattr } for pid=14913 comm="top" path="/proc/2class=dir permissive=1
+type=1400 audit(1530723373.018:15522): avc: denied { search } for pid=14913 comm="top" name="268" devir permissive=1
+type=1400 audit(1530723373.018:15522): avc: denied { search } for pid=14913 comm="top" name="268" devir permissive=1
+type=1400 audit(1530723373.038:15523): avc: denied { read } for pid=14913 comm="top" name="stat" dev= permissive=1
+type=1400 audit(1530723373.038:15526): avc: denied { search } for pid=14913 comm="top" name="1386" deive=1
+type=1400 audit(1530723382.248:15527): avc: denied { read } for pid=15016 comm="top" name="stat" dev=ss=file permissive=1
+type=1400 audit(1530723382.248:15527): avc: denied { read } for pid=15016 comm="top" name="stat" dev=ss=file permissive=1
+type=1400 audit(1530723382.248:15528): avc: denied { open } for pid=15016 comm="top" path="/proc/931/,c768 tclass=file permissive=1
+type=1400 audit(1530723382.248:15528): avc: denied { open } for pid=15016 comm="top" path="/proc/931/,c768 tclass=file permissive=1
+type=1400 audit(1530723382.608:15529): avc: denied { read } for pid=15016 comm="top" name="stat" dev=file permissive=1
+type=1400 audit(1530723382.608:15529): avc: denied { read } for pid=15016 comm="top" name="stat" dev=file permissive=1
+type=1400 audit(1530723382.628:15530): avc: denied { open } for pid=15016 comm="top" path="/proc/263/s0 tclass=file permissive=1
+type=1400 audit(1530723382.628:15530): avc: denied { open } for pid=15016 comm="top" path="/proc/263/s0 tclass=file permissive=1
+type=1400 audit(1530723385.728:15531): avc: denied { search } for pid=1278 comm="_ServicePT" name="20=1
+audit: audit_lost=7051 audit_rate_limit=20 audit_backlog_limit=64
+audit: rate limit exceeded
+type=1400 audit(1530723385.748:15559): avc: denied { open } for pid=1278 comm="_ServicePT" path="/proc768 tclass=file permissive=1
+type=1400 audit(1530723402.468:15589): avc: denied { getattr } for pid=15229 comm="top" path="/proc/2ss=dir permissive=1
+type=1400 audit(1530723402.468:15589): avc: denied { getattr } for pid=15229 comm="top" path="/proc/2ss=dir permissive=1
+type=1400 audit(1530723402.468:15590): avc: denied { search } for pid=15229 comm="top" name="256" devpermissive=1
+type=1400 audit(1530723402.468:15590): avc: denied { search } for pid=15229 comm="top" name="256" devpermissive=1
+type=1400 audit(1530723402.468:15591): avc: denied { getattr } for pid=15229 comm="top" path="/proc/2tor_default:s0 tclass=dir permissive=1
+type=1400 audit(1530723402.468:15591): avc: denied { getattr } for pid=15229 comm="top" path="/proc/2tor_default:s0 tclass=dir permissive=1
+type=1400 audit(1530723402.468:15592): avc: denied { search } for pid=15229 comm="top" name="258" devault:s0 tclass=dir permissive=1
+type=1400 audit(1530723402.468:15592): avc: denied { search } for pid=15229 comm="top" name="258" devault:s0 tclass=dir permissive=1
+type=1400 audit(1530723402.468:15593): avc: denied { read } for pid=15229 comm="top" name="stat" dev=ssive=1
+type=1400 audit(1530723404.788:15604): avc: denied { open } for pid=15250 comm="top" path="/proc/2943 tclass=file permissive=1
+type=1400 audit(1530723415.728:15605): avc: denied { search } for pid=1278 comm="_ServicePT" name="25sive=1
+type=1400 audit(1530723415.728:15605): avc: denied { search } for pid=1278 comm="_ServicePT" name="25sive=1
+type=1400 audit(1530723415.748:15606): avc: denied { search } for pid=1278 comm="_ServicePT" name="25ss=dir permissive=1
+type=1400 audit(1530723415.748:15606): avc: denied { search } for pid=1278 comm="_ServicePT" name="25ss=dir permissive=1
+type=1400 audit(1530723415.748:15607): avc: denied { read } for pid=1278 comm="_ServicePT" name="stats=file permissive=1
+type=1400 audit(1530723415.748:15607): avc: denied { read } for pid=1278 comm="_ServicePT" name="stats=file permissive=1
+type=1400 audit(1530723415.748:15608): avc: denied { open } for pid=1278 comm="_ServicePT" path="/prot:s0 tclass=file permissive=1
+type=1400 audit(1530723415.748:15608): avc: denied { open } for pid=1278 comm="_ServicePT" path="/prot:s0 tclass=file permissive=1
+type=1400 audit(1530723415.748:15609): avc: denied { search } for pid=1278 comm="_ServicePT" name="250 tclass=dir permissive=1
+audit: audit_lost=7080 audit_rate_limit=20 audit_backlog_limit=64
+audit: rate limit exceeded
+type=1400 audit(1530723416.108:15628): avc: denied { read } for pid=15374 comm="top" name="stat" dev=class=file permissive=1
+type=1400 audit(1530723422.338:15634): avc: denied { read } for pid=15439 comm="top" name="stat" dev=issive=1
+type=1400 audit(1530723422.338:15634): avc: denied { read } for pid=15439 comm="top" name="stat" dev=issive=1
+type=1400 audit(1530723422.338:15635): avc: denied { open } for pid=15439 comm="top" path="/proc/2/stile permissive=1
+type=1400 audit(1530723422.338:15635): avc: denied { open } for pid=15439 comm="top" path="/proc/2/stile permissive=1
+type=1400 audit(1530723422.418:15636): avc: denied { getattr } for pid=15439 comm="top" path="/proc/2lt:s0 tclass=dir permissive=1
+type=1400 audit(1530723422.418:15636): avc: denied { getattr } for pid=15439 comm="top" path="/proc/2lt:s0 tclass=dir permissive=1
+type=1400 audit(1530723422.418:15637): avc: denied { search } for pid=15439 comm="top" name="254" devclass=dir permissive=1
+type=1400 audit(1530723422.418:15637): avc: denied { search } for pid=15439 comm="top" name="254" devclass=dir permissive=1
+type=1400 audit(1530723422.438:15638): avc: denied { read } for pid=15439 comm="top" name="stat" dev=ile permissive=1
+type=1400 audit(1530723426.048:15652): avc: denied { search } for pid=15480 comm="top" name="285" devrmissive=1
+type=1400 audit(1530723442.388:15653): avc: denied { getattr } for pid=15650 comm="top" path="/proc/2=dir permissive=1
+type=1400 audit(1530723442.388:15653): avc: denied { getattr } for pid=15650 comm="top" path="/proc/2=dir permissive=1
+type=1400 audit(1530723442.388:15654): avc: denied { search } for pid=15650 comm="top" name="287" devrmissive=1
+type=1400 audit(1530723442.388:15654): avc: denied { search } for pid=15650 comm="top" name="287" devrmissive=1
+type=1400 audit(1530723445.718:15655): avc: denied { read } for pid=1278 comm="_ServicePT" name="stat=1
+type=1400 audit(1530723445.718:15655): avc: denied { read } for pid=1278 comm="_ServicePT" name="stat=1
+type=1400 audit(1530723445.738:15656): avc: denied { open } for pid=1278 comm="_ServicePT" path="/prormissive=1
+type=1400 audit(1530723445.738:15656): avc: denied { open } for pid=1278 comm="_ServicePT" path="/prormissive=1
+type=1400 audit(1530723445.748:15657): avc: denied { search } for pid=1278 comm="_ServicePT" name="25dir permissive=1
+type=1400 audit(1530723445.828:15682): avc: denied { open } for pid=15687 comm="top" path="/proc/283/class=file permissive=1
+type=1400 audit(1530723462.368:15683): avc: denied { read } for pid=15865 comm="top" name="stat" dev=ile permissive=1
+type=1400 audit(1530723462.368:15683): avc: denied { read } for pid=15865 comm="top" name="stat" dev=ile permissive=1
+type=1400 audit(1530723462.388:15684): avc: denied { open } for pid=15865 comm="top" path="/proc/233/0 tclass=file permissive=1
+type=1400 audit(1530723462.388:15684): avc: denied { open } for pid=15865 comm="top" path="/proc/233/0 tclass=file permissive=1
+type=1400 audit(1530723462.388:15685): avc: denied { getattr } for pid=15865 comm="top" path="/proc/2 tclass=dir permissive=1
+type=1400 audit(1530723462.388:15685): avc: denied { getattr } for pid=15865 comm="top" path="/proc/2 tclass=dir permissive=1
+type=1400 audit(1530723462.388:15686): avc: denied { search } for pid=15865 comm="top" name="234" dev=dir permissive=1
+type=1400 audit(1530723462.388:15686): avc: denied { search } for pid=15865 comm="top" name="234" dev=dir permissive=1
+type=1400 audit(1530723462.408:15687): avc: denied { getattr } for pid=15865 comm="top" path="/proc/2ss=dir permissive=1
+type=1400 audit(1530723462.408:15688): avc: denied { search } for pid=15865 comm="top" name="283" devpermissive=1
+type=1400 audit(1530723475.748:15689): avc: denied { read } for pid=1278 comm="_ServicePT" name="statpermissive=1
+type=1400 audit(1530723475.748:15689): avc: denied { read } for pid=1278 comm="_ServicePT" name="statpermissive=1
+type=1400 audit(1530723475.768:15690): avc: denied { open } for pid=1278 comm="_ServicePT" path="/prolass=file permissive=1
+type=1400 audit(1530723475.768:15690): avc: denied { open } for pid=1278 comm="_ServicePT" path="/prolass=file permissive=1
+type=1400 audit(1530723475.778:15691): avc: denied { search } for pid=1278 comm="_ServicePT" name="23permissive=1
+type=1400 audit(1530723475.778:15691): avc: denied { search } for pid=1278 comm="_ServicePT" name="23permissive=1
+type=1400 audit(1530723475.778:15692): avc: denied { read } for pid=1278 comm="_ServicePT" name="stat permissive=1
+type=1400 audit(1530723475.778:15692): avc: denied { read } for pid=1278 comm="_ServicePT" name="stat permissive=1
+type=1400 audit(1530723475.778:15693): avc: denied { open } for pid=1278 comm="_ServicePT" path="/proclass=file permissive=1
+type=1400 audit(1530723480.168:15707): avc: denied { search } for pid=16060 comm="top" name="284" devr permissive=1
+type=1400 audit(1530723505.728:15708): avc: denied { read } for pid=1278 comm="_ServicePT" name="stat
+type=1400 audit(1530723505.728:15708): avc: denied { read } for pid=1278 comm="_ServicePT" name="stat
+type=1400 audit(1530723505.748:15709): avc: denied { open } for pid=1278 comm="_ServicePT" path="/prormissive=1
+type=1400 audit(1530723505.748:15709): avc: denied { open } for pid=1278 comm="_ServicePT" path="/prormissive=1
+type=1400 audit(1530723505.748:15710): avc: denied { read } for pid=1278 comm="_ServicePT" name="statrmissive=1
+type=1400 audit(1530723505.748:15710): avc: denied { read } for pid=1278 comm="_ServicePT" name="statrmissive=1
+type=1400 audit(1530723505.748:15711): avc: denied { open } for pid=1278 comm="_ServicePT" path="/pross=file permissive=1
+type=1400 audit(1530723505.748:15711): avc: denied { open } for pid=1278 comm="_ServicePT" path="/pross=file permissive=1
+type=1400 audit(1530723505.748:15712): avc: denied { search } for pid=1278 comm="_ServicePT" name="23ermissive=1
+type=1400 audit(1530723506.078:15717): avc: denied { open } for pid=16328 comm="top" path="/proc/232/ile permissive=1
+type=1400 audit(1530723535.718:15718): avc: denied { search } for pid=1278 comm="_ServicePT" name="1"
+type=1400 audit(1530723535.718:15718): avc: denied { search } for pid=1278 comm="_ServicePT" name="1"
+type=1400 audit(1530723535.758:15719): avc: denied { search } for pid=1278 comm="_ServicePT" name="23
+type=1400 audit(1530723535.758:15719): avc: denied { search } for pid=1278 comm="_ServicePT" name="23
+type=1400 audit(1530723546.028:15720): avc: denied { getattr } for pid=16763 comm="top" path="/proc/2=dir permissive=1
+type=1400 audit(1530723546.028:15720): avc: denied { getattr } for pid=16763 comm="top" path="/proc/2=dir permissive=1
+type=1400 audit(1530723546.048:15721): avc: denied { search } for pid=16763 comm="top" name="210" devrmissive=1
+type=1400 audit(1530723546.048:15721): avc: denied { search } for pid=16763 comm="top" name="210" devrmissive=1
+type=1400 audit(1530723546.058:15722): avc: denied { getattr } for pid=16763 comm="top" path="/proc/2permissive=1
+type=1400 audit(1530723546.058:15722): avc: denied { getattr } for pid=16763 comm="top" path="/proc/2permissive=1
+type=1400 audit(1530723546.058:15723): avc: denied { search } for pid=16763 comm="top" name="232" devive=1
+type=1400 audit(1530723546.058:15723): avc: denied { search } for pid=16763 comm="top" name="232" devive=1
+type=1400 audit(1530723565.718:15724): avc: denied { read } for pid=1278 comm="_ServicePT" name="stat
+type=1400 audit(1530723565.718:15724): avc: denied { read } for pid=1278 comm="_ServicePT" name="stat
+type=1400 audit(1530723565.718:15725): avc: denied { open } for pid=1278 comm="_ServicePT" path="/proissive=1
+type=1400 audit(1530723565.718:15725): avc: denied { open } for pid=1278 comm="_ServicePT" path="/proissive=1
+type=1400 audit(1530723565.718:15726): avc: denied { search } for pid=1278 comm="_ServicePT" name="21ve=1
+type=1400 audit(1530723565.718:15726): avc: denied { search } for pid=1278 comm="_ServicePT" name="21ve=1
+type=1400 audit(1530723660.148:15727): avc: denied { read } for pid=17977 comm="top" name="stat" dev=ermissive=1
+type=1400 audit(1530723660.148:15727): avc: denied { read } for pid=17977 comm="top" name="stat" dev=ermissive=1
+type=1400 audit(1530723660.148:15728): avc: denied { open } for pid=17977 comm="top" path="/proc/210/ass=file permissive=1
+type=1400 audit(1530723660.148:15728): avc: denied { open } for pid=17977 comm="top" path="/proc/210/ass=file permissive=1
+type=1400 audit(1530723662.258:15729): avc: denied { getattr } for pid=17996 comm="top" path="/proc/3ss=dir permissive=1
+type=1400 audit(1530723662.258:15729): avc: denied { getattr } for pid=17996 comm="top" path="/proc/3ss=dir permissive=1
+type=1400 audit(1530723662.258:15730): avc: denied { search } for pid=17996 comm="top" name="312" devpermissive=1
+type=1400 audit(1530723662.258:15730): avc: denied { search } for pid=17996 comm="top" name="312" devpermissive=1
+type=1400 audit(1530723662.258:15731): avc: denied { read } for pid=17996 comm="top" name="stat" dev=permissive=1
+type=1400 audit(1530723662.258:15732): avc: denied { open } for pid=17996 comm="top" path="/proc/312/lass=file permissive=1
+type=1400 audit(1530723685.758:15733): avc: denied { read } for pid=1278 comm="_ServicePT" name="stative=1
+type=1400 audit(1530723685.758:15733): avc: denied { read } for pid=1278 comm="_ServicePT" name="stative=1
+type=1400 audit(1530723685.758:15734): avc: denied { open } for pid=1278 comm="_ServicePT" path="/prole permissive=1
+type=1400 audit(1530723685.758:15734): avc: denied { open } for pid=1278 comm="_ServicePT" path="/prole permissive=1
+type=1400 audit(1530723685.758:15735): avc: denied { search } for pid=1278 comm="_ServicePT" name="31sive=1
+type=1400 audit(1530723685.758:15735): avc: denied { search } for pid=1278 comm="_ServicePT" name="31sive=1
+type=1400 audit(1530723685.758:15736): avc: denied { read } for pid=1278 comm="_ServicePT" name="statsive=1
+type=1400 audit(1530723685.758:15736): avc: denied { read } for pid=1278 comm="_ServicePT" name="statsive=1
+type=1400 audit(1530723685.758:15737): avc: denied { open } for pid=1278 comm="_ServicePT" path="/proile permissive=1
+type=1400 audit(1530723685.808:15743): avc: denied { open } for pid=18244 comm="top" path="/proc/310/class=file permissive=1
+type=1400 audit(1530723715.728:15744): avc: denied { search } for pid=1278 comm="_ServicePT" name="30sive=1
+type=1400 audit(1530723715.728:15744): avc: denied { search } for pid=1278 comm="_ServicePT" name="30sive=1
+type=1400 audit(1530723715.748:15745): avc: denied { search } for pid=1278 comm="_ServicePT" name="30
+type=1400 audit(1530723715.748:15745): avc: denied { search } for pid=1278 comm="_ServicePT" name="30
+type=1400 audit(1530723715.748:15746): avc: denied { read } for pid=1278 comm="_ServicePT" name="statssive=1
+type=1400 audit(1530723715.748:15746): avc: denied { read } for pid=1278 comm="_ServicePT" name="statssive=1
+type=1400 audit(1530723715.748:15747): avc: denied { open } for pid=1278 comm="_ServicePT" path="/profile permissive=1
+type=1400 audit(1530723715.748:15747): avc: denied { open } for pid=1278 comm="_ServicePT" path="/profile permissive=1
+type=1400 audit(1530724107.048:15748): avc: denied { write } for pid=1278 comm="_ACFRead" laddr=127.0ssive=1
+type=1400 audit(1530724107.048:15748): avc: denied { write } for pid=1278 comm="_ACFRead" laddr=127.0ssive=1
+type=1400 audit(1530724107.048:15749): avc: denied { read } for pid=22805 comm="top" name="stat" dev= tclass=file permissive=1
+type=1400 audit(1530724107.048:15749): avc: denied { read } for pid=22805 comm="top" name="stat" dev= tclass=file permissive=1
+type=1400 audit(1530724107.048:15750): avc: denied { open } for pid=22805 comm="top" path="/proc/1877s0:c512,c768 tclass=file permissive=1
+audit: audit_lost=7085 audit_rate_limit=20 audit_backlog_limit=64
+audit: rate limit exceeded
+type=1400 audit(1530724107.048:15750): avc: denied { open } for pid=22805 comm="top" path="/proc/1877s0:c512,c768 tclass=file permissive=1
+type=1400 audit(1530724107.208:15751): avc: denied { getattr } for pid=22812 comm="top" path="/proc/2permissive=1
+type=1400 audit(1530724107.208:15751): avc: denied { getattr } for pid=22812 comm="top" path="/proc/2permissive=1
+type=1400 audit(1530724107.208:15752): avc: denied { search } for pid=22812 comm="top" name="244" devive=1
+type=1400 audit(1530724107.208:15773): avc: denied { getattr } for pid=22812 comm="top" path="/proc/2ss=dir permissive=1
+type=1400 audit(1530724122.478:15807): avc: denied { getattr } for pid=22969 comm="top" path="/proc/20 tclass=dir permissive=1
+type=1400 audit(1530724122.478:15807): avc: denied { getattr } for pid=22969 comm="top" path="/proc/20 tclass=dir permissive=1
+type=1400 audit(1530724122.478:15808): avc: denied { search } for pid=22969 comm="top" name="264" devs=dir permissive=1
+type=1400 audit(1530724122.478:15808): avc: denied { search } for pid=22969 comm="top" name="264" devs=dir permissive=1
+type=1400 audit(1530724122.478:15809): avc: denied { read } for pid=22969 comm="top" name="stat" dev==file permissive=1
+type=1400 audit(1530724122.478:15809): avc: denied { read } for pid=22969 comm="top" name="stat" dev==file permissive=1
+type=1400 audit(1530724122.478:15810): avc: denied { open } for pid=22969 comm="top" path="/proc/264/:s0 tclass=file permissive=1
+type=1400 audit(1530724122.478:15810): avc: denied { open } for pid=22969 comm="top" path="/proc/264/:s0 tclass=file permissive=1
+type=1400 audit(1530724122.478:15811): avc: denied { getattr } for pid=22969 comm="top" path="/proc/2permissive=1
+audit: audit_lost=7118 audit_rate_limit=20 audit_backlog_limit=64
+audit: rate limit exceeded
+type=1400 audit(1530724124.838:15846): avc: denied { getattr } for pid=22994 comm="top" path="/proc/2fault:s0 tclass=dir permissive=1
+type=1400 audit(1530724132.538:15850): avc: denied { call } for pid=496 comm="hci_thread" scontext=u:
+type=1400 audit(1530724132.538:15850): avc: denied { call } for pid=496 comm="hci_thread" scontext=u:
+type=1400 audit(1530724132.578:15851): avc: denied { getattr } for pid=256 comm="bluetooth@1.0-s" pattclass=chr_file permissive=1
+type=1400 audit(1530724132.578:15851): avc: denied { getattr } for pid=256 comm="bluetooth@1.0-s" pattclass=chr_file permissive=1
+type=1400 audit(1530724132.578:15852): avc: denied { call } for pid=256 comm="bluetooth@1.0-s" sconte
+type=1400 audit(1530724132.578:15852): avc: denied { call } for pid=256 comm="bluetooth@1.0-s" sconte
+audit: audit_lost=7121 audit_rate_limit=20 audit_backlog_limit=64
+audit: rate limit exceeded
+type=1400 audit(1530724135.718:15853): avc: denied { search } for pid=1278 comm="_ServicePT" name="20=1
+type=1400 audit(1530724135.718:15853): avc: denied { search } for pid=1278 comm="_ServicePT" name="20=1
+type=1400 audit(1530724135.718:15854): avc: denied { read } for pid=1278 comm="_ServicePT" name="state=1
+type=1400 audit(1530724135.718:15889): avc: denied { search } for pid=1278 comm="_ServicePT" name="26missive=1
+type=1400 audit(1530724140.048:15997): avc: denied { getattr } for pid=23164 comm="top" path="/proc/2ss=dir permissive=1
+type=1400 audit(1530724140.048:15997): avc: denied { getattr } for pid=23164 comm="top" path="/proc/2ss=dir permissive=1
+type=1400 audit(1530724140.068:15998): avc: denied { search } for pid=23164 comm="top" name="280" devpermissive=1
+type=1400 audit(1530724140.068:15998): avc: denied { search } for pid=23164 comm="top" name="280" devpermissive=1
+type=1400 audit(1530724140.068:15999): avc: denied { read } for pid=23164 comm="top" name="stat" dev=e permissive=1
+type=1400 audit(1530724140.068:15999): avc: denied { read } for pid=23164 comm="top" name="stat" dev=e permissive=1
+type=1400 audit(1530724140.068:16000): avc: denied { open } for pid=23164 comm="top" path="/proc/284/tclass=file permissive=1
+type=1400 audit(1530724140.068:16000): avc: denied { open } for pid=23164 comm="top" path="/proc/284/tclass=file permissive=1
+type=1400 audit(1530724140.438:16001): avc: denied { read } for pid=23164 comm="top" name="stat" dev=ile permissive=1
+type=1400 audit(1530724142.418:16026): avc: denied { open } for pid=23188 comm="top" path="/proc/312/lass=file permissive=1
+type=1400 audit(1530724146.228:16027): avc: denied { read } for pid=23224 comm="top" name="stat" dev=permissive=1
+type=1400 audit(1530724146.228:16027): avc: denied { read } for pid=23224 comm="top" name="stat" dev=permissive=1
+type=1400 audit(1530724146.248:16028): avc: denied { open } for pid=23224 comm="top" path="/proc/304/lass=file permissive=1
+type=1400 audit(1530724146.248:16028): avc: denied { open } for pid=23224 comm="top" path="/proc/304/lass=file permissive=1
+type=1400 audit(1530724146.248:16029): avc: denied { getattr } for pid=23224 comm="top" path="/proc/3 permissive=1
+type=1400 audit(1530724146.248:16029): avc: denied { getattr } for pid=23224 comm="top" path="/proc/3 permissive=1
+type=1400 audit(1530724146.248:16030): avc: denied { search } for pid=23224 comm="top" name="305" devsive=1
+type=1400 audit(1530724146.248:16030): avc: denied { search } for pid=23224 comm="top" name="305" devsive=1
+type=1400 audit(1530724146.248:16031): avc: denied { read } for pid=23224 comm="top" name="stat" dev= permissive=1
+type=1400 audit(1530724146.248:16032): avc: denied { open } for pid=23224 comm="top" path="/proc/310/class=file permissive=1
+type=1400 audit(1530724154.798:16033): avc: denied { getattr } for pid=23318 comm="top" path="/proc/2ss=dir permissive=1
+type=1400 audit(1530724154.798:16033): avc: denied { getattr } for pid=23318 comm="top" path="/proc/2ss=dir permissive=1
+type=1400 audit(1530724154.798:16034): avc: denied { search } for pid=23318 comm="top" name="296" devpermissive=1
+type=1400 audit(1530724154.798:16034): avc: denied { search } for pid=23318 comm="top" name="296" devpermissive=1
+type=1400 audit(1530724154.798:16035): avc: denied { read } for pid=23318 comm="top" name="stat" dev=rmissive=1
+type=1400 audit(1530724154.798:16035): avc: denied { read } for pid=23318 comm="top" name="stat" dev=rmissive=1
+type=1400 audit(1530724154.798:16036): avc: denied { open } for pid=23318 comm="top" path="/proc/300/ss=file permissive=1
+type=1400 audit(1530724154.798:16036): avc: denied { open } for pid=23318 comm="top" path="/proc/300/ss=file permissive=1
+type=1400 audit(1530724154.798:16037): avc: denied { read } for pid=23318 comm="top" name="stat" dev=sive=1
+type=1400 audit(1530724157.678:16052): avc: denied { search } for pid=23348 comm="top" name="300" devrmissive=1
+type=1400 audit(1530724162.238:16053): avc: denied { read } for pid=23400 comm="top" name="stat" dev=rmissive=1
+type=1400 audit(1530724162.238:16053): avc: denied { read } for pid=23400 comm="top" name="stat" dev=rmissive=1
+type=1400 audit(1530724162.258:16054): avc: denied { open } for pid=23400 comm="top" path="/proc/290/ss=file permissive=1
+type=1400 audit(1530724162.258:16054): avc: denied { open } for pid=23400 comm="top" path="/proc/290/ss=file permissive=1
+type=1400 audit(1530724162.258:16055): avc: denied { read } for pid=23400 comm="top" name="stat" dev=ile permissive=1
+type=1400 audit(1530724162.258:16055): avc: denied { read } for pid=23400 comm="top" name="stat" dev=ile permissive=1
+type=1400 audit(1530724162.258:16056): avc: denied { open } for pid=23400 comm="top" path="/proc/291/0 tclass=file permissive=1
+type=1400 audit(1530724162.258:16056): avc: denied { open } for pid=23400 comm="top" path="/proc/291/0 tclass=file permissive=1
+type=1400 audit(1530724162.258:16057): avc: denied { getattr } for pid=23400 comm="top" path="/proc/2lass=dir permissive=1
+audit: audit_lost=7228 audit_rate_limit=20 audit_backlog_limit=64
+audit: rate limit exceeded
+type=1400 audit(1530724165.728:16096): avc: denied { read } for pid=23435 comm="top" name="stat" dev=768 tclass=file permissive=1
+type=1400 audit(1530724169.198:16175): avc: denied { getattr } for pid=23472 comm="top" path="/proc/20 tclass=dir permissive=1
+type=1400 audit(1530724169.198:16175): avc: denied { getattr } for pid=23472 comm="top" path="/proc/20 tclass=dir permissive=1
+type=1400 audit(1530724169.218:16176): avc: denied { search } for pid=23472 comm="top" name="264" devs=dir permissive=1
+type=1400 audit(1530724169.218:16176): avc: denied { search } for pid=23472 comm="top" name="264" devs=dir permissive=1
+type=1400 audit(1530724169.228:16177): avc: denied { getattr } for pid=23472 comm="top" path="/proc/2ir permissive=1
+type=1400 audit(1530724169.228:16177): avc: denied { getattr } for pid=23472 comm="top" path="/proc/2ir permissive=1
+type=1400 audit(1530724169.228:16178): avc: denied { search } for pid=23472 comm="top" name="265" devissive=1
+type=1400 audit(1530724169.228:16178): avc: denied { search } for pid=23472 comm="top" name="265" devissive=1
+type=1400 audit(1530724169.228:16179): avc: denied { read } for pid=23472 comm="top" name="stat" dev=sive=1
+type=1400 audit(1530724169.248:16186): avc: denied { open } for pid=23472 comm="top" path="/proc/1386le permissive=1
+type=1400 audit(1530724179.018:16187): avc: denied { read } for pid=23577 comm="top" name="stat" dev==file permissive=1
+type=1400 audit(1530724179.018:16187): avc: denied { read } for pid=23577 comm="top" name="stat" dev==file permissive=1
+type=1400 audit(1530724179.038:16188): avc: denied { open } for pid=23577 comm="top" path="/proc/264/:s0 tclass=file permissive=1
+type=1400 audit(1530724179.038:16188): avc: denied { open } for pid=23577 comm="top" path="/proc/264/:s0 tclass=file permissive=1
+type=1400 audit(1530724179.038:16189): avc: denied { read } for pid=23577 comm="top" name="stat" dev=missive=1
+type=1400 audit(1530724179.038:16189): avc: denied { read } for pid=23577 comm="top" name="stat" dev=missive=1
+type=1400 audit(1530724179.038:16190): avc: denied { open } for pid=23577 comm="top" path="/proc/265/s=file permissive=1
+type=1400 audit(1530724179.038:16190): avc: denied { open } for pid=23577 comm="top" path="/proc/265/s=file permissive=1
+type=1400 audit(1530724179.038:16191): avc: denied { getattr } for pid=23577 comm="top" path="/proc/2permissive=1
+
+130|lotus:/vendor # type=1400 audit(1530724182.558:16219): avc: denied { open } for pid=23613 comm="tu:r:mediaprovider:s0:c512,c768 tclass=file permissive=1
+type=1400 audit(1530724187.978:16220): avc: denied { getattr } for pid=23672 comm="top" path="/proc/2fault:s0 tclass=dir permissive=1
+type=1400 audit(1530724187.978:16220): avc: denied { getattr } for pid=23672 comm="top" path="/proc/2fault:s0 tclass=dir permissive=1
+type=1400 audit(1530724187.978:16221): avc: denied { search } for pid=23672 comm="top" name="257" dev0 tclass=dir permissive=1
+type=1400 audit(1530724187.978:16221): avc: denied { search } for pid=23672 comm="top" name="257" dev0 tclass=dir permissive=1
+type=1400 audit(1530724187.978:16222): avc: denied { getattr } for pid=23672 comm="top" path="/proc/2tor_default:s0 tclass=dir permissive=1
+type=1400 audit(1530724187.978:16222): avc: denied { getattr } for pid=23672 comm="top" path="/proc/2tor_default:s0 tclass=dir permissive=1
+
+type=1400 audit(1530724187.978:16223): avc: denied { search } for pid=23672 comm="top" name="258" devault:s0 tclass=dir permissive=1
+130|lotus:/vendor # type=1400 audit(1530724187.978:16223): avc: denied { search } for pid=23672 comm=aphics_allocator_default:s0 tclass=dir permissive=1
+type=1400 audit(1530724187.978:16224): avc: denied { read } for pid=23672 comm="top" name="stat" dev=s=file permissive=1
+
+130|lotus:/vendor #
+130|lotus:/vendor # date
+Wed Jul  4 17:09:49 GMT 2018
+lotus:/vendor #
+lotus:/vendor #
+lotus:/vendor #
+lotus:/vendor #
+lotus:/vendor #
+lotus:/vendor #
+lotus:/vendor #
+lotus:/vendor #
+lotus:/vendor # cd /sdcard
+lotus:/sdcard # rm -rf *
+lotus:/sdcard # type=1400 audit(1530724189.588:16239): avc: denied { open } for pid=23684 comm="top" :r:system_app:s0 tclass=file permissive=1
+type=1400 audit(1530724194.728:16240): avc: denied { read } for pid=23743 comm="top" name="stat" dev=s=file permissive=1
+type=1400 audit(1530724194.728:16240): avc: denied { read } for pid=23743 comm="top" name="stat" dev=s=file permissive=1
+type=1400 audit(1530724194.748:16241): avc: denied { open } for pid=23743 comm="top" path="/proc/255/t:s0 tclass=file permissive=1
+type=1400 audit(1530724194.748:16241): avc: denied { open } for pid=23743 comm="top" path="/proc/255/t:s0 tclass=file permissive=1
+type=1400 audit(1530724194.778:16242): avc: denied { read } for pid=23743 comm="top" name="stat" dev=ile permissive=1
+type=1400 audit(1530724194.778:16242): avc: denied { read } for pid=23743 comm="top" name="stat" dev=ile permissive=1
+type=1400 audit(1530724194.778:16243): avc: denied { open } for pid=23743 comm="top" path="/proc/545/0 tclass=file permissive=1
+
+lotus:/sdcard #
+lotus:/sdcard #
+lotus:/sdcard # cdtype=1400 audit(1530724194.778:16243): avc: denied { open } for pid=23743 comm="topr:webview_zygote:s0 tclass=file permissive=1
+audit: audit_lost=7306 audit_rate_limit=20 audit_backlog_limit=64
+audit: rate limit exceeded
+type=1400 audit(1530724195.718:16244): avc: denied { search } for pid=1278 comm="_ServicePT" name="2"
+ /data/data
+lotus:/data/data # rm -rf
+lotus:/data/data #
+lotus:/data/data #
+lotus:/data/data # ls
+android                            com.android.musicfx
+android.ext.services               com.android.nfc
+android.ext.shared                 com.android.onetimeinitializer
+com.android.backupconfirm          com.android.packageinstaller
+com.android.bips                   com.android.pacprocessor
+com.android.bluetooth              com.android.phone
+com.android.bluetoothmidiservice   com.android.printservice.recommendation
+com.android.bookmarkprovider       com.android.printspooler
+com.android.calculator2            com.android.providers.blockednumber
+com.android.calendar               com.android.providers.calendar
+com.android.calllogbackup          com.android.providers.contacts
+com.android.camera2                com.android.providers.downloads
+com.android.captiveportallogin     com.android.providers.downloads.ui
+com.android.carrierconfig          com.android.providers.media
+com.android.carrierdefaultapp      com.android.providers.settings
+com.android.cellbroadcastreceiver  com.android.providers.telephony
+com.android.certinstaller          com.android.providers.userdictionary
+com.android.companiondevicemanager com.android.provision
+com.android.contacts               com.android.proxyhandler
+com.android.cts.ctsshim            com.android.quicksearchbox
+com.android.cts.priv.ctsshim       com.android.server.telecom
+com.android.defcontainer           com.android.settings
+com.android.deskclock              com.android.sharedstoragebackup
+com.android.dialer                 com.android.shell
+com.android.documentsui            com.android.statementservice
+com.android.dreams.basic           com.android.storagemanager
+com.android.egg                    com.android.systemui
+com.android.email                  com.android.systemui.theme.dark
+com.android.emergencytype=1400 audit(1530724195.718:16274): avc: denied { open } for pid=1278 comm="_al_sensors_default:s0 tclass=file permissive=1
+              com.android.vpndialogs
+com.android.externalstorage        com.antype=1400 audit(1530724202.278:16346): avc: denied { getattr2,c768 tcontext=u:r:init:s0 tclass=dir permissive=1
+droid.wallpaperbackup
+com.android.gallery3d        type=1400 audit(1530724202.278:16346): avc: denied { getattr } for pid=2ext=u:r:init:s0 tclass=dir permissive=1
+      com.android.wallpapercropper
+com.android.htmlviewer             com.android.webview
+com.type=1400 audit(1530724202.278:16347): avc: denied { search } for pid=23829 comm="top" name="1" dssive=1
+android.inputdevices           cotype=1400 audit(1530724202.278:16347): avc: denied { search } for pi=u:r:init:s0 tclass=dir permissive=1
+m.fsl.android.ota
+com.android.inputmethod.latin      com.fsl.ethernet      type=1400 audit(1530724202.278:16348): avc: _app:s0:c512,c768 tcontext=u:r:init:s0 tclass=file permissive=1
+
+com.android.inputmethod.pinyin     com.ge.med.mic.launcher
+com.android.keychain               com.ge.med.mic.monitoring
+com.android.launchetype=1400 audit(1530724202.278:16348): avc: denied { read } for pid=23829 comm="to tclass=file permissive=1
+r3              com.ge.med.mic.setype=1400 audit(1530724202.278:16349): avc: denied { open } for pid=8 tcontext=u:r:init:s0 tclass=file permissive=1
+rvice
+com.andrtype=1400 audit(1530724202.278:16349): avc: denied { open } for pid=23829 comm="top" path="/plass=file permissive=1
+oid.location.fused         com.getype=1400 audit(1530724202.348:16350): avc: denied { getattr } for p tcontext=u:r:logd:s0 tclass=dir permissive=1
+.ppd
+com.android.managedprovisioning    com.halbae87.koreanbasicime
+com.android.mms.service            com.svox.pico
+com.android.mtp                    jp.co.omronsoft.openwnn
+com.android.music     audit: audit_lost=7377 audit_rate_limit=20 audit_backlog_limit=64
+             org.chromium.webviewaudit: rate limit exceeded
+_shell
+
+lotus:/data/data #
+lotus:/data/data #
+lotus:/data/data # reboot
+init: Clear action queue and start shutdown trigger
+init: processing action (shutdown_done) from (<Builtin Action>:0)
+init: Reboot start, reason: reboot,, rebootTarget:
+init: Shutdown timeout: 6000 ms
+init: terminating init services
+init: Sending signal 15 to service 'healthd' (pid 265) process group...
+init: Sending signal 15 to service 'console' (pid 278) process group...
+collectd[5069]: Exiting normally.
+collectd[5069]: collectd: Stopping 5 read threads.
+collectd[5069]: collectd: Stoppiinit: Sending signal 15 to service 'lotuseventlogger' (pid 280) proce
+ng 5 write threads.
+collectd[5069]: rrdtool plugin: Shutting down the queue thread. init: Sending signal 15 to service 'l
+This may take a while.
+Terminated
+
+init: Sending signal 15 to service 'lotusmainlogger' (pid 282) process group...
+143|lotus:/data/data # (stc): st_tty_close (stc): 2 not un-registered
+(stc): 3 not un-registered(stc): 4 not un-registered
+
+143|lotus:/data/data # (hci_tty): inside hci_tty_release (d0a6bac0, d16759c0)
+(stc):  chnl_id 4 not registered(hci_tty): st_unregister(4) failed with error -93
+(stc):  chnl_id 2 not registered(hci_tty): st_unregister(2) failed with error -93
+(stc):  chnl_id 3 not registered(hci_tty): st_unregister(3) failed with error -93
+binder: release 262:443 transaction 1581194 in, still active
+binder: send failed reply for transaction 1581194 to 392:445
+
+143|lotus:/data/data #
+143|lotus:/data/data # binder: 392: binder_alloc_buf, no vma
+binder: 268:333 transaction failed 29201, size 68-0
+binder: 392: binder_alloc_buf, no vma
+binder: 268:332 transaction failed 29201, size 68-0
+
+143|lotus:/data/data #
+143|lotus:/data/data #
+143|lotus:/data/data # binder: 268:333 transaction failed 29189, size 68-0
+
+143|lotus:/data/data #
+143|lotus:/data/data #
+143|lotus:/data/data #
+143|lotus:/data/data #
+143|lotus:/data/data #
+143|lotus:/data/data #
+143|lotus:/data/data #
+143|lotus:/data/data #
+143|lotus:/data/data #
+143|lotus:/data/data #
+vdc: 651 emulated 5
+
+vdc: 651 emulated 0
+
+vdc: 651 emulated 8
+
+vdc: 659 emulated
+
+vdc: 200 23856 Command succeeded
+
+logd.klogd: 14251 output lines suppressed due to ratelimiting
+imx2-wdt 20bc000.wdog: Device shutdown: Expect reboot!
+ci_hdrc ci_hdrc.1: remove, state 1
+usb usb1: USB disconnect, device number 1
+usb 1-1: USB disconnect, device number 2
+usb 1-1.2: USB disconnect, device number 3
+usb 1-1.2.1: USB disconnect, device number 5
+usb 1-1.2.2: USB disconnect, device number 6
+ftdi_sio ttyUSB2: FTDI USB Serial Device converter now disconnected from ttyUSB2
+ftdi_sio 1-1.2.2:1.0: device disconnected
+ftdi_sio ttyUSB3: FTDI USB Serial Device converter now disconnected from ttyUSB3
+ftdi_sio 1-1.2.2:1.1: device disconnected
+ftdi_sio ttyUSB4: FTDI USB Serial Device converter now disconnected from ttyUSB4
+ftdi_sio 1-1.2.2:1.2: device disconnected
+ftdi_sio ttyUSB5: FTDI USB Serial Device converter now disconnected from ttyUSB5
+ftdi_sio 1-1.2.2:1.3: device disconnected
+usb 1-1.4: USB disconnect, device number 4
+ftdi_sio ttyUSB0: FTDI USB Serial Device converter now disconnected from ttyUSB0
+ftdi_sio 1-1.4:1.0: device disconnected
+ftdi_sio ttyUSB1: FTDI USB Serial Device converter now disconnected from ttyUSB1
+ftdi_sio 1-1.4:1.1: device disconnected
+ci_hdrc ci_hdrc.1: USB bus 1 deregistered
+reboot: Restarting system with command ''
+
+
+U-Boot 2016.09.01-g28bfd7f (Jul 04 2018 - 13:10:08 +0530), Build: jenkins-OREO-NIGHTLY-revC-65
+
+CPU:   Freescale i.MX6D rev1.5 at 792 MHz
+Reset cause: WDOG
+BOARD: Advantech DMS-BA16
+I2C:   ready
+DRAM:  2 GiB
+MMC:   FSL_SDHC: 0, FSL_SDHC: 1, FSL_SDHC: 2
+Using default environment
+
+auto-detected panel INNOLUX-G101ICE-L01
+Display: INNOLUX-G101ICE-L01 (1280x800)
+In:    serial
+Out:   serial
+Err:   serial
+Net:   Board Net Initialization Failed
+No ethernet found.
+Hit any key to stop autoboot:  0
+=>
+=>
+=>
+=>
+=>
+=> mw.l 0x20d8040 0x30; md.l 0x20d8040 1; mw.l 0x20d8044 0x10000000; reset
+020d8040: 00000030                               0...
+resetting ...
+
+
+U-Boot 2016.09.01-00040-g98d2563-dirty (Feb 02 2018 - 18:42:01 +0000)
+
+CPU:   Freescale i.MX6D rev1.5 at 792 MHz
+Reset cause: WDOG
+BOARD: Advantech DMS-BA16
+I2C:   ready
+DRAM:  2 GiB
+MMC:   FSL_SDHC: 0, FSL_SDHC: 1, FSL_SDHC: 2
+Using default environment
+
+auto-detected panel INNOLUX-G101ICE-L01
+Display: INNOLUX-G101ICE-L01 (1280x800)
+In:    serial
+Out:   serial
+Err:   serial
+Net:   Board Net Initialization Failed
+No ethernet found.
+Hit any key to stop autoboot:  0
+Kernel image @ 0x12000000 [ 0x000000 - 0x8b7b18 ]
+## Loading init Ramdisk from Legacy Image at 12c00000 ...
+   Image Name:   fsl-image-mfgtool-initramfs-imx6
+   Image Type:   ARM Linux RAMDisk Image (gzip compressed)
+   Data Size:    8594071 Bytes = 8.2 MiB
+   Load Address: 00000000
+   Entry Point:  00000000
+   Verifying Checksum ... OK
+## Flattened Device Tree blob at 18000000
+   Booting using the fdt blob at 0x18000000
+   Loading Ramdisk to 147cd000, end 14fff297 ... CACHE: Misaligned operation at                      range [147cd000, 14fff297]
+OK
+   Loading Device Tree to 147bf000, end 147cca32 ... OK
+
+Starting kernel ...
+
+Booting Linux on physical CPU 0x0
+Initializing cgroup subsys cpu
+Initializing cgroup subsys cpuacct
+Linux version 4.1.15-00153-g4b7912b-dirty (root@plaid) (gcc version 4.6.x-google                      20120106 (prerelease) (GCC) ) #55 SMP PREEMPT Thu Nov 30 19:51:03 UTC 2017
+CPU: ARMv7 Processor [412fc09a] revision 10 (ARMv7), cr=10c53c7d
+CPU: PIPT / VIPT nonaliasing data cache, VIPT aliasing instruction cache
+Machine model: Advantech DMS-BA16
+Memory policy: Data cache writealloc
+PERCPU: Embedded 13 pages/cpu @ee7b5000 s22016 r8192 d23040 u53248
+Built 1 zonelists in Zone order, mobility grouping on.  Total pages: 522768
+Kernel command line: console=ttymxc3,115200 rdinit=/linuxrc g_mass_storage.stall                     =0 g_mass_storage.removable=1 g_mass_storage.idVendor=0x066F g_mass_storage.idPr                     oduct=0x37FF g_mass_storage.iSerialNumber= clk_ignore_unused
+PID hash table entries: 4096 (order: 2, 16384 bytes)
+Dentry cache hash table entries: 131072 (order: 7, 524288 bytes)
+Inode-cache hash table entries: 65536 (order: 6, 262144 bytes)
+Memory: 2051176K/2097152K available (11585K kernel code, 971K rwdata, 3872K roda                     ta, 2048K init, 642K bss, 45976K reserved, 0K cma-reserved, 1318912K highmem)
+Virtual kernel memory layout:
+    vector  : 0xffff0000 - 0xffff1000   (   4 kB)
+    fixmap  : 0xffc00000 - 0xfff00000   (3072 kB)
+    vmalloc : 0xf0000000 - 0xff000000   ( 240 MB)
+    lowmem  : 0xc0000000 - 0xef800000   ( 760 MB)
+    pkmap   : 0xbfe00000 - 0xc0000000   (   2 MB)
+    modules : 0xbf000000 - 0xbfe00000   (  14 MB)
+      .text : 0xc0008000 - 0xc10186a4   (16450 kB)
+      .init : 0xc1100000 - 0xc1300000   (2048 kB)
+      .data : 0xc1300000 - 0xc13f2ec0   ( 972 kB)
+       .bss : 0xc13f5000 - 0xc149588c   ( 643 kB)
+SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=2, Nodes=1
+Preemptible hierarchical RCU implementation.
+        Additional per-CPU info printed with stalls.
+        RCU restricting CPUs from NR_CPUS=4 to nr_cpu_ids=2.
+RCU: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=2
+NR_IRQS:16 nr_irqs:16 16
+L2C-310 erratum 769419 enabled
+L2C-310 enabling early BRESP for Cortex-A9
+L2C-310 full line of zeros enabled for Cortex-A9
+L2C-310 ID prefetch enabled, offset 16 lines
+L2C-310 dynamic clock gating enabled, standby mode enabled
+L2C-310 cache controller enabled, 16 ways, 1024 kB
+L2C-310: CACHE_ID 0x410000c7, AUX_CTRL 0x76470001
+mxc_clocksource_init 3000000
+Switching to timer-based delay loop, resolution 333ns
+sched_clock: 32 bits at 3000kHz, resolution 333ns, wraps every 715827882841ns
+clocksource mxc_timer1: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 63                     7086815595 ns
+Console: colour dummy device 80x30
+Calibrating delay loop (skipped), value calculated using timer frequency.. 6.00                      BogoMIPS (lpj=30000)
+pid_max: default: 32768 minimum: 301
+Security Framework initialized
+SELinux:  Initializing.
+AppArmor: AppArmor disabled by boot time parameter
+Mount-cache hash table entries: 2048 (order: 1, 8192 bytes)
+Mountpoint-cache hash table entries: 2048 (order: 1, 8192 bytes)
+Initializing cgroup subsys freezer
+Initializing cgroup subsys debug
+CPU: Testing write buffer coherency: ok
+CPU0: thread -1, cpu 0, socket 0, mpidr 80000000
+Setting up static identity map for 0x10100000 - 0x10100058
+CPU1: thread -1, cpu 1, socket 0, mpidr 80000001
+Brought up 2 CPUs
+SMP: Total of 2 processors activated (12.00 BogoMIPS).
+CPU: All CPU(s) started in SVC mode.
+devtmpfs: initialized
+VFP support v0.3: implementor 41 architecture 3 part 30 variant 9 rev 4
+clocksource jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112                     604462750000 ns
+pinctrl core: initialized pinctrl subsystem
+NET: Registered protocol family 16
+DMA: preallocated 256 KiB pool for atomic coherent allocations
+cpuidle: using governor ladder
+cpuidle: using governor menu
+CPU identified as i.MX6Q, silicon rev 1.5
+hw-breakpoint: found 5 (+1 reserved) breakpoint and 1 watchpoint registers.
+hw-breakpoint: maximum watchpoint size is 4 bytes.
+imx6q-pinctrl 20e0000.iomuxc: initialized IMX pinctrl driver
+mxs-dma 110000.dma-apbh: initialized
+i2c i2c-0: IMX I2C adapter registered
+i2c i2c-0: can't use DMA
+i2c i2c-1: IMX I2C adapter registered
+i2c i2c-1: can't use DMA
+Installing DA9063 poweroff control
+i2c i2c-2: IMX I2C adapter registered
+i2c i2c-2: can't use DMA
+SCSI subsystem initialized
+usbcore: registered new interface driver usbfs
+usbcore: registered new interface driver hub
+usbcore: registered new device driver usb
+2000000.aips-bus:usbphy_nop1 supply vcc not found, using dummy regulator
+2000000.aips-bus:usbphy_nop2 supply vcc not found, using dummy regulator
+Linux video capture interface: v2.00
+pps_core: LinuxPPS API ver. 1 registered
+pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@l                     inux.it>
+PTP clock support registered
+imx-ipuv3 2400000.ipu: IPU DMFC NORMAL mode: 1(0~1), 5B(4,5), 5F(6,7)
+imx-ipuv3 2800000.ipu: IPU DMFC NORMAL mode: 1(0~1), 5B(4,5), 5F(6,7)
+MIPI CSI2 driver module loaded
+Advanced Linux Sound Architecture Driver Initialized.
+Bluetooth: Core ver 2.20
+NET: Registered protocol family 31
+Bluetooth: HCI device and connection manager initialized
+Bluetooth: HCI socket layer initialized
+Bluetooth: L2CAP socket layer initialized
+Bluetooth: SCO socket layer initialized
+Switched to clocksource mxc_timer1
+NET: Registered protocol family 2
+TCP established hash table entries: 8192 (order: 3, 32768 bytes)
+TCP bind hash table entries: 8192 (order: 4, 65536 bytes)
+TCP: Hash tables configured (established 8192 bind 8192)
+UDP hash table entries: 512 (order: 2, 16384 bytes)
+UDP-Lite hash table entries: 512 (order: 2, 16384 bytes)
+NET: Registered protocol family 1
+RPC: Registered named UNIX socket transport module.
+RPC: Registered udp transport module.
+RPC: Registered tcp transport module.
+RPC: Registered tcp NFSv4.1 backchannel transport module.
+Trying to unpack rootfs image as initramfs...
+Freeing initrd memory: 8396K (c47cd000 - c5000000)
+CPU PMU: Failed to parse /soc/pmu/interrupt-affinity[0]
+hw perfevents: enabled with armv7_cortex_a9 PMU driver, 7 counters available
+imx rpmsg driver is registered.
+Bus freq driver module loaded
+futex hash table entries: 512 (order: 3, 32768 bytes)
+audit: initializing netlink subsys (disabled)
+audit: type=2000 audit(1.040:1): initialized
+VFS: Disk quotas dquot_6.6.0
+VFS: Dquot-cache hash table entries: 1024 (order 0, 4096 bytes)
+NFS: Registering the id_resolver key type
+Key type id_resolver registered
+Key type id_legacy registered
+ntfs: driver 2.1.32 [Flags: R/W DEBUG].
+jffs2: version 2.2. (NAND) © 2001-2006 Red Hat, Inc.
+fuse init (API version 7.23)
+bounce: pool size: 64 pages
+io scheduler noop registered
+io scheduler deadline registered
+io scheduler cfq registered (default)
+imx-weim 21b8000.weim: Driver registered.
+MIPI DSI driver module loaded
+MIPI DSI driver module loaded
+ldb 2000000.aips-bus:ldb@020e0008: dual mode
+ldb 2000000.aips-bus:ldb@020e0008: split mode or dual mode, ignoring second outp                     ut
+mxc_sdc_fb fb@0: registered mxc display driver ldb
+imx-ipuv3 2400000.ipu: WARNING: adapt panel end blank lines
+imx-ipuv3 2400000.ipu: IPU DMFC DP HIGH RESOLUTION: 1(0,1), 5B(2~5), 5F(6,7)
+imx-ipuv3 2400000.ipu: WARNING: adapt panel end blank lines
+Console: switching to colour frame buffer device 160x50
+imx-sdma 20ec000.sdma: no iram assigned, using external mem
+imx-sdma 20ec000.sdma: no event needs to be remapped
+imx-sdma 20ec000.sdma: loaded firmware 3.3
+imx-sdma 20ec000.sdma: initialized
+21ec000.serial: ttymxc2 at MMIO 0x21ec000 (irq = 297, base_baud = 5000000) is a                      IMX
+21f0000.serial: ttymxc3 at MMIO 0x21f0000 (irq = 298, base_baud = 5000000) is a                      IMX
+console [ttymxc3] enabled
+imx sema4 driver is registered.
+i2c /dev entries driver
+i2c i2c-1: Added multiplexed i2c bus 3
+i2c i2c-1: Added multiplexed i2c bus 4
+i2c i2c-1: Added multiplexed i2c bus 5
+i2c i2c-1: Added multiplexed i2c bus 6
+i2c i2c-1: Added multiplexed i2c bus 7
+i2c i2c-1: Added multiplexed i2c bus 8
+i2c i2c-1: Added multiplexed i2c bus 9
+i2c i2c-1: Added multiplexed i2c bus 10
+pca954x 1-0070: registered 8 multiplexed busses for I2C switch pca9548
+[drm] Initialized drm 1.1.0 20060810
+[drm] Initialized vivante 1.0.0 20120216 on minor 0
+brd: module loaded
+loop: module loaded
+zram: Created 1 device(s)
+da9063 2-0058: Device detected (chip-ID: 0x61, var-ID: 0x60)
+ahci-imx 2200000.sata: fsl,transmit-level-mV value 1133, using 00000050
+ahci-imx 2200000.sata: fsl,transmit-boost-mdB value 3330, using 00000480
+ahci-imx 2200000.sata: fsl,transmit-atten-16ths value 12, using 00001000
+ahci-imx 2200000.sata: fsl,receive-eq-mdB not specified, using 05000000
+ahci-imx 2200000.sata: fsl,receive-dpll-mode value 1, using 00010000
+ahci-imx 2200000.sata: SSS flag set, parallel bus scan disabled
+ahci-imx 2200000.sata: AHCI 0001.0300 32 slots 1 ports 3 Gbps 0x1 impl platform                      mode
+ahci-imx 2200000.sata: flags: ncq sntf stag pm led clo only pmp pio slum part cc                     c apst
+scsi host0: ahci-imx
+ata1: SATA max UDMA/133 mmio [mem 0x02200000-0x02203fff] port 0x100 irq 308
+m25p80 spi0.0: n25q032 (4096 Kbytes)
+3 ofpart partitions found on MTD device spi0.0
+Creating 3 MTD partitions on "spi0.0":
+0x000000000000-0x0000000c0000 : "U-Boot"
+0x0000000c0000-0x0000000d0000 : "env"
+0x0000000d0000-0x000000200000 : "spare"
+spi_imx 2008000.ecspi: probed
+tpm_tis_core_init: tpm_chip_alloc()
+tpm_tis_core_init: wait_startup()
+tpm_tis_core_init: tpm_tis_read32 TPM_INT_ENABLE(priv->locality)
+tpm_tis_core_init: tpm_tis_write32 TPM_INT_ENABLE(priv->locality), intmask = 0x8                     F
+tpm_tis_core_init: tpm2_probe()
+tpm2_probe: tpm_transmit_cmd()
+tpm_tis_core_init: tpm_tis_read32 TPM_DID_VID(0)
+tpm_tis_core_init: +7
+tpm_tis_core_init: +8
+tpm_tis_spi spi4.2: 1.2 TPM (device-id 0x3205, rev-id 80)
+tpm_tis_core_init: +9
+tpm tpm0: Issuing TPM_STARTUP
+tpm_do_selftest++
+tpm_do_selftest: tpm_pcr_read_dev
+ata1: SATA link down (SStatus 0 SControl 300)
+ahci-imx 2200000.sata: no device found, disabling link.
+ahci-imx 2200000.sata: pass ahci_imx..hotplug=1 to enable hotplug
+tpm_do_selftest: rc != DOING_SELFTEST (== 0x0)
+tpm_do_selftest-- --
+spi_imx 2018000.ecspi: probed
+tun: Universal TUN/TAP device driver, 1.6
+tun: (C) 1999-2004 Max Krasnyansky <maxk@qualcomm.com>
+CAN device driver interface
+2188000.ethernet supply phy not found, using dummy regulator
+pps pps0: new PPS source ptp0
+fec 2188000.ethernet (unnamed net_device) (uninitialized): Invalid MAC address:                      00:00:00:00:00:00
+fec 2188000.ethernet (unnamed net_device) (uninitialized): Using random MAC addr                     ess: ae:8c:3a:71:d9:72
+libphy: fec_enet_mii_bus: probed
+fec 2188000.ethernet eth0: registered PHC device 0
+PPP generic driver version 2.4.2
+PPP BSD Compression module registered
+PPP Deflate Compression module registered
+PPP MPPE Compression module registered
+NET: Registered protocol family 24
+pegasus: v0.9.3 (2013/04/25), Pegasus/Pegasus II USB Ethernet driver
+usbcore: registered new interface driver pegasus
+usbcore: registered new interface driver rtl8150
+usbcore: registered new interface driver r8152
+usbcore: registered new interface driver asix
+usbcore: registered new interface driver ax88179_178a
+usbcore: registered new interface driver cdc_ether
+usbcore: registered new interface driver cdc_eem
+usbcore: registered new interface driver net1080
+usbcore: registered new interface driver cdc_subset
+usbcore: registered new interface driver zaurus
+usbcore: registered new interface driver cdc_ncm
+ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
+ehci-mxc: Freescale On-Chip EHCI Host driver
+usbcore: registered new interface driver cdc_acm
+cdc_acm: USB Abstract Control Model driver for USB modems and ISDN adapters
+usbcore: registered new interface driver usb-storage
+usbcore: registered new interface driver usbserial
+usbcore: registered new interface driver usbserial_generic
+usbserial: USB Serial support registered for generic
+usbcore: registered new interface driver ftdi_sio
+usbserial: USB Serial support registered for FTDI USB Serial Device
+usbcore: registered new interface driver option
+usbserial: USB Serial support registered for GSM modem (1-port)
+usbcore: registered new interface driver usb_ehset_test
+2184800.usbmisc supply vbus-wakeup not found, using dummy regulator
+ci_hdrc ci_hdrc.1: EHCI Host Controller
+ci_hdrc ci_hdrc.1: new USB bus registered, assigned bus number 1
+ci_hdrc ci_hdrc.1: USB 2.0 started, EHCI 1.00
+usb usb1: New USB device found, idVendor=1d6b, idProduct=0002
+usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb1: Product: EHCI Host Controller
+usb usb1: Manufacturer: Linux 4.1.15-00153-g4b7912b-dirty ehci_hcd
+usb usb1: SerialNumber: ci_hdrc.1
+hub 1-0:1.0: USB hub found
+hub 1-0:1.0: 1 port detected
+mousedev: PS/2 mouse device common for all mice
+usbcore: registered new interface driver xpad
+usbcore: registered new interface driver usb_acecad
+usbcore: registered new interface driver aiptek
+usbcore: registered new interface driver gtco
+usbcore: registered new interface driver hanwang
+usbcore: registered new interface driver kbtab
+input: da9063-onkey as /devices/soc0/soc/2100000.aips-bus/21a8000.i2c/i2c-2/2-00                     58/da9063-onkey/input/input0
+da9063-rtc da9063-rtc: rtc core: registered da9063-rtc as rtc0
+rtc-rx8010 2-0032: Update timer was detected
+rtc-rx8010 2-0032: rtc core: registered rx8010 as rtc1
+rtc-rx8010 2-0032: rx8010-irq_2 missing or invalid
+snvs_rtc 20cc000.snvs:snvs-rtc-lp: rtc core: registered 20cc000.snvs:snvs-r as r                     tc2
+IR NEC protocol handler initialized
+IR RC5(x/sz) protocol handler initialized
+IR RC6 protocol handler initialized
+IR JVC protocol handler initialized
+IR Sony protocol handler initialized
+IR SANYO protocol handler initialized
+IR Sharp protocol handler initialized
+IR MCE Keyboard/mouse protocol handler initialized
+IR XMP protocol handler initialized
+mxc_v4l2_output v4l2_out: V4L2 device registered as video16
+mxc_v4l2_output v4l2_out: V4L2 device registered as video17
+usbcore: registered new interface driver uvcvideo
+USB Video Class driver (1.1.1)
+sbs-battery 0-000b: sbs_probe: Failed to get device status
+sbs-battery: probe of 0-000b failed with error -5
+imx2-wdt 20bc000.wdog: use WDOG_B to reboot.
+imx2-wdt 20bc000.wdog: timeout 60 sec (nowayout=0)
+device-mapper: uevent: version 1.0.3
+device-mapper: ioctl: 4.31.0-ioctl (2015-3-12) initialised: dm-devel@redhat.com
+Bluetooth: HCI UART driver ver 2.3
+Bluetooth: HCI UART protocol H4 registered
+Bluetooth: HCI UART protocol BCSP registered
+usbcore: registered new interface driver btusb
+sdhci: Secure Digital Host Controller Interface driver
+sdhci: Copyright(c) Pierre Ossman
+sdhci-pltfm: SDHCI platform and OF driver helper
+/soc/aips-bus@02100000/usdhc@02198000: voltage-ranges unspecified
+sdhci-esdhc-imx 2198000.usdhc: No vqmmc regulator found
+mmc1: SDHCI controller on 2198000.usdhc [2198000.usdhc] using ADMA
+/soc/aips-bus@02100000/usdhc@0219c000: voltage-ranges unspecified
+sdhci-esdhc-imx 219c000.usdhc: could not get ultra high speed state, work on nor                     mal mode
+mxc_vpu 2040000.vpu_fsl: VPU initialized
+mxc_vdoa 21e4000.vdoa: i.MX Video Data Order Adapter(VDOA) driver probed
+Galcore version 5.0.11.41671
+usb 1-1: new full-speed USB device number 2 using ci_hdrc
+mmc1: MAN_BKOPS_EN bit is not set
+mmc1: new DDR MMC card at address 0001
+mmcblk1: mmc1:0001 BJNB4R 29.1 GiB
+mmcblk1boot0: mmc1:0001 BJNB4R partition 1 4.00 MiB
+mmcblk1boot1: mmc1:0001 BJNB4R partition 2 4.00 MiB
+mmcblk1rpmb: mmc1:0001 BJNB4R partition 3 4.00 MiB
+ mmcblk1: p1 p2 p3 p4 p5 p6 p7 p8 p9 p10
+caam 2100000.caam: Entropy delay = 3200
+usb 1-1: not running at top speed; connect to a high speed hub
+usb 1-1: New USB device found, idVendor=1a40, idProduct=0101
+usb 1-1: New USB device strings: Mfr=0, Product=1, SerialNumber=0
+usb 1-1: Product: USB 2.0 Hub [MTT]
+hub 1-1:1.0: USB hub found
+hub 1-1:1.0: 4 ports detected
+caam 2100000.caam: Instantiated RNG4 SH0
+caam 2100000.caam: Instantiated RNG4 SH1
+caam 2100000.caam: device ID = 0x0a16010000000000 (Era -524)
+caam 2100000.caam: job rings = 2, qi = 0
+caam algorithms registered in /proc/crypto
+caam_jr 2101000.jr0: registering rng-caam
+platform caam_sm: blkkey_ex: 4 keystore units available
+platform caam_sm: 64-bit clear key:
+platform caam_sm: [0000] 00 01 02 03 04 0f 06 07
+platform caam_sm: 64-bit black key:
+platform caam_sm: [0000] 5e c8 a1 67 ed a8 5c 4b
+platform caam_sm: [0008] c1 b4 6e 63 21 a4 5d 68
+platform caam_sm: 128-bit clear key:
+platform caam_sm: [0000] 00 01 02 03 04 0f 06 07
+platform caam_sm: [0008] 08 09 0a 0b 0c 0d 0e 0f
+platform caam_sm: 128-bit black key:
+platform caam_sm: [0000] a8 8b 6e f3 2f 45 55 1d
+platform caam_sm: [0008] 0d 1e 9d 54 b4 52 16 e2
+platform caam_sm: 192-bit clear key:
+platform caam_sm: [0000] 00 01 02 03 04 0f 06 07
+platform caam_sm: [0008] 08 09 0a 0b 0c 0d 0e 0f
+platform caam_sm: [0016] 10 11 12 13 14 15 16 17
+platform caam_sm: 192-bit black key:
+platform caam_sm: [0000] 5a 11 73 5b c0 37 e8 3e
+platform caam_sm: [0008] 75 7e 33 2a 6c 17 a8 8c
+platform caam_sm: [0016] ce ad f8 1b 36 fb 31 02
+platform caam_sm: [0024] 69 88 b4 94 57 07 ac 58
+platform caam_sm: 256-bit clear key:
+platform caam_sm: [0000] 00 01 02 03 04 0f 06 07
+platform caam_sm: [0008] 08 09 0a 0b 0c 0d 0e 0f
+platform caam_sm: [0016] 10 11 12 13 14 15 16 17
+platform caam_sm: [0024] 18 19 1a 1b 1c 1d 1e 1f
+platform caam_sm: 256-bit black key:
+platform caam_sm: [0000] 0e 9b 5c 88 08 ba 7b 67
+platform caam_sm: [0008] f3 e8 ca 5e dc 60 3e 2e
+platform caam_sm: [0016] 67 1b 9c 69 99 fe a8 c3
+platform caam_sm: [0024] ff fb 69 54 82 35 21 5c
+platform caam_sm: 64-bit unwritten blob:
+platform caam_sm: [0000] 00 00 00 00 00 00 00 00
+platform caam_sm: [0008] 00 00 00 00 00 00 00 00
+platform caam_sm: [0016] 00 00 00 00 00 00 00 00
+platform caam_sm: [0024] 00 00 00 00 00 00 00 00
+platform caam_sm: [0032] 00 00 00 00 00 00 00 00
+platform caam_sm: [0040] 00 00 00 00 00 00 00 00
+platform caam_sm: [0048] 00 00 00 00 00 00 00 00
+platform caam_sm: [0056] 00 00 00 00 00 00 00 00
+platform caam_sm: [0064] 00 00 00 00 00 00 00 00
+platform caam_sm: [0072] 00 00 00 00 00 00 00 00
+platform caam_sm: [0080] 00 00 00 00 00 00 00 00
+platform caam_sm: [0088] 00 00 00 00 00 00 00 00
+platform caam_sm: 128-bit unwritten blob:
+platform caam_sm: [0000] 00 00 00 00 00 00 00 00
+platform caam_sm: [0008] 00 00 00 00 00 00 00 00
+platform caam_sm: [0016] 00 00 00 00 00 00 00 00
+platform caam_sm: [0024] 00 00 00 00 00 00 00 00
+platform caam_sm: [0032] 00 00 00 00 00 00 00 00
+platform caam_sm: [0040] 00 00 00 00 00 00 00 00
+platform caam_sm: [0048] 00 00 00 00 00 00 00 00
+platform caam_sm: [0056] 00 00 00 00 00 00 00 00
+platform caam_sm: [0064] 00 00 00 00 00 00 00 00
+usb 1-1.2: new full-speed USB device number 3 using ci_hdrc
+platform caam_sm: [0072] 00 00 00 00 00 00 00 00
+platform caam_sm: [0080] 00 00 00 00 00 00 00 00
+platform caam_sm: [0088] 00 00 00 00 00 00 00 00
+platform caam_sm: 196-bit unwritten blob:
+platform caam_sm: [0000] 00 00 00 00 00 00 00 00
+platform caam_sm: [0008] 00 00 00 00 00 00 00 00
+platform caam_sm: [0016] 00 00 00 00 00 00 00 00
+platform caam_sm: [0024] 00 00 00 00 00 00 00 00
+platform caam_sm: [0032] 00 00 00 00 00 00 00 00
+platform caam_sm: [0040] 00 00 00 00 00 00 00 00
+platform caam_sm: [0048] 00 00 00 00 00 00 00 00
+platform caam_sm: [0056] 00 00 00 00 00 00 00 00
+platform caam_sm: [0064] 00 00 00 00 00 00 00 00
+platform caam_sm: [0072] 00 00 00 00 00 00 00 00
+platform caam_sm: [0080] 00 00 00 00 00 00 00 00
+platform caam_sm: [0088] 00 00 00 00 00 00 00 00
+platform caam_sm: 256-bit unwritten blob:
+platform caam_sm: [0000] 00 00 00 00 00 00 00 00
+platform caam_sm: [0008] 00 00 00 00 00 00 00 00
+platform caam_sm: [0016] 00 00 00 00 00 00 00 00
+platform caam_sm: [0024] 00 00 00 00 00 00 00 00
+platform caam_sm: [0032] 00 00 00 00 00 00 00 00
+platform caam_sm: [0040] 00 00 00 00 00 00 00 00
+platform caam_sm: [0048] 00 00 00 00 00 00 00 00
+platform caam_sm: [0056] 00 00 00 00 00 00 00 00
+platform caam_sm: [0064] 00 00 00 00 00 00 00 00
+platform caam_sm: [0072] 00 00 00 00 00 00 00 00
+platform caam_sm: [0080] 00 00 00 00 00 00 00 00
+platform caam_sm: [0088] 00 00 00 00 00 00 00 00
+platform caam_sm: 64-bit black key in blob:
+platform caam_sm: [0000] fc 2e f2 e9 cb 8e 6c 57
+platform caam_sm: [0008] 82 b5 4c de 9e 7a 95 24
+platform caam_sm: [0016] 89 40 d5 1f 60 70 67 37
+usb 1-1.2: not running at top speed; connect to a high speed hub
+platform caam_sm: [0024] 80 1b 46 7e 33 91 bb ed
+usb 1-1.2: New USB device found, idVendor=0424, idProduct=2514
+usb 1-1.2: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+hub 1-1.2:1.0: USB hub found
+hub 1-1.2:1.0: 2 ports detected
+platform caam_sm: [0032] 2f 4a aa a5 20 d5 8e f1
+platform caam_sm: [0040] 1b c0 0f 0a c6 33 b3 2d
+platform caam_sm: [0048] c0 14 36 f1 ac 41 d8 72
+platform caam_sm: [0056] 00 00 00 00 00 00 00 00
+platform caam_sm: [0064] 00 00 00 00 00 00 00 00
+platform caam_sm: [0072] 00 00 00 00 00 00 00 00
+platform caam_sm: [0080] 00 00 00 00 00 00 00 00
+platform caam_sm: [0088] 00 00 00 00 00 00 00 00
+platform caam_sm: 128-bit black key in blob:
+platform caam_sm: [0000] 69 7b 12 11 b1 62 2b ad
+platform caam_sm: [0008] b6 30 4b 2a 65 c6 1f e3
+platform caam_sm: [0016] 1f a8 84 03 c9 9f d6 d2
+platform caam_sm: [0024] 46 95 06 60 44 6e b0 ce
+platform caam_sm: [0032] b5 5b 9a 9b 8c d2 c5 94
+platform caam_sm: [0040] c2 88 65 e5 17 86 43 f2
+platform caam_sm: [0048] 0b 9a b9 07 de fc a5 87
+platform caam_sm: [0056] 81 07 36 ff 46 66 6a 00
+platform caam_sm: [0064] 00 00 00 00 00 00 00 00
+platform caam_sm: [0072] 00 00 00 00 00 00 00 00
+platform caam_sm: [0080] 00 00 00 00 00 00 00 00
+platform caam_sm: [0088] 00 00 00 00 00 00 00 00
+platform caam_sm: 192-bit black key in blob:
+platform caam_sm: [0000] f6 8e b5 70 9f 80 0e bb
+platform caam_sm: [0008] 38 d9 de 5a 0f c8 5f 09
+platform caam_sm: [0016] c0 98 be a7 e2 c8 9d 77
+platform caam_sm: [0024] 81 03 7d c9 66 ac 3a 38
+platform caam_sm: [0032] 08 b9 6d 8a d5 c4 ed 35
+platform caam_sm: [0040] b5 87 01 1e 74 b2 c2 85
+usb 1-1.4: new full-speed USB device number 4 using ci_hdrc
+platform caam_sm: [0048] 04 16 6a eb c8 cc 1c cd
+platform caam_sm: [0056] 85 7e 9b 25 55 d4 85 85
+platform caam_sm: [0064] d0 c3 ef a7 b9 63 3f d5
+platform caam_sm: [0072] 00 00 00 00 00 00 00 00
+platform caam_sm: [0080] 00 00 00 00 00 00 00 00
+platform caam_sm: [0088] 00 00 00 00 00 00 00 00
+platform caam_sm: 256-bit black key in blob:
+platform caam_sm: [0000] 6a 95 a3 03 fe cd e5 da
+platform caam_sm: [0008] 53 ee 28 04 0e d7 f4 81
+platform caam_sm: [0016] be 7e 49 59 73 ca 7c 75
+platform caam_sm: [0024] 3b de df 77 23 55 d9 ba
+platform caam_sm: [0032] 9e 90 fd 0b fb 20 13 5e
+platform caam_sm: [0040] 77 38 22 53 77 ee 4c d1
+platform caam_sm: [0048] 96 6e bd bf ed a9 ab 7a
+platform caam_sm: [0056] 11 28 1e 7a ed ad 4a d3
+platform caam_sm: [0064] 84 48 82 6c a8 dc ee 11
+platform caam_sm: [0072] 89 a9 6e a7 1a 18 ed 37
+platform caam_sm: [0080] 00 00 00 00 00 00 00 00
+platform caam_sm: [0088] 00 00 00 00 00 00 00 00
+platform caam_sm: restored 64-bit black key:
+platform caam_sm: [0000] 98 dd f4 19 a7 54 05 3f
+platform caam_sm: [0008] 0c e9 92 22 5c d9 7f b8
+platform caam_sm: restored 128-bit black key:
+platform caam_sm: [0000] a8 8b 6e f3 2f 45 55 1d
+platform caam_sm: [0008] 0d 1e 9d 54 b4 52 16 e2
+platform caam_sm: restored 192-bit black key:
+platform caam_sm: [0000] 5a 11 73 5b c0 37 e8 3e
+platform caam_sm: [0008] 75 7e 33 2a 6c 17 a8 8c
+platform caam_sm: [0016] 78 b5 91 18 49 59 f5 93
+platform caam_sm: [0024] ee 76 e4 d6 4c ff e5 7a
+platform caam_sm: restored 256-bit black key:
+usb 1-1.4: not running at top speed; connect to a high speed hub
+platform caam_sm: [0000] 0e 9b 5c 88 08 ba 7b 67
+platform caam_sm: [0008] f3 e8 ca 5e dc 60 3e 2e
+platform caam_sm: [0016] 67 1b 9c 69 99 fe a8 c3
+platform caam_sm: [0024] ff fb 69 54 82 35 21 5c
+usb 1-1.4: New USB device found, idVendor=0403, idProduct=6010
+snvs-secvio 20cc000.caam-snvs: can't get snvs clock
+snvs-secvio 20cc000.caam-snvs: violation handlers armed - non-secure state
+hidraw: raw HID events driver (C) Jiri Kosina
+usb 1-1.4: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+usbcore: registered new interface driver usbhid
+usbhid: USB HID core driver
+usb 1-1.4: Product: Dual RS232-HS
+usb 1-1.4: Manufacturer: FTDI
+ashmem: initialized
+logger: created 256K log 'log_main'
+logger: created 256K log 'log_events'
+logger: created 256K log 'log_radio'
+ftdi_sio 1-1.4:1.0: FTDI USB Serial Device converter detected
+usb 1-1.4: Detected FT2232H
+usb 1-1.4: FTDI USB Serial Device converter now attached to ttyUSB0
+ftdi_sio 1-1.4:1.1: FTDI USB Serial Device converter detected
+usb 1-1.4: Detected FT2232H
+usb 1-1.4: FTDI USB Serial Device converter now attached to ttyUSB1
+logger: created 256K log 'log_system'
+mma8452 3-001c: registering fsl,mma8453 accelerometer; ID 0x3a
+usb 1-1.2.1: new full-speed USB device number 5 using ci_hdrc
+mma8452 4-001d: registering fsl,mma8453 accelerometer; ID 0x3a
+usbcore: registered new interface driver snd-usb-audio
+sgtl5000: probe of 7-000a failed with error -5
+fsl-asrc 2034000.asrc: driver registered
+fsl-hdmi-dai soc:hdmi_audio@00120000: failed to probe. Load HDMI-video first.
+fsl-hdmi-dai: probe of soc:hdmi_audio@00120000 failed with error -12
+imx-sgtl5000 sound: ASoC: CODEC DAI sgtl5000 not registered
+imx-sgtl5000 sound: snd_soc_register_card failed (-517)
+imx-audio-hdmi sound-hdmi: initialize HDMI-audio failed. load HDMI-video first!
+NET: Registered protocol family 26
+u32 classifier
+    Actions configured
+Netfilter messages via NETLINK v0.30.
+nf_conntrack version 0.5.0 (16384 buckets, 65536 max)
+ctnetlink v0.93: registering with nfnetlink.
+xt_time: kernel timezone is -0000
+ip_tables: (C) 2000-2006 Netfilter Core Team
+arp_tables: (C) 2002 David S. Miller
+Initializing XFRM netlink socket
+usb 1-1.2.1: New USB device found, idVendor=0eef, idProduct=c000
+NET: Registered protocol family 10
+usb 1-1.2.1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+mip6: Mobile IPv6
+ip6_tables: (C) 2000-2006 Netfilter Core Team
+sit: IPv6 over IPv4 tunneling driver
+NET: Registered protocol family 17
+NET: Registered protocol family 15
+can: controller area network core (rev 20120528 abi 9)
+NET: Registered protocol family 29
+can: raw protocol (rev 20120528)
+can: broadcast manager protocol (rev 20120528 t)
+can: netlink gateway (rev 20130117) max_hops=1
+usb 1-1.2.1: Product: eGalaxTouch EXC3188-1549-08.00.00
+Bluetooth: RFCOMM TTY layer initialized
+Bluetooth: RFCOMM socket layer initialized
+Bluetooth: RFCOMM ver 1.11
+Bluetooth: BNEP (Ethernet Emulation) ver 1.3
+Bluetooth: BNEP filters: protocol multicast
+Bluetooth: BNEP socket layer initialized
+Bluetooth: HIDP (Human Interface Emulation) ver 1.2
+Bluetooth: HIDP socket layer initialized
+8021q: 802.1Q VLAN Support v1.8
+Key type dns_resolver registered
+failed to disable 1.2 GHz OPP
+failed to disable 852 MHz OPP
+cpufreq: __cpufreq_add_dev: CPU0: Running at unlisted freq: 792000 KHz
+cpufreq: __cpufreq_add_dev: CPU0: Unlisted initial frequency changed to: 996000                      KHz
+/soc/aips-bus@02100000/usdhc@0219c000: voltage-ranges unspecified
+sdhci-esdhc-imx 219c000.usdhc: could not get ultra high speed state, work on nor                     mal mode
+usb 1-1.2.1: Manufacturer: eGalax Inc.
+input: eGalax Inc. eGalaxTouch EXC3188-1549-08.00.00 as /devices/soc0/soc/210000                     0.aips-bus/2184200.usb/ci_hdrc.1/usb1/1-1/1-1.2/1-1.2.1/1-1.2.1:1.0/0003:0EEF:C0                     00.0001/input/input1
+hid-multitouch 0003:0EEF:C000.0001: input,hiddev0,hidraw0: USB HID v1.11 Pointer                      [eGalax Inc. eGalaxTouch EXC3188-1549-08.00.00] on usb-ci_hdrc.1-1.2.1/input0
+mmc2: SDHCI controller on 219c000.usdhc [219c000.usdhc] using ADMA
+imx-sgtl5000 sound: ASoC: CODEC DAI sgtl5000 not registered
+imx-sgtl5000 sound: snd_soc_register_card failed (-517)
+sdhci-esdhc-imx 219c000.usdhc: card claims to support voltages below defined ran                     ge
+dhd_module_init in
+Number of LUNs=8
+Mass Storage Function, version: 2009/09/11
+LUN: removable file: (no medium)
+Number of LUNs=1
+LUN: removable file: (no medium)
+Number of LUNs=1
+g_mass_storage gadget: Mass Storage Gadget, version: 2009/09/11
+g_mass_storage gadget: g_mass_storage ready
+usb 1-1.2.2: new full-speed USB device number 6 using ci_hdrc
+rtc-rx8010 2-0032: setting system clock to 2016-11-15 21:29:32 UTC (1479245372)
+mmc2: queuing unknown CIS tuple 0x91 (3 bytes)
+usb_otg_vbus: disabling
+clk: Not disabling unused clocks
+ALSA device list:
+  No soundcards found.
+mmc2: new high speed SDIO card at address 0001
+Freeing unused kernel memory: 2048K (c1100000 - c1300000)
+Starting UTP
+uuc 0.5 [built May 10 2017 05:25:28]
+UTP: Waiting for device to appear
+UTP: file/device node /dev/utp already exists
+cpu_id is 0
+usb 1-1.2.2: not running at top speed; connect to a high speed hub
+usb 1-1.2.2: New USB device found, idVendor=0403, idProduct=6011
+usb 1-1.2.2: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+usb 1-1.2.2: Product: Quad RS232-HS
+usb 1-1.2.2: Manufacturer: FTDI
+ftdi_sio 1-1.2.2:1.0: FTDI USB Serial Device converter detected
+usb 1-1.2.2: Detected FT4232H
+usb 1-1.2.2: FTDI USB Serial Device converter now attached to ttyUSB2
+imx-sgtl5000 sound: ASoC: CODEC DAI sgtl5000 not registered
+imx-sgtl5000 sound: snd_soc_register_card failed (-517)
+ftdi_sio 1-1.2.2:1.1: FTDI USB Serial Device converter detected
+usb 1-1.2.2: Detected FT4232H
+imx-sgtl5000 sound: ASoC: CODEC DAI sgtl5000 not registered
+imx-sgtl5000 sound: snd_soc_register_card failed (-517)
+usb 1-1.2.2: FTDI USB Serial Device converter now attached to ttyUSB3
+imx-sgtl5000 sound: ASoC: CODEC DAI sgtl5000 not registered
+imx-sgtl5000 sound: snd_soc_register_card failed (-517)
+ftdi_sio 1-1.2.2:1.2: FTDI USB Serial Device converter detected
+usb 1-1.2.2: Detected FT4232H
+usb 1-1.2.2: FTDI USB Serial Device converter now attached to ttyUSB4
+imx-sgtl5000 sound: ASoC: CODEC DAI sgtl5000 not registered
+imx-sgtl5000 sound: snd_soc_register_card failed (-517)
+ftdi_sio 1-1.2.2:1.3: FTDI USB Serial Device converter detected
+usb 1-1.2.2: Detected FT4232H
+usb 1-1.2.2: FTDI USB Serial Device converter now attached to ttyUSB5
+imx-sgtl5000 sound: ASoC: CODEC DAI sgtl5000 not registered
+imx-sgtl5000 sound: snd_soc_register_card failed (-517)
+g_mass_storage gadget: high-speed config #1: Linux File-Backed Storage
+UTP: received command 'send'
+UTP: sending Success to kernel for command send.
+UTP: received command 'frf'
+UTP: closing the file
+UTP: sending Success to kernel for command frf.
+utp_poll: pass returned.
+UTP: received command '$ dd if=/dev/zero of=/dev/mmcblk1 bs=1024 count=1'
+UTP: executing "dd if=/dev/zero of=/dev/mmcblk1 bs=1024 count=1"
+1+0 records in
+1+0 records out
+1024 bytes (1.0 kB, 1.0 KiB) copied, 0.0105077 s, 97.5 kB/s
+UTP: sending Success to kernel for command $ dd if=/dev/zero of=/dev/mmcblk1 bs=                     1024 count=1.
+utp_poll: pass returned.
+UTP: received command '$ sfdisk /dev/mmcblk1 < $FILE'
+UTP: executing "sfdisk /dev/mmcblk1 < $FILE"
+Checking that no-one is using thirandom: sfdisk urandom read with 62 bits of ent                     ropy available
+s disk right now ... OK
+
+Disk /dev/mmcblk1: 29.1 GiB, 31268536320 bytes, 61071360 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/ mmcblk1: p1 p2 p3 p4 p5 p6 p7
+physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+>>> Script header accepted.
+>>> Script header accepted.
+>>> Script header accepted.
+>>> Script header accepted.
+>>> Created a new GPT disklabel (GUID: 4D64E1AF-6399-4D53-9566-69EB92F6D017).
+Created a new partition 1 of type 'Linux filesystem' and of size 24 MiB.
+/dev/mmcblk1p2: Created a new partition 2 of type 'Linux filesystem' and of size                      16 MiB.
+/dev/mmcblk1p3: Created a new partition 3 of type 'Linux filesystem' and of size                      27 GiB.
+/dev/mmcblk1p4: Created a new partition 4 of type 'Linux filesystem' and of size                      800 MiB.
+/dev/mmcblk1p5: Created a new partition 5 of type 'Linux filesystem' and of size                      512 MiB.
+/dev/mmcblk1p6: Created a new partition 6 of type 'Linux filesystem' and of size                      8 MiB.
+/dev/mmcblk1p7: Created a new partition 7 of type 'Linux filesystem' and of size                      812 MiB.
+/dev/mmcblk1p8:
+New situation:
+
+Device            Start      End  Sectors  Size Type
+/dev/mmcblk1p1       34    49151    49118   24M Linux filesystem
+/dev/mmcblk1p2    49186    81919    32734   16M Linux filesystem
+/dev/mmcblk1p3    81920 56705023 56623104   27G Linux filesystem
+/dev/mmcblk1p4 56705024 58343423  1638400  800M Linux filesystem
+/dev/mmcblk1p5 58343424 59391999  1048576  512M Linux filesystem
+/dev/mmcblk1p6 59392000 59408383    16384    8M Linux filesystem
+/dev/mmcblk1p7 59408384 61071326  1662943  812M Linux filesystem
+
+The partition table has been altered.
+Calling ioctl() to re-read partition table.
+Syncing disks.
+UTP: sending Success to kernel for command $ sfdisk /dev/mmcblk1 < $FILE.
+utp_poll: pass returned.
+UTP: received command '$ mkfs.ext4 -F -E nodiscard /dev/mmcblk1p4'
+UTP: executing "mkfs.ext4 -F -E nodiscard /dev/mmcblk1p4"
+mke2fs 1.43-WIP (18-May-2015)
+Creating filesystem with 204800 4k blocks and 51296 inodes
+Filesystem UUID: f3dc42a9-521c-47be-8683-705644c3b21f
+Superblock backups stored on blocks:
+        32768, 98304, 163840
+
+Allocating group tables: done
+Writing inode tables: done
+Creating journal (4096 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+UTP: sending Success to kernel for command $ mkfs.ext4 -F -E nodiscard /dev/mmcb                     lk1p4.
+utp_poll: pass returned.
+UTP: received command '$ mkfs.ext4 -F -E nodiscard /dev/mmcblk1p5'
+UTP: executing "mkfs.ext4 -F -E nodiscard /dev/mmcblk1p5"
+mke2fs 1.43-WIP (18-May-2015)
+Creating filesystem with 131072 4k blocks and 32768 inodes
+Filesystem UUID: a0fcfedb-b78c-4bb3-b4ee-c1c354ed9d53
+Superblock backups stored on blocks:
+        32768, 98304
+
+Allocating group tables: done
+Writing inode tables: done
+Creating journal (4096 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+UTP: sending Success to kernel for command $ mkfs.ext4 -F -E nodiscard /dev/mmcb                     lk1p5.
+utp_poll: pass returned.
+UTP: received command '$ mkfs.ext4 -F -E nodiscard /dev/mmcblk1p6'
+UTP: executing "mkfs.ext4 -F -E nodiscard /dev/mmcblk1p6"
+mke2fs 1.43-WIP (18-May-2015)
+Creating filesystem with 8192 1k blocks and 2048 inodes
+
+Allocating group tables: done
+Writing inode tables: done
+Creating journal (1024 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+UTP: sending Success to kernel for command $ mkfs.ext4 -F -E nodiscard /dev/mmcb                     lk1p6.
+utp_poll: pass returned.
+UTP: received command '$ mkfs.ext4 -F -E nodiscard /dev/mmcblk1p7'
+UTP: executing "mkfs.ext4 -F -E nodiscard /dev/mmcblk1p7"
+mke2fs 1.43-WIP (18-May-2015)
+Creating filesystem with 207867 4k blocks and 51968 inodes
+Filesystem UUID: a7030905-0c36-446e-8d66-aab154c0f0b9
+Superblock backups stored on blocks:
+        32768, 98304, 163840
+
+Allocating group tables: done
+Writing inode tables: done
+Creating journal (4096 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+UTP: sending Success to kernel for command $ mkfs.ext4 -F -E nodiscard /dev/mmcb                     lk1p7.
+utp_poll: pass returned.
+UTP: received command '$ mkfs.ext4 -F -E nodiscard /dev/mmcblk1p3'
+UTP: executing "mkfs.ext4 -F -E nodiscard /dev/mmcblk1p3"
+mke2fs 1.43-WIP (18-May-2015)
+/dev/mmcblk1p3 contains a ext4 file system labelled 'system'
+Creating filesystem with 7077888 4k blocks and 1769472 inodes
+Filesystem UUID: f9994090-32fb-4dac-af14-eb9e4872f9f3
+Superblock backups stored on blocks:
+        32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208,
+        4096000
+
+Allocating group tables: done
+Writing inode tables: done
+Creating journal (32768 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+UTP: sending Success to kernel for command $ mkfs.ext4 -F -E nodiscard /dev/mmcb                     lk1p3.
+utp_poll: pass returned.
+UTP: received command 'send'
+UTP: sending Success to kernel for command send.
+UTP: received command 'frf'
+UTP: closing the file
+UTP: sending Success to kernel for command frf.
+utp_poll: pass returned.
+UTP: received command '$ dd if=$FILE of=/dev/mmcblk1p1'
+UTP: executing "dd if=$FILE of=/dev/mmcblk1p1"
+random: nonblocking pool is initialized
+20056+1 records in
+20056+1 records out
+10268704 bytes (10 MB, 9.8 MiB) copied, 2.53347 s, 4.1 MB/s
+UTP: sending Success to kernel for command $ dd if=$FILE of=/dev/mmcblk1p1.
+utp_poll: pass returned.
+UTP: received command 'send'
+UTP: sending Success to kernel for command send.
+UTP: received command 'frf'
+UTP: closing the file
+UTP: sending Success to kernel for command frf.
+utp_poll: pass returned.
+UTP: received command '$ dd if=$FILE of=/dev/mmcblk1p2'
+UTP: executing "dd if=$FILE of=/dev/mmcblk1p2"
+21136+1 records in
+21136+1 records out
+10821664 bytes (11 MB, 10 MiB) copied, 2.73138 s, 4.0 MB/s
+UTP: sending Success to kernel for command $ utp_poll: pass returned.
+dd if=$FILE of=/dev/mmcblk1p2.
+UTP: received command '$ mount -o remount,size=600M rootfs /'
+UTP: executing "mount -o remount,size=600M rootfs /"
+UTP: sending Success to kernel for command $ mount -o remount,size=600M rootfs /                     .
+utp_poll: pass returned.
+UTP: received command 'send'
+UTP: sending Success to kernel for command send.
+UTP: received command 'frf'
+UTP: closing the file
+UTP: sending Success to kernel for command frf.
+utp_poll: pass returned.
+UTP: received command '$ simg2img $FILE /dev/mmcblk1p4'
+UTP: executing "simg2img $FILE /dev/mmcblk1p4"
+UTP: sending Success to kernel for command $ simg2img $FILE /dev/mmcblk1p4.
+utp_poll: pass returned.
+UTP: received command '$ flash_erase /dev/mtd0 0 0'
+UTP: executing "flash_erase /dev/mtd0 0 0"
+Erasing 64 Kibyte @ b0000 -- 100 % complete
+UTP: sending Success to kernel for command $ flash_erase /dev/mtd0 0 0.
+utp_poll: pass returned.
+UTP: received command '$ flash_erase /dev/mtd1 0 0'
+UTP: executing "flash_erase /dev/mtd1 0 0"
+Erasing 64 Kibyte @ 0 -- 100 % complete
+UTP: sending Success to kernel for command $ flash_erase /dev/mtd1 0 0.
+utp_poll: pass returned.
+UTP: received command 'send'
+UTP: sending Success to kernel for command send.
+UTP: received command '$ dd if=$FILE of=/dev/mtd0 bs=512 seek=2'
+UTP: executing "dd if=$FILE of=/dev/mtd0 bs=512 seek=2"
+966+0 records in
+966+0 records out
+494592 bytes (495 kB, 483 KiB) copied, 2.11035 s, 234 kB/s
+UTP: sending Success to kernel for command $ dd if=$FILE of=/dev/mtd0 bs=512 seek=2.
+utp_poll: pass returned.
+UTP: received command '$ sync'
+UTP: executing "sync"
+UTP: sending Success to kernel for command $ sync.
+utp_poll: pass returned.
+UTP: received command 'frf'
+UTP: closing the file
+UTP: sending Success to kernel for command frf.
+utp_poll: pass returned.
+UTP: received command '$ echo Update Complete!'
+UTP: executing "echo Update Complete!"
+Update Complete!
+UTP: sending Success to kernel for command $ echo Update Complete!.
+utp_poll: pass returned.
+
+
+UTP: received command 'send'
+UTP: received command 'frf'
+UTP: received command '$ dd if=/dev/zero of=/dev/mmcblk1 bs=1024 count=1'
+UTP: received command '$ sfdisk /dev/mmcblk1 < $FILE'
+UTP: received command '$ mkfs.ext4 -F -E nodiscard /dev/mmcblk1p4'
+UTP: received command '$ mkfs.ext4 -F -E nodiscard /dev/mmcblk1p5'
+UTP: received command '$ mkfs.ext4 -F -E nodiscard /dev/mmcblk1p6'
+UTP: received command '$ mkfs.ext4 -F -E nodiscard /dev/mmcblk1p7'
+UTP: received command '$ mkfs.ext4 -F -E nodiscard /dev/mmcblk1p3'
+UTP: received command 'send'
+UTP: received command 'frf'
+UTP: received command '$ dd if=$FILE of=/dev/mmcblk1p1'
+UTP: received command 'send'
+UTP: received command 'frf'
+UTP: received command '$ dd if=$FILE of=/dev/mmcblk1p2'
+UTP: received command '$ mount -o remount,size=600M rootfs /'
+UTP: received command 'send'
+UTP: received command 'frf'
+UTP: received command '$ simg2img $FILE /dev/mmcblk1p4'
+UTP: received command '$ flash_erase /dev/mtd0 0 0'
+UTP: received command '$ flash_erase /dev/mtd1 0 0'
+UTP: received command 'send'
+UTP: received command '$ dd if=$FILE of=/dev/mtd0 bs=512 seek=2'
+UTP: received command '$ sync'
+UTP: received command 'frf'
+UTP: received command '$ echo Update Complete!'
