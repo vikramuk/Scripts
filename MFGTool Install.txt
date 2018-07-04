@@ -1582,3 +1582,21 @@ UTP: received command '$ dd if=$FILE of=/dev/mtd0 bs=512 seek=2'
 UTP: received command '$ sync'
 UTP: received command 'frf'
 UTP: received command '$ echo Update Complete!'
+
+
+ UTP: executing "dd if=/dev/zero of=/dev/mmcblk1 bs=1024 count=1"
+ UTP: executing "sfdisk /dev/mmcblk1 < $FILE"
+ UTP: executing "mkfs.ext4 -F -E nodiscard /dev/mmcblk1p4"
+ UTP: executing "mkfs.ext4 -F -E nodiscard /dev/mmcblk1p5"
+ UTP: executing "mkfs.ext4 -F -E nodiscard /dev/mmcblk1p6"
+ UTP: executing "mkfs.ext4 -F -E nodiscard /dev/mmcblk1p7"
+ UTP: executing "mkfs.ext4 -F -E nodiscard /dev/mmcblk1p3"
+ UTP: executing "dd if=$FILE of=/dev/mmcblk1p1"
+ UTP: executing "dd if=$FILE of=/dev/mmcblk1p2"
+ UTP: executing "mount -o remount,size=600M rootfs /"
+ UTP: executing "simg2img $FILE /dev/mmcblk1p4"
+ UTP: executing "flash_erase /dev/mtd0 0 0"
+ UTP: executing "flash_erase /dev/mtd1 0 0"
+ UTP: executing "dd if=$FILE of=/dev/mtd0 bs=512 seek=2"
+ UTP: executing "sync"
+ UTP: executing "echo Update Complete!"
