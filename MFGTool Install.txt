@@ -1600,3 +1600,30 @@ UTP: received command '$ echo Update Complete!'
  UTP: executing "dd if=$FILE of=/dev/mtd0 bs=512 seek=2"
  UTP: executing "sync"
  UTP: executing "echo Update Complete!"
+
+
+>>> Created a new GPT disklabel (GUID: 6125893B-C30D-439D-AF6A-F6FE8C436F54).
+Created a new partition 1 of type 'Linux filesystem' and of size 24 MiB.
+/dev/mmcblk1p2: Created a new partition 2 of type 'Linux filesystem' and of size 16 MiB.
+/dev/mmcblk1p3: Created a new partition 3 of type 'Linux filesystem' and of size 4 GiB.
+/dev/mmcblk1p4: Created a new partition 4 of type 'Linux filesystem' and of size 1 GiB.
+/dev/mmcblk1p5: Created a new partition 5 of type 'Linux filesystem' and of size 4 MiB.
+/dev/mmcblk1p6: Created a new partition 6 of type 'Linux filesystem' and of size 2 MiB.
+/dev/mmcblk1p7: Created a new partition 7 of type 'Linux filesystem' and of size 2 MiB.
+/dev/mmcblk1p8: Created a new partition 8 of type 'Linux filesystem' and of size 1 MiB.
+/dev/mmcblk1p9: Created a new partition 9 of type 'Linux filesystem' and of size 512 MiB.
+/dev/mmcblk1p10: Created a new partition 10 of type 'Linux filesystem' and of size 23.6 GiB.
+/dev/mmcblk1p11:
+New situation:
+
+Device             Start      End  Sectors  Size Type
+/dev/mmcblk1p1        34    49151    49118   24M Linux filesystem
+/dev/mmcblk1p2     49186    81919    32734   16M Linux filesystem
+/dev/mmcblk1p3     81920  8470527  8388608    4G Linux filesystem
+/dev/mmcblk1p4   8470528 10567679  2097152    1G Linux filesystem
+/dev/mmcblk1p5  10567680 10575871     8192    4M Linux filesystem
+/dev/mmcblk1p6  10575872 10579967     4096    2M Linux filesystem
+/dev/mmcblk1p7  10579968 10584063     4096    2M Linux filesystem
+/dev/mmcblk1p8  10584064 10586111     2048    1M Linux filesystem
+/dev/mmcblk1p9  10586112 11634687  1048576  512M Linux filesystem
+/dev/mmcblk1p10 11634688 61071326 49436639 23.6G Linux filesystem
