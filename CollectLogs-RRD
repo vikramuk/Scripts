@@ -203,7 +203,6 @@ a.	rrdtool restore –f filename.xml filename.rrd
 
  /lib/ld-linux-armhf.so.3 --library-path /lib /bin/collectd -C /etc/lotus/collectd/collectd_from_GE.conf 
 
-
 #
 # Config file for collectd(1).
 # Please read collectd.conf(5) for a list of options.
@@ -246,6 +245,18 @@ LoadPlugin syslog
 # Write statistics to RRD files.
 LoadPlugin rrdtool
 
+LoadPlugin write_graphite
+
+<Plugin write_graphite>
+        <Node "graphite">
+                Host "10.177.220.248"
+                Port "2003"
+                Protocol "tcp"
+                LogSendErrors true
+                Prefix "collectd."
+        </Node>
+</Plugin>
+
 #
 # Intervals are as follows:
 #
@@ -256,30 +267,30 @@ LoadPlugin rrdtool
 #        so that we don't oversample.
 #
 <LoadPlugin cpu>
-  Interval 20
+  Interval 10
 </LoadPlugin>
 
 <LoadPlugin load>
-  Interval 20
+  Interval 10
 </LoadPlugin>
 
 <LoadPlugin memory>
-  Interval 600
+  Interval 10
 </LoadPlugin>
 
 <LoadPlugin processes>
-  Interval 20
+  Interval 10
 </LoadPlugin>
 
 <LoadPlugin uptime>
-  Interval 600
+  Interval 10
 </LoadPlugin>
 
 ## Plugin configuration
 
 <Plugin cpu>
-  ReportByState = true
-  ReportByCpu = true
+  ReportByState =false
+  ReportByCpu = false
   ValuesPercentage = true
 </Plugin>
 
@@ -289,12 +300,17 @@ LoadPlugin rrdtool
 </Plugin>
 
 <Plugin "processes">
-  Process "emerald_acq" # PPD only
-  Process "esp"
-  Process "pulseaudio"
-  Process "weston"
-  Process "Xwayland"
+  ProcessMatch "system_server" "system_server"
+  ProcessMatch "surfaceflinger" "surfaceflinger"
+  ProcessMatch "emerald_acq" "emerald_acq"
+  ProcessMatch "monitoring" "monitoring"
+  ProcessMatch "ext.services" "ext.services"
+  ProcessMatch "android.process.media" "android.process.media"
+  ProcessMatch "system:ui" "system:ui"
+  ProcessMatch "android.hardware.sensors" "android.hardware.sensors"
+  ProcessMatch "precompliance" "compliance"
 </Plugin>
+
 
 
 
@@ -505,6 +521,11 @@ sudo update-rc.d grafana-server defaults 95 10
 Install and configure Seyren:
 -----------------------------
 Seyren not installed.
+
+cp /sdcard/collectd_graphite_10sec.conf   /data/local/collectd_graphite.conf
+chmod 755 /data/local/collectd_graphite.conf
+chmod 755 /bin/collectd
+/lib/ld-linux-armhf.so.3 --library-path /lib  /bin/collectd -C  /data/local/collectd_graphite.conf
 
 
 
