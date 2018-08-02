@@ -66,3 +66,49 @@ update_sf_uboot=if tftp $loadaddr $uboot; then sf probe; sf erase 0 0xC0000; sf 
 vendor_size=8MiB
 
 Environment size: 4745/8188 bytes
+
+
+sysrq: SysRq : Emergency Remount R/O
+reboot: Restarting system with command ''
+
+
+U-Boot 2016.09.01-00007-ge59b903 (Jul 26 2018 - 19:04:01 +0530), Build: jenkins-MONITOR_RELEASE-45
+
+CPU:   Freescale i.MX6D rev1.5 at 792 MHz
+Reset cause: POR
+BOARD: Advantech DMS-BA16
+I2C:   ready
+DRAM:  2 GiB
+MMC:   FSL_SDHC: 0, FSL_SDHC: 1, FSL_SDHC: 2
+Using default environment
+
+auto-detected panel INNOLUX-G101ICE-L01
+Display: INNOLUX-G101ICE-L01 (1280x800)
+In:    serial
+Out:   serial
+Err:   serial
+Net:   Board Net Initialization Failed
+No ethernet found.
+Hit any key to stop autoboot:  0
+=>
+=>
+=>
+=> loadb
+## Ready for binary (kermit) download to 0x12000000 at 115200 bps...
+## Total Size      = 0x00000000 = 0 Bytes
+## Start Addr      = 0x12000000
+=> iminfo
+
+## Checking Image at 12000000 ...
+   Android image found
+   kernel size:      8c1a08
+   kernel address:   14008000
+   ramdisk size:     fa19d
+   ramdisk addrress: 15000000
+   second size:      ab29
+   second address:   14f00000
+   tags address:     14000100
+   page size:        800
+   name:
+   cmdline:          console=ttymxc3,115200 androidboot.console=ttymxc3 consoleblank=0 vmalloc=256M init=/init video=mxcfb0:dev=ldb,bpp=32 video=mxcfb1:dev=hdmi,1920x1080M@60,bpp=32 vt.global_cursor_default=0 androidboot.hardware=freescale cma=384M androidboot.selinux=enforcing quiet
+
