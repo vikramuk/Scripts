@@ -1,0 +1,68 @@
+=> meminfo
+DRAM:  2 GiB
+=> bdinfo
+arch_number = 0x00000000
+boot_params = 0x10000100
+DRAM bank   = 0x00000000
+-> start    = 0x10000000
+-> size     = 0x80000000
+current eth = unknown
+ip_addr     = <NULL>
+baudrate    = 115200 bps
+TLB addr    = 0x8FFF0000
+relocaddr   = 0x8FF39000
+reloc off   = 0x78739000
+irq_sp      = 0x8F536EC0
+sp start    = 0x8F536EB0
+FB base     = 0x8F53C5C0
+=> printenv
+batt_ischarging=1
+baudrate=115200
+boot_fdt=yes
+boot_size=24MiB
+bootcmd=run evalpower; setenv fastboot_boot 0; if test ${fastboot_boot} = 1; then fastboot 1; fi; setenv ums_boot 0; if test ${ums_boot} = 1; then ums 0 mmc 1; reset; fi; setenv mfg_boot 0; if test ${mfg_boot} = 1; then setenv bootargs console=${console},${baudrate} rdinit=/linuxrc g_mass_storage.stall=0 g_mass_storage.removable=1 g_mass_storage.idVendor=0x066F g_mass_storage.idProduct=0x37FF g_mass_storage.iSerialNumber="" clk_ignore_unused; loadaddr=0x12000000; initrd_addr=0x12C00000; fdt_addr=0x18000000; bootz ${loadaddr} ${initrd_addr} ${fdt_addr};fi; if gpio input 35; then echo Not resetting into serial download mode...; else echo Resetting into serial download mode...; mw.l 0x20d8040 0x30; md.l 0x20d8040 1; mw.l 0x20d8044 0x10000000; reset; fi; mmc dev 1; setexpr recovery *0x20CC068 \\& 0x80; setexpr fastboot *0x20CC068 \\& 0x100; setexpr service *0x20CC068 \\& 0x200; mw 0x20CC068 0x00000000; if test ${service} -gt 0; then mtest 0x10000000 0x8f000000 0x10101010 1; if test $? -eq 1; then echo Memory test failure.; ext4load mmc 1:3 0x10800000 mem_fail.bmp; bmp d 0x10800000; exit; fi; fi; if test ${fastboot} -gt 0; then echo Starting fastboot.; fastboot 1; fi; if test ${recovery} -gt 0; then mmc read ${loadaddr} 0x0000C022 0xC000; else mmc read ${loadaddr} 0x00000022 0xC000; fi; setenv bootargs ${bootargs} fb_start=${fb_start} fb_size=${fb_size}; bootm ${loadaddr} ${loadaddr} ${loadaddr};
+bootdelay=0
+bootscript=echo Running bootscript from ${dev}:${devnum}:${partnum}; source
+cache_size=512MiB
+console=ttymxc3
+default_env=1
+doboot=echo Booting from ${dev}:${devnum}:${partnum} ...; run setargs; if test ${boot_fdt} = yes || test ${boot_fdt} = try; then if run loadfdt; then bootm ${loadaddr} - ${fdt_addr}; else if test ${boot_fdt} = try; then bootm; else echo WARN: Cannot load the DT; fi; fi; else bootm; fi;
+emmcdev=1
+ethprime=FEC
+evalpower=if test ${batt_ischarging} = 0; then if test ${batt_energymax} -lt 4000; then setenv batt_warn 16; setenv batt_warncrit 8; else setenv batt_warn 8; setenv batt_warncrit 4; fi; echo levels: ${batt_warn} ${batt_warncrit}; if test ${batt_curcharge} -le ${batt_warncrit}; then echo WARN: Battery critically low: ${batt_curcharge}; run shutdown; else if test ${batt_curcharge} -lt ${batt_warn}; then echo WARN: Battery is low: ${batt_curcharge}; else echo INFO: Battery ok: ${batt_curcharge}; fi; fi; fi;
+fb_size=4096000
+fb_start=2404632000
+fdt_addr=0x18000000
+fdt_file=/imx6q-dms-ba16.dtb
+fdt_high=0x14f00000
+image=/uImage
+initrd_high=0x15000000
+ip_dyn=yes
+loadaddr=0x12000000
+loadbootscript=${loadcmd} ${dev} ${devnum}:${partnum} ${loadaddr} ${script};
+loadcmd=fatload
+loadfdt=${loadcmd} ${dev} ${devnum}:${partnum} ${fdt_addr} ${fdt_file}
+loadimage=${loadcmd} ${dev} ${devnum}:${partnum} ${loadaddr} ${image}
+misc_size=8MiB
+netargs=setenv bootargs console=${console},${baudrate} root=/dev/nfs ip=dhcp nfsroot=${serverip}:${nfsroot},v3,tcp
+netboot=echo Booting from net ...; run netargs; if test ${ip_dyn} = yes; then setenv get_cmd dhcp; else setenv get_cmd tftp; fi; ${get_cmd} ${image}; if test ${boot_fdt} = yes || test ${boot_fdt} = try; then if ${get_cmd} ${fdt_addr} ${fdt_file}; then bootm ${loadaddr} - ${fdt_addr}; else if test ${boot_fdt} = try; then bootm; else echo WARN: Cannot load the DT; fi; fi; else bootm; fi;
+partitions=uuid_disk=${uuid_gpt_disk};name=boot,size=${boot_size},uuid=${boot_uuid};name=recovery,size=${recovery_size},uuid=${recovery_uuid};name=userdata,size=${userdata_size},uuid=${userdata_uuid};name=system,size=${system_size},uuid=${system_uuid};name=cache,size=${cache_size},uuid=${cache_uuid};name=vendor,size=${vendor_size},uuid=${vendor_uuid};name=misc,size=${misc_size},uuid=${misc_uuid};
+partnum=1
+recovery_size=16MiB
+rfspart=2
+script=boot.scr
+sddev=0
+service_mode=0
+setargs=setenv bootargs console=${console},${baudrate} root=/dev/${rootdev} rw rootwait panic=10
+shutdown=i2c dev 2; i2c mw 0x58 0x13 0x2; exit;
+splashfile=splash.bmp
+splashimage=0x10800000
+splashsource=mmc_system_fs
+system_size=800MiB
+tryboot=if run loadbootscript; then run bootscript; else if run loadimage; then run doboot; fi; fi;
+uboot=u-boot.imx
+update_sd_firmware=if test ${ip_dyn} = yes; then setenv get_cmd dhcp; else setenv get_cmd tftp; fi; if mmc dev ${mmcdev}; then if ${get_cmd} ${update_sd_firmware_filename}; then setexpr fw_sz ${filesize} / 0x200; setexpr fw_sz ${fw_sz} + 1; mmc write ${loadaddr} 0x2 ${fw_sz}; fi; fi
+update_sf_uboot=if tftp $loadaddr $uboot; then sf probe; sf erase 0 0xC0000; sf write $loadaddr 0x400 $filesize; echo 'U-Boot upgraded. Please reset'; fi
+vendor_size=8MiB
+
+Environment size: 4745/8188 bytes
