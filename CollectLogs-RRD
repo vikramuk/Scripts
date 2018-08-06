@@ -522,6 +522,13 @@ Install and configure Seyren:
 -----------------------------
 Seyren not installed.
 
+adb shell su 
+setprop persist.sys.timezone "Asia/Kolkata"
+/lib/ld-linux-armhf.so.3 --library-path /lib  /bin/collectd -C  /data/local/collectd_graphite.conf
+
+mount -o rw,remount /vendor
+cp  /sdcard/write_graphite.so /data/local/
+cp /sdcard/write_graphite.so /vendor/bin/pdm/lib/
 cp /sdcard/collectd_graphite_10sec.conf   /data/local/collectd_graphite.conf
 chmod 755 /data/local/collectd_graphite.conf
 chmod 755 /bin/collectd
@@ -529,3 +536,7 @@ chmod 755 /bin/collectd
 
 
 
+
+-- to Collect Data from Server
+
+curl -X POST http://admin:GrafanaAdmin123@10.177.220.248:3000/api/annotations -H "Content-Type: application/json" -d  '{"dashboardId":3,"panelId":1,"time":1533551294000000,"isRegion":true,"timeEnd":1533551294200000,"tags":["Oreo_95_LSD"],"text":"Test Annotation from cURL"}'
