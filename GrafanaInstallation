@@ -1,0 +1,209 @@
+
+Install Graphite and its dependencies:
+-------------------------------------
+sudo apt-get update
+sudo apt-get install graphite-web graphite-carbon grafana
+sudo apt-get install postgresql libpq-dev python-psycopg2
+sudo apt-get install apache2 libapache2-mod-wsgi
+sudo apt-get install collectd collectd-utils
+
+
+Switch to postgres user and create the DB user graphite:
+-------------------------------------------------------
+sudo -u postgres psql
+CREATE USER graphite WITH PASSWORD 'graphite_password';
+CREATE DATABASE graphite WITH OWNER graphite;
+\q
+
+
+Configure Graphite:
+-------------------------
+Open /etc/graphite/local_settings.py 
+Do below modifications,
+
+SECRET_KEY = 'a_salty_string'
+TIME_ZONE = 'Asia/Kolkata'   
+
+   DATABASES = {
+    'default': {
+        'NAME': 'graphite',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': 'graphite',
+        'PASSWORD': 'graphite_password',
+        'HOST': '127.0.0.1',
+        'PORT': ''
+    }
+}
+
+Sync the Database:
+-----------------------
+sudo graphite-manage syncdb
+
+
+Configure Carbon and start it:
+------------------------------
+
+sudo vi /etc/default/graphite-carbon 
+CARBON_CACHE_ENABLED=true
+
+sudo vi /etc/carbon/carbon.conf
+ENABLE_LOGROTATION = True
+
+Setting the Storage Schema and Aggregation:
+Copy default storage aggregation file to carbon directory:
+sudo cp /usr/share/doc/graphite-carbon/examples/storage-aggregation.conf.example /etc/carbon/storage-aggregation.conf
+sudo vi /etc/carbon/storage-schemas.conf
+[collectd]
+pattern = ^collectd.*
+retentions = 10s:1d,1m:7d,10m:1y
+
+save the file and start carbon-cache daemon:
+sudo service carbon-cache start
+
+
+Install and configure Apache + wsgi:
+---------------------------------------
+sudo apt-get install apache2 libapache2-mod-wsgi
+sudo a2dissite 000-default
+sudo cp /usr/share/graphite-web/apache2-graphite.conf /etc/apache2/sites-available
+sudo a2ensite apache2-graphite
+sudo service apache2 reload
+    
+# Check the status at http://domain_name_or_IP/server-status
+We can now access Graphite interface by browsing to http://your_ip_address.
+
+
+Configure Collectd
+--------------------------
+/etc/collectd/collectd.conf
+
+LoadPlugin syslog
+LoadPlugin write_graphite
+
+<Plugin syslog>
+        LogLevel info
+</Plugin>
+
+<Plugin write_graphite>
+    <Node "graphing">
+        Host "localhost"
+        Port "2003"
+        Protocol "tcp"
+        LogSendErrors true
+        Prefix "collectd."
+    </Node>
+</Plugin>
+
+
+
+Configure grafana:
+--------------------
+sudo vi /etc/grafana/grafana.ini
+
+[database]
+# Either "mysql", "postgres" or "sqlite3", it's your choice
+type = postgres
+host = 127.0.0.1:5432
+name = graphite
+user = graphite
+password = graphite_password
+
+
+
+start Carbon :
+--------------
+sudo service carbon-cache start
+
+
+start apache :
+--------------
+sudo service apache2 reload
+
+
+start collectd :
+--------------
+sudo service collectd restart
+
+
+start grafana:
+---------------
+sudo service grafana-server start
+
+
+Chnages required in collectd.conf in Lotus board:
+----------------------------------------------------
+
+LoadPlugin write_graphite
+
+<Plugin write_graphite>
+        <Node "graphite">
+                Host "10.197.74.139"
+                Port "2003"
+                Protocol "tcp"
+                LogSendErrors true
+                Prefix "collectd."
+        </Node>
+</Plugin>
+
+
+Reference:
+------------
+
+https://community.rackspace.com/products/f/public-cloud-forum/6800/how-to-set-up-monitoring-stack-using-collectd-graphite-grafana-and-seyren-on-ubuntu-14-04
+
+https://www.digitalocean.com/community/tutorials/how-to-install-and-use-graphite-on-an-ubuntu-14-04-server
+
+http://graphite.readthedocs.io/en/latest/install.html
+
+
+
+
+
+Steps that are not included in our installation are given below:
+====================================================================
+
+Configure Carbon:
+-------------------
+Main configuration file is /etc/carbon/carbon.conf. We would need to edit it to configure carbon to listen on isolated network interface 192.168.3.12:
+sudo sed -i.bak s/0.0.0.0/192.168.3.12/g /etc/carbon/carbon.conf
+
+
+Install and configure Grafana:
+-------------------------------
+Add the following line to your /etc/apt/sources.list file.
+
+deb https://packagecloud.io/grafana/stable/debian/ wheezy main
+Add the Package Cloud key to be able to install signed packages:
+
+curl https://packagecloud.io/gpg.key | sudo apt-key add -
+ Update your Apt repositories and install Grafana:
+
+sudo apt-get update
+sudo apt-get install grafana
+You can configure to listen on any port, but we will show how to use SSL and configure Grafana to listen on port 443:
+
+cd /etc/grafana
+sudo openssl req -x509 -newkey rsa:2048 -keyout cert.key -out cert.pem -days 3650 -nodes
+
+Edit file /etc/grafana/grafana.ini and set the following:
+
+# https certs & key file
+cert_file = /etc/grafana/cert.pem
+cert_key = /etc/grafana/cert.key
+
+protocol = https
+http_port = 443
+
+ Set grafana to be able to run on any port:
+
+ sudo setcap 'cap_net_bind_service=+ep' /usr/sbin/grafana-server
+ Configure Grafana server to start on boot:
+
+sudo update-rc.d grafana-server defaults 95 10
+
+Install and configure Seyren:
+-----------------------------
+Seyren not installed.
+
+
+
