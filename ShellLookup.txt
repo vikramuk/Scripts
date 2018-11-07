@@ -1,0 +1,12 @@
+Lookup.csv:
+828,Barak Frierson,z000jaed,barak.frierson@ABC.com,Absent
+827,Juerg von Bueren,z001tywx,juerg.von-bueren@ABC,Absent
+826,Arthur Effting,z003pdzz,arthur.effting@ABC.com,Absent
+
+New.json
+z003vm6e
+z003vewr
+z002zz6y
+
+#https://unix.stackexchange.com/questions/126485/replacing-the-values-in-one-file-with-the-values-in-another-file-in-bash
+awk -F',|, ' 'NR==FNR{a[$3]=$4} NR>FNR{$1=a[$1];print}' OFS=',' "Lookup.csv"   "New.json"
