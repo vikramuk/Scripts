@@ -1,0 +1,67 @@
+MKV
+By default this command will produce an output video file using libx264 library (which produces H.264 video stream) and libvorbis library (which produces VORBIS audio stream). You can use the command specifying this options (which will produce the same result):
+ffmpeg -i input_video.avi -f matroska -vcodec libx264 -acodec libvorbis output_video.mkv
+
+In which we are using the parameters:
+-f matroska which specifies that the output file will have Matroska format
+-vcodec libx264 we're telling here to use the libx264 library which encodes video in H.264 coded streams. As we have said before you can use different video encoders. You can use other codecs changing libx264 for 'vp8' if you want to use VP8 encoding through libvpx library or 'vp9' if you want to use VP9 encoding. You can use more video encoders but the most widely supported codecs are H.264 and VP8.
+-acodec libvorbis which specifies to use the libvorbis library which encodes audio using VORBIS codec. You can chose another audio codec. Use 'aac' for AAC encoding or 'opus' for OPUS encoding.
+
+
+MP4:
+ffmpeg -i example.mov -f mp4 -vcodec libx264 -preset fast -profile:v main -acodec aac example.mp4 -hide_banner
+
+In this conversion we are using some parameters:
+-f mp4 with this parameter we are specifying that the output file will have mp4 format.
+-vcodec libx264 with this parameter we are specifying the video codec that we want to use. In this case we are using libx264 which is a H264 video encoder. (we can use the parameter -c:v libx264 instead)
+-preset fast with this parameter we are specifying the encoder (libx264) some options for the encoding process. We can use any of the different presets that exists (ultrafast, superfast, veryfast, faster, fast, medium, slow, slower or veryslow from the fastest to the slowest). Slower presets will produce better quality video in less space but it will take more time to process.
+-profile:v main this parameter is similar to preset. The profile parameter indicates the encoder if it can use some advanced options to improve the video compression. The downside is that using these advanced options can make the video unplayable on some old devices. We are using the main profile as it is very well supported but we can use one of the following: baseline, main, high, high10, high422, and high444
+-acodec aac with this parameter we are specifying the audio encoder to use, in this case we are using audio aac codec.
+-hide_banner will hide some compilation information about ffmpeg.
+crf 
+the constant rate factor is a value between 0 and 51. It indicates the encoder to attempt to achieve a certain output quality. The value 0 indicates lossless and 51 is the worst possible, with 23 as the default value. A lower value indicates higher quality.
+bitrate 
+we can indicate the encoder a bitrate so the encoder will try to achieve it. We can indicate an average bit rate, a minimum bitrate or a maximum bitrate.
+faststart this is a must when you are going to use your video file online. This will move some metadata information to the beginning of the file and allow the video to begin playing before it is completely downloaded.
+
+
+WebM:
+To convert a video file example.mp4 into webm format we can do with the following command:
+ffmpeg -i example.mp4 -f webm -c:v libvpx -b:v 1M -acodec libvorbis example.webm -hide_banner
+We are using the parameters:
+-f webm this makes ffmpeg to produce an output file in webm format.
+-c:v libvpx with this parameter we are specifying to use the libvpx encoder for video. This encoder will produce a stream in vp8 codec format which is the codec we want.
+-acodec libvorbis with this parameter we are specifying to use libvorbis encoder for audio streams.
+-b:v 1M with this parameter we are telling ffmpeg to attempt to achieve a bitrate of 1Mb for the output file. This is a big difference with mp4 encoding. We should specify the variable bitrate that we want to achieve. We can aviod this parameter, but the results will be really bad (by default the encoder lowers the quality too much). There is a crf option in the documentation of the encoder that should work like in mp4-h264 encoding but in my personal experience that parameter just doesn't work, so we must use the bitrate option.
+-hide_banner as usual with this parameter we hide certain information about compilation of ffmpeg.
+
+
+Aspect Ratio:
+ffmpeg -i video_1920.mp4 -vf scale=640:360 video_640.mp4 -hide_banner
+It is only necessary to indicate the scale video filter with the new desired resolution (640:360) with -vf scale=640:360. To consider:
+We can indicate any resolution we want, but the resulting video will always have the same aspect ratio. That is, it will not distort the images, if video is in 16:9 aspect ratio, it will keep the video in 16:9 aspect ratio. The program will adjust the resulting video so it can fit in the resolution that we have given.
+When changing resolution, the video must go throught the encoding process another time, so the process can be slow depending on the output format and the codec you're using for the output.
+We have not mentioned it, but most of the time it does not make sense to transform a video to a higher resolution because, there can't be any improvement in video quality.
+Changing the video aspect ratio
+If we want to change the look of the video, knowing that the image will appear distorted, we can use an additional filter "setdar". Imagine that in the previous case we want to change the 16:9 aspect ratio to 4:3, and therefore the video at a resolution of 4:3 aspect ratio, which in this case it will be 640x480. The ffmpeg command to make this transformation would be:
+ffmpeg -i video_1920.mp4 -vf scale=640:480,setdar=4:3 video_640x480.mp4 -hide_banner
+
+MKV:
+ffmpeg -i input_video.avi -f matroska -vcodec libx264 -acodec libvorbis output_video.mkv
+In which we are using the parameters:
+-f matroska which specifies that the output file will have Matroska format
+-vcodec libx264 we're telling here to use the libx264 library which encodes video in H.264 coded streams. As we have said before you can use different video encoders. You can use other codecs changing libx264 for 'vp8' if you want to use VP8 encoding through libvpx library or 'vp9' if you want to use VP9 encoding. You can use more video encoders but the most widely supported codecs are H.264 and VP8.
+-acodec libvorbis which specifies to use the libvorbis library which encodes audio using VORBIS codec. You can chose another audio codec. Use 'aac' for AAC encoding or 'opus' for OPUS encoding.
+
+3GP:
+So if you want to convert any video into this 3GP format using H.263 and AMR_NB codecs you should need to resize the video, and to convert the audio into a supported audio stream. This is done by the FFMPEG command:
+ffmpeg -i input_video.avi -f 3gp -vcodec h263 -vf scale=352x288 -acodec amr_nb -ar 8000 -ac 1 output_video.3gp
+With parameters:
+-f 3gp same as before, we specify that the output file format is 3GP
+-vcodec h263 which specifies output file using H.263 encoder.
+-vf scale=352x288 which will resize the image from the input video into a 352x288px size. This is one of the sizes allowed by H.263 codec, but you can use the one you want from the list of supported sizes (128x96, 176x144, 352x288, 704x576 or 1408x1152). If the input video is in a different aspect ratio size, FFMPEG will add outer black boxes mantaining the original video aspect ratio and using the new size. Know more about resizing videos using FFMPEG.
+-acodec amr_nb which specifies output audio codec
+-ar 8000 will convert audio streams into 8000Hz audio streams. This is required by the AMR_NB encoder.
+-ac 1 will transform audio from stereo into mono. This is also required by the AMR_NB encoder.
+
+#https://trac.ffmpeg.org/wiki/Encode/H.264
