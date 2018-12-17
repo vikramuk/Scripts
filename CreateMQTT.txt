@@ -1,0 +1,25 @@
+https://www.survivingwithandroid.com/2016/10/mqtt-protocol-tutorial.html
+openssl genrsa -out mosq-ca.key 2048
+openssl req -new -x509 -days 365 -key mosq-ca.key -out mosq-ca.crt
+openssl genrsa -out mosq-serv.key 2048
+openssl req -new -key mosq-serv.key -out mosq-serv.csr
+openssl x509 -req -in mosq-serv.csr -CA mosq-ca.crt -CAkey mosq-ca.key -CAcreateserial -out mosq-serv.crt -days 365 -sha256
+openssl x509 -in mosq-serv.crt -noout -text
+Mosquitto.conf
+listener 8883
+cafile /home/pi/ssl-cert-mosq/mosq-ca.crt
+certfile /home/pi/ssl-cert-mosq/mosq-serv.crt
+keyfile /home/pi/ssl-cert-mosq/mosq-serv.key
+mosquitto_pub -p 8883 -t "test" -cafile mosq-ca.crt -m "Hello MQTT" -d -h 192.168.1.8
+
+https://dzone.com/articles/introduction-to-security-and-tls?fromrel=true
+https://dzone.com/articles/secure-communication-with-tls-and-the-mosquitto-broker?fromrel=true
+openssl genrsa -des3 -out m2mqtt_ca.key 2048
+openssl req -new -x509 -days 3650 -key m2mqtt_ca.key -out m2mqtt_ca.crt
+openssl genrsa -out m2mqtt_srv.key 2048
+openssl req -new -key m2mqtt_srv.key -out m2mqtt_srv.csr 
+openssl x509 -req -in m2mqtt_srv.csr -CA m2mqtt_ca.crt -CAkey m2mqtt_ca.key -CAcreateserial -out m2mqtt_srv.crt -days 3650
+
+cafile C:\Program Files (x86)\mosquitto\certs\m2mqtt_ca.crt
+certfile C:\Program Files (x86)\mosquitto\certs\m2mqtt_srv.crt
+keyfile C:\Program Files (x86)\mosquitto\certs\m2mqtt_srv.key
